@@ -1,4 +1,4 @@
-package com.trafficjunction;
+package com.trafficjunction.View_and_Controller;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
