@@ -1,6 +1,6 @@
 package com.trafficjunction;
 
-public class DataMetrics {
+public class UserInputData {
     private InputData inputData;
     private OutputData outputData;
     // private JunctionInformation junctionInformation;
