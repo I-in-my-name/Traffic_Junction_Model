@@ -1,4 +1,4 @@
-package com.trafficjunction.View_and_Controller;
+package com.trafficjunction;
 
 public class DataMetrics {
     private InputData inputData;
