@@ -1,5 +1,8 @@
 package com.trafficjunction;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserInputData {
     private InputData inputData;
     private OutputData outputData;
@@ -7,42 +10,30 @@ public class UserInputData {
 }
 
 class InputData {
-    private int nte; // North to East
-    private int nts; // North to South
-    private int ntw; // North to West
-    
-    private int ets; // East to South
-    private int etw; // East to West
-    private int etn; // East to North
 
-    private int ste; // South to East
-    private int stw; // South to West
-    private int stn; // South to North
-
-    private int wtn; // West to North
-    private int wte; // West to East
-    private int wts; // West to South
+    private Map<String, Integer> directionInfo = new HashMap<>();
 
     public void InputData(int nte, int nts, int ntw, int ets, int etw, int etn, int ste, int stw, int stn, int wtn, int wte, int wts) {
-        this.nte = nte;
-        this.nts = nts;
-        this.ntw = ntw;
-        this.ets = ets;
-        this.etw = etw;
-        this.etn = etn;
-        this.ste = ste;
-        this.stn = stn;
-        this.stw = stw;
-        this.wte = wte;
-        this.wtn = wtn;
-        this.wts = wts;
+        directionInfo.put("nte", nte);
+        directionInfo.put("nts", nts);
+        directionInfo.put("ntw", ntw);
+        directionInfo.put("ets", ets);
+        directionInfo.put("etw", etw);
+        directionInfo.put("etn", etn);
+        directionInfo.put("ste", ste);
+        directionInfo.put("stn", stn);
+        directionInfo.put("stw", stw);
+        directionInfo.put("wte", wte);
+        directionInfo.put("wtn", wtn);
+        directionInfo.put("wts", wts);
     }
 
-    public int getNorthToEast() {
-        return this.nte;
-    }
-    public int getNorthToSouth() {
-        return this.nts;
+    /*
+     * @param direction: The direction for which the information is required.
+     * @return: The number of vehicles in the given direction, or null if invalid direction.
+     */
+    public Integer getDirectionInfo(String direction) {
+        return directionInfo.get(direction);
     }
 }
 
