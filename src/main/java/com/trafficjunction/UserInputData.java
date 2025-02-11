@@ -6,7 +6,6 @@ import java.util.Map;
 public class UserInputData {
     private InputData inputData;
     private OutputData outputData;
-    // private JunctionInformation junctionInformation;
 }
 
 class InputData {
@@ -35,6 +34,20 @@ class InputData {
     public Integer getDirectionInfo(String direction) {
         return directionInfo.get(direction);
     }
+
+    /*
+     * @param direction: The direction for which the information is required.
+     * @param num: The number of vehicles in the given direction.
+     * @return bool: True if the value has been updated, or false if the direction is invalid.
+     */
+    public boolean setDirectionInfo(String direction, int num) {
+        if (directionInfo.containsKey(direction)) {
+            directionInfo.put(direction, num);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 class OutputData {
@@ -42,7 +55,7 @@ class OutputData {
     private int maxQueueLength;
     private int maxWaitTime; // In seconds.
     private int averageWaitTime; // In seconds.
-    private int emissionScore;
+    private int emissionScore; // In ??
 
     public void OutputData(int pedScore, int maxQueueLength, int maxWaitTime, int averageWaitTime, int emissionScore) {
         this.pedScore = pedScore;
@@ -51,8 +64,25 @@ class OutputData {
         this.averageWaitTime = averageWaitTime;
         this.emissionScore = emissionScore;
     }
+
+    /* Getter methods for output data. */
+    public int getPedScore() {
+        return pedScore;
+    }
+
+    public int getMaxQueueLength() {
+        return maxQueueLength;
+    }
+
+    public int getMaxWaitTime() {
+        return maxWaitTime;
+    }
+
+    public int getAverageWaitTime() {
+        return averageWaitTime;
+    }
+
+    public int getEmissionScore() {
+        return emissionScore;
+    }
 }
-
-// class JunctionInformation {
-
-// }
