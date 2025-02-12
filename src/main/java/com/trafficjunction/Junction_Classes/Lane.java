@@ -83,8 +83,24 @@ class Lane {
    public List<Lane> getGoingTo() {
         return new ArrayList<>(goesTo); // return a copy to avoid modification
    }
+
+   public int getVehicleNum(int num) {
+        /// 
+   }
    
     // add vehicle needs to check if lane full
 
-    
+    public boolean isFull() {
+        // check if vehicle at back of queue --> indicates it is full 
+        if (vehicles.isEmpty()) {
+            return false; // If no vehicles, lane is not full
+        }
+        float laneCapacityThreshold = this.length - 2.0f; // Backmost vehicle should not be beyond this point
+
+        // Get the vehicle with the highest position (furthest back in queue)
+        float backmostVehiclePos = Collections.max(vehicles);
+
+        // Check if the backmost vehicle is within 2m of the front (0m)
+        return backmostVehiclePos >= laneCapacityThreshold;
+    }
 }

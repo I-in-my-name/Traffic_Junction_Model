@@ -119,4 +119,9 @@ public class LaneTests {
        assertEquals(10, lane.getLength());
     }
 
+    @Test
+    void testIsFull() {
+        
+    }
+
 }

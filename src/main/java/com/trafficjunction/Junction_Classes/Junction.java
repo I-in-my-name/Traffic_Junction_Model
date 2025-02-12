@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Junction {
 
     // Questions: what sort of lists / arrays? Array lists?
-    private List<List<Lane>> entry_lanes = new ArrayList<>();
-    private List<List<Lane>> exit_lanes = new ArrayList<>();
+    private List<List<Lane>> entry_lanes = new ArrayList<>();   // Entry lanes
+    private List<List<Lane>> exit_lanes = new ArrayList<>();    // Exit lanes
     /** 
      * Indexes for directions
      * 0 - North
@@ -17,15 +17,15 @@ public class Junction {
      * 3 - West
      */
     
-    private Map<String, Integer> vehicle_rate;
+    private Map<String, Integer> vehicle_rate;  // Rate of vehicles coming into the junction for each direction
     // Vehicle backlog?
 
-    private List<TrafficLight> traffic_lights;
-    private TrafficLightConfig tl_config;
+    private List<TrafficLight> traffic_lights;  // List of all traffic lights
+    private TrafficLightConfig tl_config;       // The configuration for the traffic lights
 
-    private float timer;
+    private float timer;                // How much time has passed since the start of the simulation
 
-    private JunctionMetrics metrics;
+    private JunctionMetrics metrics;    // The metrics for the juntion
     
 
     public Junction() {
@@ -57,7 +57,6 @@ public class Junction {
 
     /** 
      * Accesses and returns the entry lanes of the junction
-     * @
      * @return - List<lanes> entry_lanes
      */
     public List<Lane> getEntryLanes() {
@@ -67,7 +66,6 @@ public class Junction {
 
     /** 
      * Accesses and returns the exitt lanes of the junction
-     * @
      * @return - List<lanes> exit_lanes
      */
     public List<Lane> getexitLanes() {
@@ -77,13 +75,16 @@ public class Junction {
 
     /** 
      * Accesses and returns the traffic lights of the junction
-     * @
      * @return - List<TrafficLights> traffic_lights
      */
     public List<TrafficLight> getTrafficLights() {
         return traffic_lights;
     }
 
+    /** 
+     * Accesses and returns the rate of vehicles coming into the junction
+     * @return - List<TrafficLights> traffic_lights
+     */
     public Map<String, Integer> getVehicle_rate() {
         return vehicle_rate;
     }
@@ -94,7 +95,6 @@ public class Junction {
 
     /** 
      * Accesses and returns the traffic lights configuration for junction
-     * @
      * @return - TrafficLightsConfig tl_config
      */
     public TrafficLightConfig getTLConfig() {
@@ -105,7 +105,6 @@ public class Junction {
 
     /** 
      * Accesses and returns the timer for the simulation
-     * @
      * @return - float timer
      */
     public float getTimer() {
@@ -115,40 +114,66 @@ public class Junction {
 
     /** 
      * Accesses and returns the metrics of the junction
-     * @
      * @return - List<lanes> entry_lanes
      */
     public JunctionMetrics getJunctionMetric() {
         return metrics;
     }
 
-    
+    /** 
+     * Set the number of entry lanes in a specified direction
+     * 
+     * @return - List<lanes> entry_lanes
+     */
     public boolean setNumLanesEntry(int side, int number) {
-        for (int i = 0; i ++; i < number) {
-            Lane lane = new Lane();
-            entry_lanes.get(side).add(lane);
+        
+        //Checks to see if a reasonable amount of lanes has been chosen
+        if (number < 1 || number > 5){
+            // If not do not add any lanes and retun false
+            return false;
+        } else {
+            // If a reasonable amount of lanes has been chosen
+            // Add the specified amount of lanes to the junction
+            for (int i = 0; i ++; i < number) {
+                Lane lane = new Lane(); 
+                entry_lanes.get(side).add(lane);
+            }
         }
     }
 
-    public boolean setLaneDirections(int side, int index, int direction) {
-        Lane theLane = entry_lanes.get(side).get(lane);
-        if (theLane != null) {
-            theLane.setDirection(direction);
+    public boolean setLaneDirections(int side, int index, String direction) {
+        // Check the validity of the direction string
+        //if (direction) {
+        //    return false;
+        //}
+        // Check that a valid side and index has been given
+        if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
+            // If so then set direction
+            entry_lanes.get(side).get(lane).setLaneBus(type);
             return true;
         } else {
+            // Return false if side or index are not valid
             return false;
         }
     }
 
     public void setLaneBus(int side, int index, boolean type) {
-        entry_lanes.get(side).get(lane).setBusLane(type);
+        // Check that a valid side and index has been given
+        if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
+            // If so then set the bus lane
+            entry_lanes.get(side).get(lane).setLaneBus(type);
+            return true;
+        } else {
+            // Return false if side or index are not valid
+            return false;
+        }
     }
 
-    public void verifyJunction() {
+    public boolean verifyJunction() {
         
     }
 
-    public void connectLanes() {
+    public boolean connectLanes() {
 
     }
 
