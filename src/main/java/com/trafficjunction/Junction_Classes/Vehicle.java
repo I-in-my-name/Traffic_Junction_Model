@@ -23,5 +23,9 @@ public class Vehicle {
     public VehicleMetrics getMetrics() {
         return null;
     }
+
+    public float getLength() {
+        return length;
+    }
     
 }

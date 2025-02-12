@@ -1,30 +1,54 @@
 package com.trafficjunction;
 import java.util.*;
-import java.util.PriorityQueue;
+//import java.util.PriorityQueue;
+//import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import Vehicle;
-import TrafficLight;
 
+class Pair<K,V> {
+    K left;
+    V right;
+    
+    public Pair(K k, V v) {
+        left = k;
+        right = v;
+    }
 
-class Lane {
+    public K getLeft() {
+        return left;
+    }
+
+    public V getRight() {
+        return right;
+    }
+}
+
+public class Lane {
     private List<Lane> goesTo; // lanes that current lane leads to
     private List<Lane> comesFrom; // previous lanes connected to current lane
     private float length; // length of lane
-    private PriorityQueue<Float, Vehicle> vehicles; // store vehicles & positions
+    
+    //private PriorityQueue<Float, Vehicle> vehicles; // store vehicles & positions - this doesn't work
+    // Need some kind of queue pair data structure
+    private List<Pair<Float, Vehicle>> vehicles;
+
     private TrafficLight trafficLight; 
     private String direction; // N, S, E, W --> can formalise later
     private boolean busLane; // if bus lane
 
-    public void Lane (float length, TrafficLight trafficLight, String direction, boolean busLane) {
-		this.length = length;
-        this.trafficLight = trafficLight;
-        this.direction - direction;
-        this.busLane = busLane;
-        this.vehicles = new PriorityQueue<>();
-        this.goesTo = new ArrayList<>();
+    public void Lane (float length, TrafficLight trafficLight, String direction) {
+		this.goesTo = new ArrayList<>();
         this.comesFrom = new ArrayList<>();
+        
+        this.length = length;
+        this.trafficLight = trafficLight;
+        this.direction = direction;
+        this.busLane = false;
+
+        vehicles = new ArrayList<>();
+        
     }
 
     // Returns direction as a String
@@ -38,17 +62,24 @@ class Lane {
         this.direction = newDirection; // need to restrict param to N, S etc
     }
 
+    // Updates if the lane is a bus lane
+    public void setBusLane(boolean bool) {
+        // if (newDirection != "F" || newDirection != "L") - potentially go 2 directions? so more than 1 char?
+        this.busLane = bool; // need to restrict param to N, S etc
+    }
+
     // Get lane lenght
     public float getLength() {
         return this.length;
     }
 
-    // Update lane length // VLAD 
-    public void setLength(float newLength) {
+    // Update lane length
+    public boolean setLength(float newLength) {
         if (newLength <= 0) {
-            throw new IllegalArqumentException("Lane length must be greater than zero.");
+            return false;
         }
         this.length = newLength;
+        return true;
     }
 
     // Add a lane that connects to this lane
@@ -85,22 +116,24 @@ class Lane {
    }
 
    public int getVehicleNum(int num) {
-        /// 
+        return vehicles.size();
    }
    
     // add vehicle needs to check if lane full
 
     public boolean isFull() {
-        // check if vehicle at back of queue --> indicates it is full 
-        if (vehicles.isEmpty()) {
+        // check if vehicle at back of queue --> indicates it is full
+
+        int index = vehicles.size(); // get the number of vehicles in the lane
+        if (index == 0) {
             return false; // If no vehicles, lane is not full
         }
-        float laneCapacityThreshold = this.length - 2.0f; // Backmost vehicle should not be beyond this point
+        index--;    // Index of backmost vehicle is #vehicles - 1
 
-        // Get the vehicle with the highest position (furthest back in queue)
-        float backmostVehiclePos = Collections.max(vehicles);
+        float vehicle_position  = vehicles.get(index).getLeft();                // Gets the backmost vehicle's position
+        float vehicle_length    = vehicles.get(index).getRight().getLength();   // Gets the backmost vehicle's length
 
-        // Check if the backmost vehicle is within 2m of the front (0m)
-        return backmostVehiclePos >= laneCapacityThreshold;
+        // Check if the backmost vehicle is not blocking the back of the lane
+        return this.length >= (vehicle_position + vehicle_length);
     }
 }

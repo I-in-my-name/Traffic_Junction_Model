@@ -1,5 +1,6 @@
 package com.trafficjunction;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -48,8 +49,8 @@ public class Junction {
 
         // Add a lane to each direction
         for (int i; i<4; i++) {
-            entry_lanes.add(new ArrayList<>())
-            exit_lanes.add(new ArrayList<>())
+            entry_lanes.add(new ArrayList<>());
+            exit_lanes.add(new ArrayList<>());
         }
         
         // Create one trafficlight
@@ -59,7 +60,7 @@ public class Junction {
      * Accesses and returns the entry lanes of the junction
      * @return - List<lanes> entry_lanes
      */
-    public List<Lane> getEntryLanes() {
+    public List<List<Lane>> getEntryLanes() {
         return entry_lanes;
     }
 
@@ -68,7 +69,7 @@ public class Junction {
      * Accesses and returns the exitt lanes of the junction
      * @return - List<lanes> exit_lanes
      */
-    public List<Lane> getexitLanes() {
+    public List<List<Lane>> getexitLanes() {
         return exit_lanes;
     }
 
@@ -108,7 +109,7 @@ public class Junction {
      * @return - float timer
      */
     public float getTimer() {
-        return timer
+        return timer;
     }
 
 
@@ -134,7 +135,7 @@ public class Junction {
         } else {
             // If a reasonable amount of lanes has been chosen
             // Add the specified amount of lanes to the junction
-            for (int i = 0; i ++; i < number) {
+            for (int i = 0; i < number; i++) {
                 Lane lane = new Lane(); 
                 entry_lanes.get(side).add(lane);
             }
@@ -149,7 +150,7 @@ public class Junction {
         // Check that a valid side and index has been given
         if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
             // If so then set direction
-            entry_lanes.get(side).get(lane).setLaneBus(type);
+            entry_lanes.get(side).get(index).setDirection(direction);
             return true;
         } else {
             // Return false if side or index are not valid
@@ -157,17 +158,18 @@ public class Junction {
         }
     }
 
-    public void setLaneBus(int side, int index, boolean type) {
+    public boolean setLaneBus(int side, int index, boolean type) {
         // Check that a valid side and index has been given
         if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
             // If so then set the bus lane
-            entry_lanes.get(side).get(lane).setLaneBus(type);
+            entry_lanes.get(side).get(index).setBusLane(type);
             return true;
         } else {
             // Return false if side or index are not valid
             return false;
         }
     }
+    // set exit lane as bus ...
 
     public boolean verifyJunction() {
         

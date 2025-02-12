@@ -7,6 +7,10 @@ public class TrafficLightConfig {
     public List<TrafficLightState> configs;
     private float cycle_duration;
 
+    public TrafficLightConfig() {
+
+    }
+
     public void addState(float time, int state) {
 
     }
@@ -29,7 +33,7 @@ public class TrafficLightConfig {
     
 }
 
-private class TrafficLightState {
+class TrafficLightState {
 
 	public float time;
 	public int[] states;
