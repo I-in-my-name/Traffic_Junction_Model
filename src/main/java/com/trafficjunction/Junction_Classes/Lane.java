@@ -1,6 +1,5 @@
-class Lane {
+package com.trafficjunction;
 
-    public void Lane () {
-		
-    }
+public class Lane {
+    
 }
