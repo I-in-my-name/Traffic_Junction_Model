@@ -122,12 +122,12 @@
                         </ImageView>
                         <Group fx:id="westRoad" layoutX="109.0" layoutY="108.0">
                            <children>
-                              <ImageView fx:id="wLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="wLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="wLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="wLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
@@ -137,12 +137,12 @@
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="wLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="wLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="wLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="wLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
@@ -151,12 +151,12 @@
                         </Group>
                         <Group fx:id="northRoad" layoutX="390.8" layoutY="-7.0" rotate="90.0">
                            <children>
-                              <ImageView fx:id="nLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="nLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="nLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="nLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
@@ -166,12 +166,12 @@
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="nLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="nLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="nLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="nLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
@@ -180,12 +180,12 @@
                         </Group>
                         <Group fx:id="southRoad" layoutX="223.7" layoutY="390.5" rotate="-90.0">
                            <children>
-                              <ImageView fx:id="sLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="sLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="sLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="sLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
@@ -195,12 +195,12 @@
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="sLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="sLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="sLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="sLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
@@ -209,12 +209,12 @@
                         </Group>
                         <Group fx:id="eastRoad" layoutX="505.5" layoutY="275.0" rotate="180.0">
                            <children>
-                              <ImageView fx:id="eLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="eLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="eLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="eLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="33.399993896484375" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
@@ -224,18 +224,26 @@
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="eLane4" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="eLane2" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="100.10000610351562" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="eLane5" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+                              <ImageView fx:id="eLane1" fitHeight="60.0" fitWidth="34.5" layoutX="59.482757568359375" layoutY="133.5" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                                  <image>
                                     <Image url="@../../assets/straightOnRoad.png" />
                                  </image>
                               </ImageView>
                            </children>
                         </Group>
+                        <Button fx:id="westLaneAdd" layoutX="62.0" layoutY="173.0" mnemonicParsing="false" text="+" />
+                        <Button fx:id="westLaneSub" layoutX="62.0" layoutY="204.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
+                        <Button fx:id="northLaneAdd" layoutX="557.0" layoutY="32.0" mnemonicParsing="false" text="+" />
+                        <Button fx:id="northLaneSub" layoutX="557.0" layoutY="63.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
+                        <Button fx:id="eastLaneAdd" layoutX="686.0" layoutY="343.0" mnemonicParsing="false" text="+" />
+                        <Button fx:id="eastLaneSub" layoutX="686.0" layoutY="374.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
+                        <Button fx:id="southLaneAdd" layoutX="173.0" layoutY="489.0" mnemonicParsing="false" text="+" />
+                        <Button fx:id="southLaneSub" layoutX="173.0" layoutY="520.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
                      </children>
                   </AnchorPane>
                </children>
