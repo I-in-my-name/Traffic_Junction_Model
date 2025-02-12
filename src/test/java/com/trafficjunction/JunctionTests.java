@@ -14,7 +14,7 @@ public class JunctionTests {
     }
     
     @Test
-    void setNumLanesEntry() {
+    void testSetNumLanesEntry() {
         // Testing function:
         /**
         * Returns a boolean success or failure
@@ -37,6 +37,11 @@ public class JunctionTests {
         assertEquals(false, result);
 
         // test it works 
+        // So given (int side, int number) the lane at side should have number lanes
+        result = junction.setNumLanesEntry(0, 3);
+        assertEquals(true, result);
+        assertEquals(3, # of lanes on side 0);
+        assertEquals(3, junction.getEntryLanes().get(0).size())
     }
 
 }
