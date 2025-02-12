@@ -2,6 +2,7 @@ package com.trafficjunction;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.String;
 
 public class UserInputData {
     private InputData inputData;
@@ -12,7 +13,8 @@ class InputData {
 
     private Map<String, Integer> directionInfo = new HashMap<>();
 
-    public void InputData(int nte, int nts, int ntw, int ets, int etw, int etn, int ste, int stw, int stn, int wtn, int wte, int wts) {
+    public void InputData(int nte, int nts, int ntw, int ets, int etw, int etn, int ste, int stw, int stn, int wtn,
+            int wte, int wts) {
         directionInfo.put("nte", nte);
         directionInfo.put("nts", nts);
         directionInfo.put("ntw", ntw);
@@ -29,7 +31,9 @@ class InputData {
 
     /*
      * @param direction: The direction for which the information is required.
-     * @return: The number of vehicles in the given direction, or null if invalid direction.
+     * 
+     * @return: The number of vehicles in the given direction, or null if invalid
+     * direction.
      */
     public Integer getDirectionInfo(String direction) {
         return directionInfo.get(direction);
@@ -37,8 +41,11 @@ class InputData {
 
     /*
      * @param direction: The direction for which the information is required.
+     * 
      * @param num: The number of vehicles in the given direction.
-     * @return bool: True if the value has been updated, or false if the direction is invalid.
+     * 
+     * @return bool: True if the value has been updated, or false if the direction
+     * is invalid.
      */
     public boolean setDirectionInfo(String direction, int num) {
         if (directionInfo.containsKey(direction)) {
