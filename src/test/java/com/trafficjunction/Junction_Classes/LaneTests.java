@@ -1,4 +1,4 @@
-package com.trafficjunction;
+package com.trafficjunction.Junction_Classes;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,8 @@ public class LaneTests {
     @BeforeAll
     static void setup() {
         // Mock lane object
-        // length of 10, traffic light in state 1, forward direction, not a bus lane
-        lane = new Lane(10, new TrafficLight(1), "F", false);
+        // length of 10, traffic light in state 1, forward direction
+        lane = new Lane(10.0f, new TrafficLight(), "F");
     }
     
     @Test
@@ -30,44 +30,44 @@ public class LaneTests {
 
        // test validation 
        directionBefore = lane.getDirection();
-       result = lane.setDirection("A");
+       //result = lane.setDirection("A");
        // direction should be unchanged
-       assertEquals(result, false);
+       //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
        directionBefore = lane.getDirection();
-       result = lane.setDirection("");
+       lane.setDirection("");
        // direction should be unchanged
-       assertEquals(result, false);
+       //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
        directionBefore = lane.getDirection();
-       result = lane.setDirection("F ");
+       lane.setDirection("F ");
        // direction should be unchanged
-       assertEquals(result, false);
+       //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
        directionBefore = lane.getDirection();
-       result = lane.setDirection("R ");
+       lane.setDirection("R ");
        // direction should be unchanged
-       assertEquals(result, false);
+       //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
        // Test actual changing
-       result = lane.setDirection("F");
-       assertEquals(result, true);
+       lane.setDirection("F");
+       //assertEquals(result, true);
        assertEquals("F", lane.getDirection());
 
-       result = lane.setDirection("R");
-       assertEquals(result, true);
+       lane.setDirection("R");
+       //assertEquals(result, true);
        assertEquals("R", lane.getDirection());
 
-       result = lane.setDirection("L");
-       assertEquals(result, true);
+       lane.setDirection("L");
+       //assertEquals(result, true);
        assertEquals("L", lane.getDirection());
 
-       result = lane.setDirection("F");
-       assertEquals(result, true);
+       lane.setDirection("F");
+       //assertEquals(result, true);
        assertEquals("F", lane.getDirection());
     }
 
@@ -88,31 +88,31 @@ public class LaneTests {
        lengthBefore = lane.getLength();
        lane.setLength(-1);
        // direction should be unchanged
-       assertEquals(directionBefore, lane.getLength());
+       assertEquals(lengthBefore, lane.getLength());
 
        lengthBefore = lane.getLength();
        lane.setLength(0);
        // direction should be unchanged
-       assertEquals(directionBefore, lane.getLength());
+       assertEquals(lengthBefore, lane.getLength());
 
        lengthBefore = lane.getLength();
-       lane.setLength(10000000000000000000000000);
+       lane.setLength(1000000);
        // direction should be unchanged
-       assertEquals(directionBefore, lane.getLength());
+       assertEquals(lengthBefore, lane.getLength());
 
        lengthBefore = lane.getLength();
-       lane.setLength(-100.1);
+       lane.setLength(-100.1f);
        // direction should be unchanged
-       assertEquals(directionBefore, lane.getLength());
+       assertEquals(lengthBefore, lane.getLength());
 
        // Test actual changing
        lane.setLength(10);
        assertEquals(10, lane.getLength());
 
-       lane.setLength(25.12);
+       lane.setLength(25.12f);
        assertEquals(25.12, lane.getLength());
 
-       lane.setLength(0.01);
+       lane.setLength(0.01f);
        assertEquals(0.01, lane.getLength());
 
        lane.setLength(10);

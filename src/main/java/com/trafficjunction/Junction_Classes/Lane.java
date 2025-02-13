@@ -1,11 +1,7 @@
-package com.trafficjunction;
-import java.util.*;
-//import java.util.PriorityQueue;
-//import org.apache.commons.lang3.tuple.Pair;
+package com.trafficjunction.Junction_Classes;
 
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 class Pair<K,V> {
     K left;
@@ -38,7 +34,7 @@ public class Lane {
     private String direction; // N, S, E, W --> can formalise later
     private boolean busLane; // if bus lane
 
-    public void Lane (float length, TrafficLight trafficLight, String direction) {
+    public Lane(float length, TrafficLight trafficLight, String direction) {
 		this.goesTo = new ArrayList<>();
         this.comesFrom = new ArrayList<>();
         

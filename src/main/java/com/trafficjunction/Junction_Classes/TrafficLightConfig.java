@@ -1,4 +1,4 @@
-package com.trafficjunction;
+package com.trafficjunction.Junction_Classes;
 
 import java.util.List;
 

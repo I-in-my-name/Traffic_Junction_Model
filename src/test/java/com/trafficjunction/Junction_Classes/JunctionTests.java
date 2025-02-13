@@ -1,4 +1,4 @@
-package com.trafficjunction;
+package com.trafficjunction.Junction_Classes;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -50,27 +50,27 @@ public class JunctionTests {
         result = junction.setNumLanesEntry(0, 3);
         assertEquals(true, result);
         // should be 3 lanes in 0 
-        assertEquals(3, junction.getEntryLanes().get(0).size())
+        assertEquals(3, junction.getEntryLanes().get(0).size());
 
         result = junction.setNumLanesEntry(0, 5);
         assertEquals(true, result);
         // should be 5 lanes in 0 
-        assertEquals(5, junction.getEntryLanes().get(0).size())
+        assertEquals(5, junction.getEntryLanes().get(0).size());
 
         result = junction.setNumLanesEntry(2, 4);
         assertEquals(true, result);
         // should be 4 lanes in 2 
-        assertEquals(4, junction.getEntryLanes().get(2).size())
+        assertEquals(4, junction.getEntryLanes().get(2).size());
 
         result = junction.setNumLanesEntry(1, 3);
         assertEquals(true, result);
         // should be 3 lanes in 0 
-        assertEquals(3, junction.getEntryLanes().get(1).size())
+        assertEquals(3, junction.getEntryLanes().get(1).size());
 
         result = junction.setNumLanesEntry(3, 0);
         assertEquals(true, result);
         // should be 0 lanes in 3 
-        assertEquals(0, junction.getEntryLanes().get(3).size())
+        assertEquals(0, junction.getEntryLanes().get(3).size());
     }
 
 }

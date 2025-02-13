@@ -1,4 +1,4 @@
-package com.trafficjunction;
+package com.trafficjunction.Junction_Classes;
 
 public class TrafficLight {
 

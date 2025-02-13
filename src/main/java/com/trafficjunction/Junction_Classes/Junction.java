@@ -1,9 +1,9 @@
-package com.trafficjunction;
-import java.util.Map;
+package com.trafficjunction.Junction_Classes;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
-
+import java.util.Map;
 
 public class Junction {
 
@@ -136,7 +136,8 @@ public class Junction {
             // If a reasonable amount of lanes has been chosen
             // Add the specified amount of lanes to the junction
             for (int i = 0; i < number; i++) {
-                Lane lane = new Lane(); 
+                // TODO DEFAULT LANE? LENGTH OF 10 AND NULL VALUES JUST MADE UP
+                Lane lane = new Lane(10.f, null, null); 
                 entry_lanes.get(side).add(lane);
             }
             return true;
