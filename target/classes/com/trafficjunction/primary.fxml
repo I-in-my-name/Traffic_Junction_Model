@@ -244,6 +244,11 @@
                         <Button fx:id="eastLaneSub" layoutX="686.0" layoutY="374.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
                         <Button fx:id="southLaneAdd" layoutX="173.0" layoutY="489.0" mnemonicParsing="false" text="+" />
                         <Button fx:id="southLaneSub" layoutX="173.0" layoutY="520.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
+                        <ImageView fx:id="trafficLightButton" fitHeight="105.0" fitWidth="38.0" layoutX="34.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../assets/trafficLight.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
                </children>

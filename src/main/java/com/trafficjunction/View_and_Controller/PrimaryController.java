@@ -32,9 +32,18 @@ public class PrimaryController {
     private ImageView sLane1, sLane2, sLane3, sLane4, sLane5;
     @FXML
     private ImageView wLane1, wLane2, wLane3, wLane4, wLane5;
+    @FXML
+    private ImageView trafficLightButton;
 
+    // Buttons for adding and subtracting the number of lanes.
     @FXML
     private Button northLaneAdd, northLaneSub, eastLaneAdd, eastLaneSub, southLaneAdd, southLaneSub, westLaneAdd, westLaneSub;
+
+    // Current number of lanes for each road.
+    int northLaneNum = 5;
+    int eastLaneNum = 5;
+    int southLaneNum = 5;
+    int westLaneNum = 5;
 
     // Store the current image index for each lane.
     private final Map<ImageView, Integer> laneImageIndex = new HashMap<>();
@@ -49,10 +58,6 @@ public class PrimaryController {
         "/assets/straightLeftRightRoad.png"
     };
 
-    int northLaneNum = 5;
-    int eastLaneNum = 5;
-    int southLaneNum = 5;
-    int westLaneNum = 5; 
 
     /*
      * The initialise function is called when the FXML file is loaded. It is used to set up the scene. 
@@ -65,6 +70,8 @@ public class PrimaryController {
                 applyNumericRestriction((TextField) node);
             }
         }
+
+        addHoverEffect(trafficLightButton);
 
         // Add all lanes to a hashmap to track their current index.
         ImageView[] lanes = {nLane1, nLane2, nLane3, nLane4, nLane5, eLane1, eLane2, eLane3, eLane4, eLane5, sLane1, sLane2, sLane3, sLane4, sLane5, wLane1, wLane2, wLane3, wLane4, wLane5};
