@@ -48,7 +48,7 @@ public class Junction {
         vehicle_rate.put("wtn", 0);
 
         // Add a lane to each direction
-        for (int i; i<4; i++) {
+        for (int i = 0; i<4; i++) {
             entry_lanes.add(new ArrayList<>());
             exit_lanes.add(new ArrayList<>());
         }
@@ -139,6 +139,7 @@ public class Junction {
                 Lane lane = new Lane(); 
                 entry_lanes.get(side).add(lane);
             }
+            return true;
         }
     }
 
@@ -172,11 +173,11 @@ public class Junction {
     // set exit lane as bus ...
 
     public boolean verifyJunction() {
-        
+        return false;
     }
 
     public boolean connectLanes() {
-
+        return false;
     }
 
     public void setLaneTrafficLight(int side, int index, TrafficLight light) {

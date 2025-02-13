@@ -27,8 +27,9 @@ public class TrafficLightConfig {
 
     }
 
+    // Should return a list of states
     public int getState(float time) {
-        
+        return 0;
     }
     
 }
