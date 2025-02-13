@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+// TODO: Not sure if we need this yet. Has NOT been used.
 enum Direction {
     NORTH, EAST, SOUTH, WEST
 }
@@ -132,6 +133,11 @@ public class PrimaryController {
         });
     }
 
+    /* 
+     * This method is used to disable lanes when the user decreases the number of lanes.
+     * @param lanes - The array of lanes to disable.
+     * @param laneNum - The number of lanes to disable.
+     */
     @FXML
     private void subtractLane(ImageView[] lanes, int laneNum) {
         for (int i = laneNum; i < 5; i++) {
@@ -140,6 +146,11 @@ public class PrimaryController {
         }
     }
 
+    /*
+     * This method is used to enable lanes when the user increases the number of lanes.
+     * @param lanes - The array of lanes to enable.
+     * @param laneNum - The number of lanes to enable.
+     */
     @FXML
     private void addLane(ImageView[] lanes, int laneNum) {
         for (int i = 0; i < laneNum; i++) {
