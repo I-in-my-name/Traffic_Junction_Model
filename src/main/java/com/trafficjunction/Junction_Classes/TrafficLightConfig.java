@@ -83,3 +83,13 @@ class TrafficLightState {
 
 
 }
+
+/**
+ * Junction
+ * List(TrafficLights) trafLights
+ * 
+ * TLConfig
+ * List( Pair(time, List(states)) ) 
+ * 
+ * |List(states)| = |trafLights|
+ */
