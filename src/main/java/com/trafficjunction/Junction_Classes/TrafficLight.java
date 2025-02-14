@@ -5,7 +5,8 @@ public class TrafficLight {
     public int state;
 
     public TrafficLight() {
-        state = 0;
+        state = 0;  // 0 - Red
+                    // 1 - Green
     }
 
     public void setState(int s) {

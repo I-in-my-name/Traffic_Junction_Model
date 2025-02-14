@@ -12,6 +12,13 @@ public class Vehicle {
 
     private VehicleMetrics metrics;
 
+    // Should vehicle be abstract class only defined by Car and Bus classes?
+    public Vehicle(float speed, float max_speed, float length) {
+        this.speed = speed;
+        this.max_speed = max_speed;
+        this.length = length;
+    }
+
     public void update(float time, Lane lane) {
 
     }
@@ -27,5 +34,7 @@ public class Vehicle {
     public float getLength() {
         return length;
     }
+
+    // method: get vehicle position: used in lane class for deleting vehicles. 
     
 }

@@ -14,7 +14,7 @@ public class JunctionTests {
     }
     
     @Test
-    void testSetNumLanesEntry() {
+    void testSetNumLanesEntryNegative() {
         // Testing function:
         /**
         * Returns a boolean success or failure
@@ -44,7 +44,21 @@ public class JunctionTests {
         // test > 3
         result = junction.setNumLanesEntry(4, 2);
         assertEquals(false, result);
+    }
 
+    @Test
+    void testSetNumLanesEntryPositive() {
+        // Testing function:
+        /**
+        * Returns a boolean success or failure
+        * Given number must > 0 and <= 5 (otherwise failure)
+        * If success, set the number of entry lanes at the
+        * given side to the given number
+        * @param    side    Side to update as a String
+        * @param    number  the number of lanes to set to
+        * @return   boolean success or failure
+        */
+        boolean result;
         // test it works 
         // So given (int side, int number) the lane at side should have number lanes
         result = junction.setNumLanesEntry(0, 3);
@@ -71,6 +85,96 @@ public class JunctionTests {
         assertEquals(true, result);
         // should be 0 lanes in 3 
         assertEquals(0, junction.getEntryLanes().get(3).size());
+    }
+
+    // passing invalid data and ensuring error handling
+    @Test
+    void testSetLaneDirectionsNegative() {
+        /*
+         * Returns boolean
+         * 
+         * Given a side and index, set the lane's direction to the one given
+         * 
+         * @param side      int     the no. side it is (0-3)
+         * @param index     int     the index lane to set (>= 0)
+         * @param direction string  the new direction to set it to
+         */
+        boolean result;
+
+        // test 0 <= side <= 3
+        result = junction.setLaneDirections(-1, 2, "l");
+        assertEquals(false, result);
+        result = junction.setLaneDirections(10, 2, "f");
+        assertEquals(false, result);
+
+        // test 0 <= index
+        result = junction.setLaneDirections(2, -1, "l");
+        assertEquals(false, result);
+
+        // test direction must only contain "lfr" chars 
+        result = junction.setLaneDirections(2, 2, "l ");
+        assertEquals(false, result);
+        result = junction.setLaneDirections(2, 2, "");
+        assertEquals(false, result);
+        result = junction.setLaneDirections(2, 2, "frj");
+        assertEquals(false, result);
+    }
+
+    // passing valid data and ensuring correct behaviour
+    // Dependent on setNumLanesEntry, getEntryLanes, Lane.getDirection
+    @Test
+    void testSetLaneDirectionsPositive() {
+        /*
+         * Returns boolean
+         * 
+         * Given a side and index, set the lane's direction to the one given
+         * 
+         * @param side      int     the no. side it is (0-3)
+         * @param index     int     the index lane to set (>= 0)
+         * @param direction string  the new direction to set it to
+         */
+        boolean result;
+        String expectedDirection, newDirection;
+        int side, index;
+
+        // setting number of entry lanes for each side for testing purposed
+        // (can't test lane has set direction if lane doesn't exist)
+        junction.setNumLanesEntry(0, 4);
+        junction.setNumLanesEntry(1, 3);
+        junction.setNumLanesEntry(2, 1);
+        junction.setNumLanesEntry(3, 2);
+
+        side = 0;
+        index = 4;
+        expectedDirection = "l";
+        result = junction.setLaneDirections(side, index, expectedDirection);
+        assertEquals(true, result);
+        newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
+        assertEquals(expectedDirection, newDirection);
+
+        side = 1;
+        index = 0;
+        expectedDirection = "lr";
+        result = junction.setLaneDirections(side, index, expectedDirection);
+        assertEquals(true, result);
+        newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
+        assertEquals(expectedDirection, newDirection);
+
+        side = 2;
+        index = 0;
+        expectedDirection = "r";
+        result = junction.setLaneDirections(side, index, expectedDirection);
+        assertEquals(true, result);
+        newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
+        assertEquals(expectedDirection, newDirection);
+
+        side = 3;
+        index = 2;
+        expectedDirection = "lfr";
+        result = junction.setLaneDirections(side, index, expectedDirection);
+        assertEquals(true, result);
+        newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
+        assertEquals(expectedDirection, newDirection);
     }
 
 }
