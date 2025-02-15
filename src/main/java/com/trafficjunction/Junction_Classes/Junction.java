@@ -254,12 +254,19 @@ public class Junction {
             // Check content/ Check for duplicates
         
         for (int i = 0; i < 4; i++) {
-            String character = Character.toString(direction.charAt(i)); // Gets the i'th characthter in direction, then converted to string
+            char character_i = direction.charAt(i); // Gets the i'th characthter in direction
+            String character = Character.toString(character_i); // Converts the character to a string so the (.contains()) method can be used
             String allowed = "LFR";     // Allowed characters
             if (!allowed.contains(character)) {
                 return false;
             } else {
-                // 
+                // Check if there is a duplicate character
+                for (int j = i + 1; j < 4; j++) {
+                    char character_j = direction.charAt(j);
+                    if (character_i == character_j) {
+                        return false;
+                    }
+                }
             }
         }
         // Check that a valid side and index has been given
@@ -295,13 +302,14 @@ public class Junction {
 
     /** 
      * Connects two lanes
-     * 
-     * Description...
-     * 
+     * Creates an 'inbetween lane' and connects the entry/exit lanes to it
+     * Parameters - takes the entry and exit lanes that need to be connected
      * @return - Returns whether the method succesfully managed to connect the lanes
      */
     public void connectLanes(Lane entry, Lane exit) {
         Lane between = new Lane(10.f, null, null);
+        entry.addGoingLane(between);
+        exit.addComingLane(between);
     }
 
     /** 
