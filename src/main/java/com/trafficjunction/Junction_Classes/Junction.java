@@ -117,18 +117,91 @@ public class Junction {
 
     /** 
      * Accesses and returns the metrics of the junction
-     * @return - List<lanes> entry_lanes
+     * @return 
      */
     public JunctionMetrics getJunctionMetric() {
         return metrics;
     }
 
+    /**
+     * Add Entry Lane method
+     * Parameters - the side which we want to add a lane in.
+     * @return - If the lane was added.
+     */
+    public boolean addEntryLane(int side) {
+        // Get the road on the desired side
+        List<Lane> road = entry_lanes.get(side);
+        // Check if the road has less than 5 lanes
+        if (road.size() > 4) {
+            return false;
+        }
+        // Add a default lane to the road
+        // TODO DEFAULT ENTRY LANE?
+        Lane lane = new Lane(30.f, traffic_lights.get(0), null);
+        road.add(lane);
+        return true;
+    }
+
+    /**
+     * Remove Entry Lane method
+     * Parameters - the side which we want to remove a lane in.
+     * @return - If the lane was removed.
+     */
+    public boolean removeEntryLane(int side) {
+        // Get the road on the desired side
+        List<Lane> road = entry_lanes.get(side);
+        // Check that the road will have at least 0 lanes after removal
+        if (road.size() < 1) {
+            return false;
+        }
+        // Remove the lane at the end of the list
+        int index = road.size() - 1;
+        road.remove(index);
+        return true;
+    }
+
+    /**
+     * Add Exit Lane method
+     * Parameters - the side which we want to add a lane in.
+     * @return - If the lane was added.
+     */
+    public boolean addExitLane(int side) {
+        // Get the road on the desired side
+        List<Lane> road = exit_lanes.get(side);
+        // Check if the road has less than 5 lanes
+        if (road.size() > 4) {
+            return false;
+        }
+        // Add a default lane to the road
+        // TODO DEFAULT EXIT LANE?
+        Lane lane = new Lane(30.f, null, null);
+        road.add(lane);
+        return true;
+    }
+
+    /**
+     * Remove Exit Lane method
+     * Parameters - the side which we want to remove a lane in.
+     * @return - If the lane was removed.
+     */
+    public boolean removeExitLane(int side) {
+        // Get the road on the desired side
+        List<Lane> road = exit_lanes.get(side);
+        // Check that the road will have at least 0 lanes after removal
+        if (road.size() < 1) {
+            return false;
+        }
+        // Remove the lane at the end of the list
+        int index = road.size() - 1;
+        road.remove(index);
+        return true;
+    }
+
+
     // Written test for
     /** 
      * Set the number of entry lanes in a specified direction
-     * 
-     * This also sets the #exiting lanes in the opposite direction
-     * 
+     * Parameters - the side of the junction and the number of lanes wanted
      * @return - List<lanes> entry_lanes
      */
     public boolean setNumLanesEntry(int side, int number) {
@@ -137,15 +210,35 @@ public class Junction {
         if (number < 1 || number > 5){
             // If not do not add any lanes and retun false
             return false;
+        }
+        List<Lane> road = entry_lanes.get(side);
+        int to_add = number - road.size();
+        if (to_add > 0) {       // If we need to add lanes
+            for (int i = 0; i < to_add; i++) {  // Adds number of lanes needed
+                this.addEntryLane(side);
+            }
+        } else if (to_add < 0) {    // If we need to remove lanes
+            for (int i = 0; i > to_add; i--) {  // Removes number of lanes needed
+                this.removeEntryLane(side);
+            }
+        } // If to_add is 0 then nothing needs to happen
+        return true;
+    }
+
+    public boolean setNumLanesExit(int side, int number) {
+        //Checks to see if a reasonable amount of lanes has been chosen
+        if (number < 1 || number > 5){
+            // If not do not add any lanes and retun false
+            return false;
         } else {
             // If a reasonable amount of lanes has been chosen
             // Add the specified amount of lanes to the junction
+            exit_lanes.set(side, new ArrayList<>());
+
             for (int i = 0; i < number; i++) {
                 // TODO DEFAULT LANE? LENGTH OF 30 AND NULL VALUE FOR DIRECTION
-                Lane lane = new Lane(30.f, traffic_lights.get(0), null); 
-                entry_lanes.get(side).add(lane);
-                int exit_side = (side + 2) % 4;
-                exit_lanes
+                Lane exit_lane = new Lane(30.f, null, null);
+                exit_lanes.get(side).add(exit_lane);
             }
             return true;
         }
@@ -154,14 +247,19 @@ public class Junction {
     // Written test for
     public boolean setLaneDirections(int side, int index, String direction) {
         // Check the validity of the direction string
-        if (direction.length() > 3) {   // Check size
+            // Check size
+        if (direction.length() > 3) {
             return false;   // If direction string is longer than 3 characters, then it is definetely invalid
         }
-        for (int i = 0; i < 4; i++) {   // Check content
+            // Check content/ Check for duplicates
+        
+        for (int i = 0; i < 4; i++) {
             String character = Character.toString(direction.charAt(i)); // Gets the i'th characthter in direction, then converted to string
-            String allowed = "lfr";     // Allowed characters
-            if (allowed.contains(character)) {
+            String allowed = "LFR";     // Allowed characters
+            if (!allowed.contains(character)) {
                 return false;
+            } else {
+                // 
             }
         }
         // Check that a valid side and index has been given
@@ -191,7 +289,7 @@ public class Junction {
     // set exit lane as bus ...
 
     public boolean verifyJunction() {
-
+        
         return false;
     }
 
@@ -200,7 +298,7 @@ public class Junction {
      * 
      * Description...
      * 
-     * @return - Returns wether the method succesfully managed to connect the lanes
+     * @return - Returns whether the method succesfully managed to connect the lanes
      */
     public void connectLanes(Lane entry, Lane exit) {
         Lane between = new Lane(10.f, null, null);
@@ -228,30 +326,34 @@ public class Junction {
             List<Lane> entry_road = entry_lanes.get(i);
             //List<String> directions = new ArrayList<>();    // Store directions for present lanes
             for (int j = 0; j < entry_road.size(); j++) {   // For each lane 
-                Lane lane = entry_road.get(j);          // Gets a lane
-                String direction = lane.getDirection(); // Gets the lane's direction
+                Lane entry_lane = entry_road.get(j);          // Gets a lane
+                String direction = entry_lane.getDirection(); // Gets the lane's direction
                 for (char c : direction.toCharArray()) {    // For every char/direction the lane is connected in
-                    int exit_i;
-                    int exit_j;
+                    // Initialise variables
+                    int exit_i;     // Index to get the side of the exit lanes
+                    Lane exit_lane; // The exit lane that needs to be connected to
                     switch (c) {
-                        case 'l':
-                            exit_i = (i+1) % 4;
-                            exit_j = exit_lanes.get(exit_i).size() - j;
+                        case 'L':   // Left
+                            exit_i = (i+1) % 4; // The index on the left of side (i)
+                            exit_lane = exit_lanes.get(exit_i).get(j);
+                            this.connectLanes(entry_lane, exit_lane);
                             break;
-                        case 'f':
-                            exit_i = (i+2) % 4;
-                            exit_j = exit_lanes.get(exit_i).size() - j;
+                        case 'F':   // Forward
+                            exit_i = (i+2) % 4; // Gets the opposing index
+                            exit_lane = exit_lanes.get(exit_i).get(j);
+                            this.connectLanes(entry_lane, exit_lane);
                             break;
-                        case 'r':
-                            exit_i = (i+3) % 4;
-                            exit_j = exit_lanes.get(exit_i).size() - j;
+                        case 'R':   // Right
+                            exit_i = (i+3) % 4; // The index on the left of side (i)
+                            exit_lane = exit_lanes.get(exit_i).get(j);
+                            this.connectLanes(entry_lane, exit_lane);
                             break;
                     }
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     public boolean setLaneTrafficLight(int side, int index, TrafficLight light) {

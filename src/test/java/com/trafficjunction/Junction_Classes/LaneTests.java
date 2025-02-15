@@ -1,8 +1,8 @@
 package com.trafficjunction.Junction_Classes;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class LaneTests {
 
@@ -69,6 +69,35 @@ public class LaneTests {
        lane.setDirection("F");
        //assertEquals(result, true);
        assertEquals("F", lane.getDirection());
+
+       //Also dealing with multiple letters in one 
+       lane.setDirection("LFR");
+       //assertEquals(result, true);
+       assertEquals("LFR", lane.getDirection());
+
+       directionBefore = lane.getDirection();
+       lane.setDirection("FRL ");
+       // direction should be unchanged
+       //assertEquals(result, false);
+       assertEquals(directionBefore, lane.getDirection());
+
+       directionBefore = lane.getDirection();
+       lane.setDirection("FRLL");
+       // direction should be unchanged
+       //assertEquals(result, false);
+       assertEquals(directionBefore, lane.getDirection());
+
+       lane.setDirection("FRR");
+       // direction should be unchanged
+       //assertEquals(result, false);
+       assertEquals(directionBefore, lane.getDirection());
+
+       directionBefore = lane.getDirection();
+       lane.setDirection("frl");
+       //direction should be unchanged
+       //assertEquals(result, false);
+       assertEquals(directionBefore, lane.getDirection());
+
     }
 
     @Test

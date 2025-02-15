@@ -2,24 +2,6 @@ package com.trafficjunction.Junction_Classes;
 import java.util.ArrayList;
 import java.util.List;
 
-class Pair<K,V> {
-    K left;
-    V right;
-    
-    public Pair(K k, V v) {
-        left = k;
-        right = v;
-    }
-
-    public K getLeft() {
-        return left;
-    }
-
-    public V getRight() {
-        return right;
-    }
-}
-
 public class Lane {
     private List<Lane> goesTo; // lanes that current lane leads to
     private List<Lane> comesFrom; // previous lanes connected to current lane
@@ -52,7 +34,7 @@ public class Lane {
     // Written test
     // Updates direction
     public void setDirection(String newDirection) {
-        // if (newDirection != "F" || newDirection != "L") - potentially go 2 directions? so more than 1 char?
+        // if (newDirection != "f" || newDirection != "l") - potentially go 2 directions? so more than 1 char?
         this.direction = newDirection; // need to restrict param to N, S etc
     }
 
@@ -163,7 +145,7 @@ public class Lane {
 
     // Doesn't need test
     public List<Pair<Float, Vehicle>> getVehicles() {
-        return new vehicles; 
+        return this.vehicles;
     }
 
     // Written test

@@ -19,18 +19,22 @@ public class Vehicle {
         this.length = length;
     }
 
+    // TODO: finish est for
     public void update(float time, Lane lane) {
 
     }
 
+    // Don't need test for
     public Lane popRoute() {
         return null;
     }
 
+    // Don't need test for
     public VehicleMetrics getMetrics() {
         return null;
     }
 
+    // Don't need test for
     public float getLength() {
         return length;
     }

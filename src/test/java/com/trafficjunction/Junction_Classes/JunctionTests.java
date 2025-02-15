@@ -1,8 +1,8 @@
 package com.trafficjunction.Junction_Classes;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class JunctionTests {
 
@@ -14,7 +14,7 @@ public class JunctionTests {
     }
     
     @Test
-    void testSetNumLanesEntryNegative() {
+    void testsetNumLanesEntryNegative() {
         // Testing function:
         /**
         * Returns a boolean success or failure
@@ -47,7 +47,7 @@ public class JunctionTests {
     }
 
     @Test
-    void testSetNumLanesEntryPositive() {
+    void testsetNumLanesEntryPositive() {
         // Testing function:
         /**
         * Returns a boolean success or failure
