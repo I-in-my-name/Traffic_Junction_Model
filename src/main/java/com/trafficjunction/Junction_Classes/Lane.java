@@ -107,6 +107,7 @@ public class Lane {
     }
 
     // Written test
+    // TODO: need to connect this to the Simulation and incorporate some global time manager and have a finalising total wait time method here
     public boolean removeVehicle() {
         if (vehicles.isEmpty()) {
             return false; // Lane is empty, nothing to remove
@@ -158,6 +159,50 @@ public class Lane {
         float backmostVehiclePos = lastVehicle.getLeft(); // get pos
 
         return backmostVehiclePos >= (length - 2);
+    }
+
+    /**
+     * Updates all vehicles in the lane based on the traffic light's state.
+     * - If the traffic light is red (state = 0) or the lane is blocked, vehicles stop.
+     * - If the traffic light is green (state = 1), vehicles resume movement.
+     * - Vehicles interact with their `VehicleMetrics` to track wait time.
+     *
+     * @param time The current simulation time (in seconds).
+     */
+    public void updateTraffic(float time) {
+        TrafficLight trafficLight = this.getTrafficLight(); // Retrieve the lane's traffic light
+
+        for (Pair<Float, Vehicle> pos_vehicle : vehicles) {  // Loop through all vehicles in the lane
+            Vehicle vehicle = pos_vehicle.getRight(); // Extract the Vehicle object from the Pair
+
+            // If the light is red (0) or the lane is blocked, stop the vehicle
+            if (trafficLight.getState() == 0 || this.isBlocked()) {  
+                vehicle.updateMovement(time, this);  // Stop the vehicle (tracked in VehicleMetrics)
+
+            // If the light is green  (1), allow movement
+            } else if (trafficLight.getState() == 1) {  
+                vehicle.updateMovement(time, this);  // Allow vehicle to move
+            }
+        }
+    }
+
+
+    /**
+     * Method to update the lane
+     * It updates each vehicle starting from the end of the lane.
+     * 
+     * Parameters - (time) which is the time (sec) since the simulation started
+     * @return 
+     */
+    public void update(float time) {
+        // TODO: shift stored values in index? Will this cause problems? If so then does the vehicles list need to be cloned?
+        // List has a clone method but not for when it stores custom objects.
+        int index = 0;
+        for (Pair<Float,Vehicle> pos_vehicle : vehicles) {
+            Vehicle vehicle = pos_vehicle.getRight();
+            vehicle.update(time, this, index);
+            index++;
+        }
     }
 
 }
