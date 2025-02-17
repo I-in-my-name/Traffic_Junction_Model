@@ -176,10 +176,10 @@ public class Lane {
             Vehicle vehicle = pos_vehicle.getRight(); // Extract the Vehicle object from the Pair
 
             // If the light is red (0) or the lane is blocked, stop the vehicle
-            if (trafficLight.getState() == 0 || this.isBlocked()) {  
+            if (trafficLight.getState() == 0 || this.isFull()) {  
                 vehicle.updateMovement(time, this);  // Stop the vehicle (tracked in VehicleMetrics)
 
-            // If the light is green  (1), allow movement
+            // If the light is green (1), allow movement
             } else if (trafficLight.getState() == 1) {  
                 vehicle.updateMovement(time, this);  // Allow vehicle to move
             }

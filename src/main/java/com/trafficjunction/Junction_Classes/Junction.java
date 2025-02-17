@@ -27,7 +27,7 @@ public class Junction {
     private float timer;                // How much time has passed since the start of the simulation
 
     private JunctionMetrics metrics;    // The metrics for the juntion
-    
+
 
     public Junction() {
         // Initialise
@@ -378,20 +378,50 @@ public class Junction {
         
     }
 
+    // side1 = junction entry direction, side2 = junction exit direction
+    // objective: return (random) 1 of the list of routes between entry & exit
     public void findRoute(int side1, int side2) {
+        // side 1 (chooses lane) -> middle lane -> side 2 (chooses lane)
+        // find random lane on side 1 that goes to middle and goes to side 2
+
+        int turn = ((side2 - side1 + 4) % 4);
         
+        switch(turn) {
+            case 0: // this shouldn't be
+            case 1: // left
+            case 2: // forward
+            case 3: // right
+            default: // probably won't need
+        }
+        // check if the leftmost lane goes left
     }
 
     public void update(float time) {
-
+        this.timer += 0.5;      // Add time increment
+        this.updateLights();    // Update traffic lights
+        // update vehicles from exit lanes -> middle lanes -> starting lanes
+            // this is so the vehicles behind don't go into the ones infront/ have to wait for them to move before they can move
+            // or do we want them to be the other way around?
+                // this would mean we create vehicles, then update the junction
+        // create vehicles
     }
 
     public void updateLights() {
-
+        // Get desired state for traffic lights:
+        List<Integer> state_list = tl_config.getStates(this.timer);
+        // Loop through this list to update the lights
+        for (int i = 0; i < state_list.size(); i++) {
+            int state = state_list.get(i);  // Get the desired state for the trafficlight
+            this.traffic_lights.get(i).setState(state); // Update the traffic light
+        }
     }
 
     public void createVehicles() {
+        
+        // loop through all directions across roads
+        // vph is set in each road direction (e.g. NORTH road) + which lane it is exiting
 
+        // every second it does or does not generate a vehicle to
     }
 
     public void calculateMetrics() {

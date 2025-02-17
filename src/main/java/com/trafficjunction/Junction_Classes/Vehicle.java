@@ -11,6 +11,8 @@ public class Vehicle {
     private List<Lane> desired_route;
 
     private VehicleMetrics metrics;
+    private float start_time;
+    private float current_time;
 
     // Should vehicle be abstract class only defined by Car and Bus classes?
     public Vehicle(float time, float max_speed, float length) {
@@ -18,6 +20,9 @@ public class Vehicle {
         this.max_speed = max_speed;
         this.length = length;
         this.metrics = new VehicleMetrics(time);
+        
+        this.start_time = time;
+        this.current_time = time;
     }
 
 /// Methods for VehicleMetrics:
@@ -29,6 +34,8 @@ public class Vehicle {
     public VehicleMetrics getMetrics() {
         return metrics;
     }
+
+///
 
     // Don't need test for
     public Lane popRoute() {
@@ -47,19 +54,31 @@ public class Vehicle {
      */
     public void updateMovement(float time, Lane lane) {
         TrafficLight trafficLight = lane.getTrafficLight();
-
-        if (trafficLight.getState() == 0 || lane.isBlocked()) {  // 0 = Red
-            metrics.stopMoving(time);  // Track wait time
+        
+        if (trafficLight.getState() == 0 || lane.isFull()) {  // 0 = Red
+            if (this.speed != 0) {
+                metrics.stopMoving(time);  // Track wait time
+            }
         } else if (trafficLight.getState() == 1) {  // 1 = Green
-            metrics.startMoving(time);  // Resume movement
+            if (this.speed == 0) {
+                metrics.startMoving(time);  // Resume movement
+            }
+            lane.removeVehicle();
+            List<Lane> lanes = lane.getComesFrom();
+            if (lanes == null) {
+                // TODO: delete self, pass metrics to JunctionMetrics somehow.
+            } else {
+                lanes.get(0).addVehicle(this);
+            }
         }
-    } 
+    }
 
 ///
 
     // TODO: finish test for
     /**
      * Method to update a vehicle's position
+     * 
      * 
      * Parameters - (time) the time since simulation started, (lane) the lane that the vehicle is currently in
      */
@@ -105,5 +124,4 @@ public class Vehicle {
     }
 
     // method: get vehicle position: used in lane class for deleting vehicles. 
-    
 }
