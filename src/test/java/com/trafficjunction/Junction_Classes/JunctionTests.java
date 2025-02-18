@@ -111,6 +111,10 @@ public class JunctionTests {
         result = junction.setLaneDirections(2, -1, "l");
         assertEquals(false, result);
 
+        // test for large values of index
+        result = junction.setLaneDirections(2, 1000, "l");
+        assertEquals(false, result);
+
         // test direction must only contain "lfr" chars 
         result = junction.setLaneDirections(2, 2, "l ");
         assertEquals(false, result);
@@ -145,7 +149,7 @@ public class JunctionTests {
         junction.setNumLanesEntry(3, 2);
 
         side = 0;
-        index = 4;
+        index = 3;
         expectedDirection = "l";
         result = junction.setLaneDirections(side, index, expectedDirection);
         assertEquals(true, result);

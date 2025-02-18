@@ -207,7 +207,8 @@ public class Junction {
     public boolean setNumLanesEntry(int side, int number) {
         
         //Checks to see if a reasonable amount of lanes has been chosen
-        if (number < 0 || number > 5){
+        //And that the value for 'sides' is valid
+        if ((number < 0 || number > 5) || (side < 0 || side > 3)){
             // If not do not add any lanes and retun false
             return false;
         }
@@ -251,9 +252,11 @@ public class Junction {
         if (direction.length() > 3) {
             return false;   // If direction string is longer than 3 characters, then it is definitely invalid
         }
-            // Check content/ Check for duplicates
-        
-        for (int i = 0; i < 4; i++) {
+        //check for duplicates
+
+
+        // Check content/ Check for duplicates
+        for (int i = 0; i < direction.length(); i++) {
             char character_i = direction.charAt(i); // Gets the i'th characthter in direction
             String character = Character.toString(character_i); // Converts the character to a string so the (.contains()) method can be used
             String allowed = "lfr";     // Allowed characters
@@ -261,7 +264,7 @@ public class Junction {
                 return false;
             } else {
                 // Check if there is a duplicate character
-                for (int j = i + 1; j < 4; j++) {
+                for (int j = i + 1; j < direction.length(); j++) {
                     char character_j = direction.charAt(j);
                     if (character_i == character_j) {
                         return false;
