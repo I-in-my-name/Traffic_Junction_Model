@@ -61,7 +61,7 @@ public class LaneTests {
 
        lane.setDirection("r");
        //assertEquals(result, true);
-       assertEquals("l", lane.getDirection());
+       assertEquals("r", lane.getDirection());
 
        lane.setDirection("l");
        //assertEquals(result, true);
@@ -94,7 +94,7 @@ public class LaneTests {
        assertEquals(directionBefore, lane.getDirection());
 
        directionBefore = lane.getDirection();
-       lane.setDirection("frl");
+       lane.setDirection("frL");
        //direction should be unchanged
        //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());

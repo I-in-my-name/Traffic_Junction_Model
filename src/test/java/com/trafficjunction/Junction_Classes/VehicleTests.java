@@ -37,9 +37,14 @@ public class VehicleTests {
        // vehicle should be in next lane
        // (as instataneous acceleration so immediately vehicle speed = 1 distance / time unit,
        // so in one time unit go 1 distance > distance remaining in lane -> in next lane).
-        vehicle.update(1.f, entryLane);
-        assertEquals(1, exitLane.getVehicleNum());
+        vehicle.update(1.0f, entryLane);
+
+        //interim tests
+        assertEquals(1,entryLane.getTrafficLight().getState());
+        assertEquals(false,entryLane.isFull());
+
         assertEquals(0, entryLane.getVehicleNum());
+        assertEquals(1, exitLane.getVehicleNum());
         // TODO: What is position of vehicle in exit lane? Should be back of lane?
     }
 }

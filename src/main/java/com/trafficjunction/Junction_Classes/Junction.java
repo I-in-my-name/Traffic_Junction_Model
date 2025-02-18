@@ -252,26 +252,7 @@ public class Junction {
         if (direction.length() > 3) {
             return false;   // If direction string is longer than 3 characters, then it is definitely invalid
         }
-        //check for duplicates
-
-
-        // Check content/ Check for duplicates
-        for (int i = 0; i < direction.length(); i++) {
-            char character_i = direction.charAt(i); // Gets the i'th characthter in direction
-            String character = Character.toString(character_i); // Converts the character to a string so the (.contains()) method can be used
-            String allowed = "lfr";     // Allowed characters
-            if (!allowed.contains(character)) {
-                return false;
-            } else {
-                // Check if there is a duplicate character
-                for (int j = i + 1; j < direction.length(); j++) {
-                    char character_j = direction.charAt(j);
-                    if (character_i == character_j) {
-                        return false;
-                    }
-                }
-            }
-        }
+        
         // Check that a valid side and index has been given
         if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
             // If it is valid set direction

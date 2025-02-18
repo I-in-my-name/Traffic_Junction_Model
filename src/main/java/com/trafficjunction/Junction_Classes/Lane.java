@@ -33,9 +33,29 @@ public class Lane {
 
     // Written test
     // Updates direction
-    public void setDirection(String newDirection) {
-        // if (newDirection != "f" || newDirection != "l") - potentially go 2 directions? so more than 1 char?
-        this.direction = newDirection; // need to restrict param to N, S etc
+    public boolean setDirection(String newDirection) {
+        //edge case guard
+        if (newDirection.length() == 0) return false;
+
+        // Check content/ Check for duplicates
+        for (int i = 0; i < newDirection.length(); i++) {
+            char character_i = newDirection.charAt(i); // Gets the i'th characthter in direction
+            String character = Character.toString(character_i); // Converts the character to a string so the (.contains()) method can be used
+            String allowed = "lfr";     // Allowed characters
+            if (!allowed.contains(character)) {
+                return false;
+            } else {
+                // Check if there is a duplicate character
+                for (int j = i + 1; j < newDirection.length(); j++) {
+                    char character_j = newDirection.charAt(j);
+                    if (character_i == character_j) {
+                        return false;
+                    }
+                }
+            }
+        }
+        this.direction = newDirection;
+        return true;
     }
 
     // Doesn't need test
