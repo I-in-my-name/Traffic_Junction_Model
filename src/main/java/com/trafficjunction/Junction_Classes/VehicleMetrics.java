@@ -61,7 +61,7 @@ class VehicleMetrics {
 
     // Test written for
     // calculates total wait time once vehicle removed from simulation, ensures all waiting periods are summed prior to deletion
-    public void calculateMetrics(float exitTimestamp) {
+    public void calculateTotalWaitTime(float exitTimestamp) {
         if (!isMoving && !stopTimes.isEmpty()) {
             totalWaitTime += (exitTimestamp - stopTimes.get(stopTimes.size() - 1));
         }

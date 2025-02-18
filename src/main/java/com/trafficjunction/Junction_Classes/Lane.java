@@ -53,7 +53,8 @@ public class Lane {
     // Written test
     // Update lane length
     public boolean setLength(float newLength) {
-        if (newLength <= 0) {
+        //utterly arbitrary number for length
+        if (newLength <= 0 || newLength >= 5000) {
             return false;
         }
         this.length = newLength;

@@ -21,7 +21,7 @@ public class VehicleMetricsTests {
         metrics.stopMoving(41.f);
 
         //Calculating metrics after final stop at 41.f (CONFIRM IF THIS IS CORRECT?)
-        metrics.calculateMetrics(41.f);
+        metrics.calculateTotalWaitTime(41.f);
         float resultTotalWaitTime = metrics.getTotalWaitTime();
 
         float expectedWaitTime = 9 + 5 + 11;
@@ -47,7 +47,7 @@ public class VehicleMetricsTests {
         metrics.startMoving(startExistingTime + 30.f);
         metrics.stopMoving(startExistingTime + 41.f);
 
-        metrics.calculateMetrics(startExistingTime + 41.f);
+        metrics.calculateTotalWaitTime(startExistingTime + 41.f);
         resultTotalWaitTime = metrics.getTotalWaitTime();
 
         expectedWaitTime = 9.f + 5.f + 11.f;

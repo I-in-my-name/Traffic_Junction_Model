@@ -43,52 +43,52 @@ public class LaneTests {
        assertEquals(directionBefore, lane.getDirection());
 
        directionBefore = lane.getDirection();
-       lane.setDirection("F ");
+       lane.setDirection("f ");
        // direction should be unchanged
        //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
        directionBefore = lane.getDirection();
-       lane.setDirection("R ");
+       lane.setDirection("r ");
        // direction should be unchanged
        //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
        // Test actual changing
-       lane.setDirection("F");
+       lane.setDirection("f");
        //assertEquals(result, true);
-       assertEquals("F", lane.getDirection());
+       assertEquals("f", lane.getDirection());
 
-       lane.setDirection("R");
+       lane.setDirection("r");
        //assertEquals(result, true);
-       assertEquals("R", lane.getDirection());
+       assertEquals("l", lane.getDirection());
 
-       lane.setDirection("L");
+       lane.setDirection("l");
        //assertEquals(result, true);
-       assertEquals("L", lane.getDirection());
+       assertEquals("l", lane.getDirection());
 
-       lane.setDirection("F");
+       lane.setDirection("f");
        //assertEquals(result, true);
-       assertEquals("F", lane.getDirection());
+       assertEquals("f", lane.getDirection());
 
        //Also dealing with multiple letters in one 
-       lane.setDirection("LFR");
+       lane.setDirection("lfr");
        //assertEquals(result, true);
-       assertEquals("LFR", lane.getDirection());
+       assertEquals("lfr", lane.getDirection());
 
        directionBefore = lane.getDirection();
-       lane.setDirection("FRL ");
+       lane.setDirection("frl ");
        // direction should be unchanged
        //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
        directionBefore = lane.getDirection();
-       lane.setDirection("FRLL");
+       lane.setDirection("frll");
        // direction should be unchanged
        //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
 
-       lane.setDirection("FRR");
+       lane.setDirection("frr");
        // direction should be unchanged
        //assertEquals(result, false);
        assertEquals(directionBefore, lane.getDirection());
@@ -140,10 +140,10 @@ public class LaneTests {
        assertEquals(10, lane.getLength());
 
        lane.setLength(25.12f);
-       assertEquals(25.12, lane.getLength());
+       assertEquals(25.12f, lane.getLength());
 
        lane.setLength(0.01f);
-       assertEquals(0.01, lane.getLength());
+       assertEquals(0.01f, lane.getLength());
 
        lane.setLength(10);
        assertEquals(10, lane.getLength());
