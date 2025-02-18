@@ -1,8 +1,5 @@
 package com.trafficjunction.View_and_Controller;
 
-// import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import javafx.fxml.FXML;
@@ -10,14 +7,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-// TODO: Not sure if we need this yet. Has NOT been used.
-enum Direction {
-    NORTH, EAST, SOUTH, WEST
-}
+import com.trafficjunction.UI_Utilities.UILane;
 
 public class PrimaryController {
 
@@ -45,23 +38,12 @@ public class PrimaryController {
     int southLaneNum = 5;
     int westLaneNum = 5;
 
-    // Store the current image index for each lane.
-    private final Map<ImageView, Integer> laneImageIndex = new HashMap<>();
+    // UILane objects
+    private UILane[] northRoadAllLanes;
+    private UILane[] eastRoadAllLanes;
+    private UILane[] southRoadAllLanes;
+    private UILane[] westRoadAllLanes;
 
-    // Store the image paths for each lane type.
-    private final String[] laneImagePaths = {
-        "/assets/straightOnRoad.png",
-        "/assets/leftOnlyRoad.png",
-        "/assets/rightOnlyRoad.png",
-        "/assets/straightOnAndLeftRoad.png",
-        "/assets/straightOnAndRightRoad.png",
-        "/assets/straightLeftRightRoad.png"
-    };
-
-
-    /*
-     * The initialise function is called when the FXML file is loaded. It is used to set up the scene. 
-     */
     @FXML
     private void initialize() {
         // Input validation against words.
@@ -73,26 +55,55 @@ public class PrimaryController {
 
         addHoverEffect(trafficLightButton);
 
-        // Add all lanes to a hashmap to track their current index.
-        ImageView[] lanes = {nLane1, nLane2, nLane3, nLane4, nLane5, eLane1, eLane2, eLane3, eLane4, eLane5, sLane1, sLane2, sLane3, sLane4, sLane5, wLane1, wLane2, wLane3, wLane4, wLane5};
-        for (ImageView lane : lanes) {
-            laneImageIndex.put(lane, 0);
-            // Assign the changeLaneType method to each lane.
-            lane.setOnMouseClicked(event -> changeLaneType(lane));
-            // Add hover effect to each lane.
-            addHoverEffect(lane);
-        }
+        // Initialize UILane objects
+        northRoadAllLanes = new UILane[]{
+            new UILane(nLane1, 1),
+            new UILane(nLane2, 2),
+            new UILane(nLane3, 3),
+            new UILane(nLane4, 4),
+            new UILane(nLane5, 5)
+        };
 
-        // Store the lanes in arrays by road for easier access.
-        ImageView[] northRoadAllLanes = {nLane1, nLane2, nLane3, nLane4, nLane5};
-        ImageView[] eastRoadAllLanes = {eLane1, eLane2, eLane3, eLane4, eLane5};
-        ImageView[] southRoadAllLanes = {sLane1, sLane2, sLane3, sLane4, sLane5};
-        ImageView[] westRoadAllLanes = {wLane1, wLane2, wLane3, wLane4, wLane5};
+        eastRoadAllLanes = new UILane[]{
+            new UILane(eLane1, 1),
+            new UILane(eLane2, 2),
+            new UILane(eLane3, 3),
+            new UILane(eLane4, 4),
+            new UILane(eLane5, 5)
+        };
+
+        southRoadAllLanes = new UILane[]{
+            new UILane(sLane1, 1),
+            new UILane(sLane2, 2),
+            new UILane(sLane3, 3),
+            new UILane(sLane4, 4),
+            new UILane(sLane5, 5)
+        };
+
+        westRoadAllLanes = new UILane[]{
+            new UILane(wLane1, 1),
+            new UILane(wLane2, 2),
+            new UILane(wLane3, 3),
+            new UILane(wLane4, 4),
+            new UILane(wLane5, 5)
+        };
+
+        // Allow right turns on the rightmost lane.
+        northRoadAllLanes[0].enableRight();
+        eastRoadAllLanes[0].enableRight();
+        southRoadAllLanes[0].enableRight();
+        westRoadAllLanes[0].enableRight();
+
+        // Allow left turns on the leftmost lane.
+        northRoadAllLanes[4].enableLeft();
+        eastRoadAllLanes[4].enableLeft();
+        southRoadAllLanes[4].enableLeft();
+        westRoadAllLanes[4].enableLeft();
 
         // Assign the correct functions to each button.
         northLaneAdd.setOnAction(event -> {
             if (northLaneNum < 5) {
-                northLaneNum++;  // Directly update instance variable
+                northLaneNum++;
                 addLane(northRoadAllLanes, northLaneNum);
             }
         });
@@ -140,52 +151,50 @@ public class PrimaryController {
         });
     }
 
-    /* 
-     * This method is used to disable lanes when the user decreases the number of lanes.
-     * @param lanes - The array of lanes to disable.
-     * @param laneNum - The number of lanes to disable.
+    /*
+     * Function to disable lanes.
+     * @param lanes - The array of UILane objects to disable. Enables left turns for the left-most lane.
+     * @param laneNum - The current number of lanes that should be ENABLED.
      */
     @FXML
-    private void subtractLane(ImageView[] lanes, int laneNum) {
+    private void subtractLane(UILane[] lanes, int laneNum) {
         for (int i = laneNum; i < 5; i++) {
-            lanes[i].setDisable(true);
-            lanes[i].setImage(new Image(getClass().getResourceAsStream("/assets/blackedOutRoad.png")));
+            lanes[i].disableLane();
         }
+
+        // Allow left turns on the highest lane number.
+        lanes[laneNum - 1].enableLeft();
+
     }
 
     /*
-     * This method is used to enable lanes when the user increases the number of lanes.
-     * @param lanes - The array of lanes to enable.
-     * @param laneNum - The number of lanes to enable.
+     * Function to enable another lane. Also enables left turns for the left-most lane.
+     * @param lanes - The array of UILane objects to enable.
+     * @param laneNum - The current number of lanes that should be ENABLED.
      */
     @FXML
-    private void addLane(ImageView[] lanes, int laneNum) {
+    private void addLane(UILane[] lanes, int laneNum) {
         for (int i = 0; i < laneNum; i++) {
-            lanes[i].setDisable(false);
-            lanes[i].setImage(new Image(getClass().getResourceAsStream(laneImagePaths[laneImageIndex.get(lanes[i])])));
+            lanes[i].enableLane();
         }
+
+        // Allow left turns on the highest lane number.
+        lanes[laneNum - 1].enableLeft();
+        // Disable left turns from the previous highest lane number.
+        lanes[laneNum - 2].disableLeft();
     }
 
-    /**
-     * Adds a hover effect to the lane.
-     * @param lane - The lane to add the hover effect to.
-     */
     private void addHoverEffect(ImageView lane) {
         lane.setOnMouseEntered(event -> {
-            lane.setEffect(new javafx.scene.effect.Bloom(0.8));  // Glow effect
-            lane.setCursor(javafx.scene.Cursor.HAND);           // Change cursor
+            lane.setEffect(new javafx.scene.effect.Bloom(0.8));
+            lane.setCursor(javafx.scene.Cursor.HAND);
         });
 
         lane.setOnMouseExited(event -> {
-            lane.setEffect(null);  // Remove effect on hover exit
+            lane.setEffect(null);
         });
     }
 
-
-    /*
-     * This method is used to apply a numeric restriction to a text field. It only allows the user to input positive numbers of length 6 or less.
-     * @param textField - The text field to apply the restriction to.
-     */
     private void applyNumericRestriction(TextField textField) {
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String newText = change.getControlNewText();
@@ -194,11 +203,6 @@ public class PrimaryController {
         textField.setTextFormatter(new TextFormatter<>(filter));
     }
 
-
-    /**
-     * This method is called when the user presses the "Run Simulation" button. Used to get all input parameters.
-     * @return An array of integers representing the input vehicle parameters.
-     */
     @FXML
     private int[] runSimulationButtonPress() {
         int[] returnVal = new int[12];
@@ -217,18 +221,4 @@ public class PrimaryController {
         }
         return returnVal;
     }
-
-    /*
-     * This method is called when the user clicks on a lane. It changes the lane type to the next one in the list.
-     * @param lane - The lane that was clicked on.
-     */
-    @FXML
-    private void changeLaneType(ImageView lane) {
-        int imageIndex = laneImageIndex.get(lane);
-        imageIndex = (imageIndex + 1) % laneImagePaths.length;
-        laneImageIndex.put(lane, imageIndex);
-
-        lane.setImage(new Image(getClass().getResourceAsStream(laneImagePaths[imageIndex])));
-    }
-
 }

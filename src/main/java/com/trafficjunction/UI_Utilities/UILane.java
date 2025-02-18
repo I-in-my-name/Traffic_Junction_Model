@@ -29,6 +29,8 @@ public class UILane {
         this.enableRight = false;
         this.laneImagePaths.add("/assets/straightOnRoad.png");
         this.currentImagePath = laneImagePaths.get(0);
+
+        this.lane.setOnMouseClicked(event -> changeImage());
     }
 
     /*
@@ -51,22 +53,29 @@ public class UILane {
         if (enableRight) {
             this.enableRight();
         }
+
+        this.lane.setOnMouseClicked(event -> changeImage());
+
     }
 
     /* Method to disable this lane. */
     public void disableLane() {
         this.lane.setDisable(true);
+        this.lane.setImage(new Image(getClass().getResourceAsStream("/assets/blackedOutRoad.png")));
+
     }
 
     /* Method to enable this lane. */
     public void enableLane() {
         this.lane.setDisable(false);
+        this.lane.setImage(new Image(getClass().getResourceAsStream(laneImagePaths.get(this.currentImageIndex))));
+
     }
 
     /*
      * Method to switch to the next image.
      */
-    public void changeImage()   {
+    public void changeImage() {
         this.currentImageIndex = (currentImageIndex + 1) % laneImagePaths.size();
         this.lane.setImage(new Image(getClass().getResourceAsStream(laneImagePaths.get(currentImageIndex))));
     }
