@@ -18,7 +18,7 @@ public class JunctionTests {
         // Testing function:
         /**
         * Returns a boolean success or failure
-        * Given number must > 0 and <= 5 (otherwise failure)
+        * Given number must >= 0 and <= 5 (otherwise failure)
         * If success, set the number of entry lanes at the
         * given side to the given number
         * @param    side    Side to update as a String
@@ -31,7 +31,7 @@ public class JunctionTests {
         assertEquals(false, result);
         // test number = 0 (edge case)
         result = junction.setNumLanesEntry(0, 0);
-        assertEquals(false, result);
+        assertEquals(true, result);
         // test number > 5
         result = junction.setNumLanesEntry(0, 10);
         assertEquals(false, result);
