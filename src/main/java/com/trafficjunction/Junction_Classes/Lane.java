@@ -134,6 +134,11 @@ public class Lane {
 
             newPosition = lastPosition + lastVehicleLength; // Position it right after the last one
         }
+        // check the lane length isn't violated
+        if (newPosition + vehicle.getLength() > this.getLength()){
+            return false;
+        }
+
 
         vehicles.add(new Pair<>(newPosition, vehicle)); // Add to the back of the list
         return true;
