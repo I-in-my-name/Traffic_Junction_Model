@@ -249,14 +249,14 @@ public class Junction {
         // Check the validity of the direction string
             // Check size
         if (direction.length() > 3) {
-            return false;   // If direction string is longer than 3 characters, then it is definetely invalid
+            return false;   // If direction string is longer than 3 characters, then it is definitely invalid
         }
             // Check content/ Check for duplicates
         
         for (int i = 0; i < 4; i++) {
             char character_i = direction.charAt(i); // Gets the i'th characthter in direction
             String character = Character.toString(character_i); // Converts the character to a string so the (.contains()) method can be used
-            String allowed = "LFR";     // Allowed characters
+            String allowed = "lfr";     // Allowed characters
             if (!allowed.contains(character)) {
                 return false;
             } else {
