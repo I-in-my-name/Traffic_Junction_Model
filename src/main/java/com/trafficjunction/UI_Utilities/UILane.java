@@ -49,12 +49,13 @@ public class UILane {
         this.currentImagePath = laneImagePaths.get(0);
         if (enableLeft) {
             this.enableLeft();
+            addHoverEffect();
         }
         if (enableRight) {
             this.enableRight();
+            addHoverEffect();
         }
 
-        this.lane.setOnMouseClicked(event -> changeImage());
 
     }
 
@@ -87,6 +88,7 @@ public class UILane {
         // Checks if left was disabled before.
         if (!this.enableLeft) {
             this.switchLeft(); // Toggle left to true.
+            addHoverEffect();
 
             // Add left turn images.
             laneImagePaths.add("/assets/leftOnlyRoad.png");
@@ -106,6 +108,7 @@ public class UILane {
         // Checks if right was disabled before.
         if (!this.enableRight) {
             this.switchRight(); // Toggle right to true.
+            addHoverEffect();
 
             // Add right turn images.
             laneImagePaths.add("/assets/rightOnlyRoad.png");
@@ -137,6 +140,11 @@ public class UILane {
             if (!laneImagePaths.contains(currentImagePath)) {
                 changeImage();
             }
+
+            // Check if right turns are enabled. If not, disable hover effects.
+            if (!this.enableRight) {
+                removeHoverEffect();
+            }
         }
     }
 
@@ -159,6 +167,11 @@ public class UILane {
             if (!laneImagePaths.contains(currentImagePath)) {
                 changeImage();
             }
+
+            // Check if left turns are enabled. If not, disable hover effects.
+            if (!this.enableLeft) {
+                removeHoverEffect();
+            }
         }
     }
 
@@ -174,6 +187,35 @@ public class UILane {
      */
     public void switchRight() {
         this.enableRight = !this.enableRight;
+    }
+
+    /*
+     * Function to add hover effect to a lane.
+     */
+    public void addHoverEffect() {
+        this.lane.setOnMouseEntered(event -> {
+            this.lane.setEffect(new javafx.scene.effect.Bloom(0.8));
+            this.lane.setCursor(javafx.scene.Cursor.HAND);
+        });
+
+        this.lane.setOnMouseExited(event -> {
+            this.lane.setEffect(null);
+        });
+    }
+
+    /*
+     * Function to remove hover effects from a lane.
+     */
+    public void removeHoverEffect() {
+        this.lane.setOnMouseEntered(null);
+        this.lane.setOnMouseExited(null);
+    }
+
+    /*
+     * Getter method for position field.
+     */
+    public int getPosition() {
+        return this.position;
     }
 
 }

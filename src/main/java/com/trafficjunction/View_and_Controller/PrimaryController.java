@@ -53,8 +53,6 @@ public class PrimaryController {
             }
         }
 
-        addHoverEffect(trafficLightButton);
-
         // Initialize UILane objects
         northRoadAllLanes = new UILane[]{
             new UILane(nLane1, 1),
@@ -182,17 +180,6 @@ public class PrimaryController {
         lanes[laneNum - 1].enableLeft();
         // Disable left turns from the previous highest lane number.
         lanes[laneNum - 2].disableLeft();
-    }
-
-    private void addHoverEffect(ImageView lane) {
-        lane.setOnMouseEntered(event -> {
-            lane.setEffect(new javafx.scene.effect.Bloom(0.8));
-            lane.setCursor(javafx.scene.Cursor.HAND);
-        });
-
-        lane.setOnMouseExited(event -> {
-            lane.setEffect(null);
-        });
     }
 
     private void applyNumericRestriction(TextField textField) {
