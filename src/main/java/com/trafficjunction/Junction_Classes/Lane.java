@@ -158,7 +158,7 @@ public class Lane {
         Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1);
         float backmostVehiclePos = lastVehicle.getLeft(); // get pos
 
-        return backmostVehiclePos >= (length - 2);
+        return backmostVehiclePos >= (length - lastVehicle.getRight().getLength());
     }
 
     /**

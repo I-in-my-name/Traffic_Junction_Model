@@ -173,7 +173,7 @@ public class JunctionTests {
         assertEquals(expectedDirection, newDirection);
 
         side = 3;
-        index = 2;
+        index = 1;
         expectedDirection = "lfr";
         result = junction.setLaneDirections(side, index, expectedDirection);
         assertEquals(true, result);
