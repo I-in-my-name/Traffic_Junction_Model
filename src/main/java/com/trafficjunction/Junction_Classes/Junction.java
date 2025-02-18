@@ -207,7 +207,7 @@ public class Junction {
     public boolean setNumLanesEntry(int side, int number) {
         
         //Checks to see if a reasonable amount of lanes has been chosen
-        if (number < 1 || number > 5){
+        if (number < 0 || number > 5){
             // If not do not add any lanes and retun false
             return false;
         }
@@ -227,7 +227,7 @@ public class Junction {
 
     public boolean setNumLanesExit(int side, int number) {
         //Checks to see if a reasonable amount of lanes has been chosen
-        if (number < 1 || number > 5){
+        if (number < 0 || number > 5){
             // If not do not add any lanes and retun false
             return false;
         } else {
