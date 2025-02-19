@@ -55,7 +55,9 @@ public class Junction {
         
         // Create one trafficlight
         traffic_lights = new ArrayList<>();
-        traffic_lights.add(new TrafficLight());
+        for (int i = 0; i < 3; i++) {
+            traffic_lights.add(new TrafficLight());
+        }
     }
 
     /** 
