@@ -1,6 +1,4 @@
 package com.trafficjunction.Junction_Classes;
-import java.util.Random;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +8,8 @@ public class Junction {
 
     private List<List<Lane>> entry_lanes = new ArrayList<>();   // Entry lanes
     private List<List<Lane>> exit_lanes = new ArrayList<>();    // Exit lanes
+
+    private List<Lane> between_lanes = new ArrayList<>();
     /** 
      * Indexes for directions
      * 0 - North
@@ -318,6 +318,8 @@ public class Junction {
      */
     public void connectLanes(Lane entry, Lane exit) {
         Lane between = new Lane(10.f, null, null);
+        this.between_lanes.add(between);
+        
         entry.addGoingLane(between);
         exit.addComingLane(between);
     }
@@ -408,14 +410,31 @@ public class Junction {
         // check if the leftmost lane goes left
     }
 
+    /* Calls everything to update: looks through all exiting lanes, updates all 
+    for loop through all the exiting lanes and call the update lane function, then move to middle and starting lanes
+    - need to create an attribute that stores the middle lanes - done, use (between_lanes)
+    - purpose of this method is to move things by the time interval
+
+    */
     public void update(float time) {
-        this.timer += 0.5;      // Add time increment
+        this.timer += time;     // Add time increment
         this.updateLights();    // Update traffic lights
+        this.createVehicles();
         // update vehicles from exit lanes -> middle lanes -> starting lanes
-            // this is so the vehicles behind don't go into the ones infront/ have to wait for them to move before they can move
-            // or do we want them to be the other way around?
-                // this would mean we create vehicles, then update the junction
-        // create vehicles
+        // use 3 for loops for each lane type 
+        for (List<Lane> exitLaneList : exit_lanes) { // double for loop due to nested list for class attribute: outermost list stores list of lanes + then dir
+            for (Lane lane : exitLaneList) {
+                lane.update(time);
+            }
+        }
+        for (Lane lane : between_lanes) {
+            lane.update(time); // only one list of middle lanes because only going through them once in simulation
+        }
+        for (List<Lane> entryLaneList : entry_lanes) {
+            for (Lane lane : entryLaneList) {
+                lane.update(time);
+            }
+        }
     }
 
     public void updateLights() {

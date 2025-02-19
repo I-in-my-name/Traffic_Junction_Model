@@ -107,6 +107,7 @@ public class Vehicle {
         } else if (speed == 0) {   // If the vehicle is currently not moving
             if (index == 0) {   // The vehicle is first in the lane
                 float traversable_distance = calculateDistanceFromTime(time_difference);
+                // Travel until 
                 if (position >= traversable_distance) {
                     
                 }
@@ -119,8 +120,13 @@ public class Vehicle {
 
                 float difference = next_vehicle_position + vehicle_length - position;   // Calculates how far away the vehicles are
 
-                if (difference >= traversable_distance) {
-                    
+                if (difference > 2) {   // If the distance to the next vehicle is greater than 2m
+                    this.speed = this.max_speed; // Initialise movement
+                    if (difference - 1 >= traversable_distance) {
+                        // move by travel_distance
+                    } else if (true) {
+                        // move by difference - 1, stop moving again
+                    }
                 }
             }
         } else { // If the vehicle is moving

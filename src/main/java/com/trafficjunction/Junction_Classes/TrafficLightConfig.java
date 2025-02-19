@@ -1,6 +1,5 @@
 package com.trafficjunction.Junction_Classes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -24,38 +23,64 @@ public class TrafficLightConfig {
     private float cycle_duration;   // stores the total time it takes for the cycle
 
     public TrafficLightConfig() {
-        record = new ArrayList<>();
+        //record = new List<>();
         cycle_duration = 0;
     }
 
-    public boolean addState() {
-        return false;
+    public boolean addState(Float time, List<Integer> states) {
+        if (time <= 0 || states == null || states.isEmpty()) {
+            return false;
+        }
+        else {
+            Pair<Float, List<Integer>> thisCycle = new Pair<>(time, states);
+            record.add(thisCycle);
+            cycle_duration += time; // Update total cycle duration
+            return true;
+        }
     }
 
     public boolean removeState(int index) {
+        if (record.size() < index) {
+            return false;
+        } else {
+            float time = record.get(index).getLeft();
+            cycle_duration -= time;
+            record.remove(index);
+            return true;
+        }
         
-        return false;
     }
 
     public boolean setState(float time, int state, int record_index) {
-        //float currentTime = 0;
-        //int i = 0;
-        //if (record_index < 0 || record_index >= record.size() || state < 0 || state >= record.size()) {
-        //    return false;
-        //} else {
-        //    while (currentTime < time && found == false) {
-        //        currentTime = currentTime + record.get(i).getLeft();
-        //        i ++;
-        //    }
-        //    record.get(i).getRight().set(record_index, state);
-        //    return true;
-        //}
-        return false;
+        float currentTime = 0;
+        int i = 0;
+        boolean found = false;
+        if (record_index < 0 || record_index >= record.size() || state < 0 || state >= record.size()) {
+            return false;
+        } else {
+            while (found == false) {
+                currentTime = currentTime + record.get(i).getLeft();
+                if (currentTime > time) {
+                    found = true;
+                } else {
+                    i++;
+                }
+            }
+            record.get(i).getRight().set(record_index, state);
+            return true;
+        }
     }
 
-    public boolean insertState(int index, float time, List<Integer> state) {
-
-        return false;
+    public boolean insertState(int index, float time, List<Integer> states) {
+        if (index < 0 || index > record.size()) {
+            return false;
+        } else {
+            Pair <Float, List<Integer>> thisCycle = new Pair<>(time, states);
+            record.remove(index);
+            record.add(index, thisCycle);
+            return true;
+        }
+       
     }
     
     public List<Integer> getStates(float time) {
