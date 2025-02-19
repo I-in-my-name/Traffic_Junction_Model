@@ -489,7 +489,19 @@ public class Junction {
 
                 // look for matching entry lane
                 for (Lane lane : lanes) {
-                    
+                    // lane.getDirection should return a relative direction string like 'L', 'F', 'R'
+                    if (lane.getDirection() != null && lane.getDirection().contains(String.valueOf(turn))) {
+                        // create new vehicle
+                        // default values: max speed = 10.0f, length = 2.0f (MIGHT NEED OPTIMISE LOGIC TO CATER TO BUSSES/BIKES)
+                        // timer??
+                        Vehicle vehicle = new Vehicle(timer, 10.0f, 2.0f);
+
+                        // try to add vehicle to lane
+                        if (lane.addVehicle()) {
+                            vehicleAdded = true;
+                            break;
+                        }
+                    }
                 }
                 
             }
