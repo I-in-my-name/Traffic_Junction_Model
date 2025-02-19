@@ -389,7 +389,7 @@ public class Junction {
 
     // side1 = junction entry direction, side2 = junction exit direction
     // objective: return (random) 1 of the list of routes between entry & exit
-    // BUT in what cases would there be more than one possible route to take from side 1 to side 2, unless the vehicle wants to change lane?
+    // user can configure different lane types e.g. only left turn
     public void findRoute(int side1, int side2) {
         // side 1 (chooses lane) -> middle lane -> side 2 (chooses lane)
         // find random lane on side 1 that goes to middle and goes to side 2
@@ -439,20 +439,61 @@ public class Junction {
 
             // if vehicle arrives
             if (Math.random() < arrivalProbability) {
-                // Parse the key:
-                // The first character represents the entry side (n,e,s,w)
-                // The third character represents the desired exit direction.
+                // parse the key:
+                // the first character represents the entry side (n,e,s,w)
+                // the third character represents the desired exit direction
                 char entrySide = key.charAt(0);
                 char destLetter = key.charAt(2);
                 char turn = 'F';  // default to straight (F)
 
-                // Determine the turning movement based on entry side and destination.
+                // determine the turning movement based on entry side and destination
+                // e.g. if a vehicle is coming from North, and destLetter is 'e' then turn 'L'
+                switch (entrySide) {
+                case 'n':
+                    if (destLetter == 'e') turn = 'L';
+                    else if (destLetter == 's') turn = 'F';
+                    else if (destLetter == 'w') turn = 'R';
+                    break;
+                case 'e':
+                    if (destLetter == 's') turn = 'L';
+                    else if (destLetter == 'w') turn = 'F';
+                    else if (destLetter == 'n') turn = 'R';
+                    break;
+                case 's':
+                    if (destLetter == 'w') turn = 'L';
+                    else if (destLetter == 'n') turn = 'F';
+                    else if (destLetter == 'e') turn = 'R';
+                    break;
+                case 'w':
+                    if (destLetter == 'n') turn = 'L';
+                    else if (destLetter == 'e') turn = 'F';
+                    else if (destLetter == 's') turn = 'R';
+                    break;
+                default:
+                    // if  entry side is not valid, skip key
+                    continue;
+                }
+
+                // map entry side to an index in entry_lanes e.g. 'n' --> 0
+                int sideIndex = 0;
+                switch (entrySide) {
+                    case 'n': sideIndex = 0; break;
+                    case 'e': sideIndex = 1; break;
+                    case 's': sideIndex = 2; break;
+                    case 'w': sideIndex = 3; break;
+                }
+
+                // get list of entry lanes for this side
+                List<Lane> lanes = entry_lanes.get(sideIndex);
+                boolean vehicleAdded = false;
+
+                // look for matching entry lane
+                for (Lane lane : lanes) {
+                    
+                }
+                
             }
         }        
-        // loop through all directions across roads
-        // vph is set in each road direction (e.g. NORTH road) + which lane it is exiting
-
-        // every second it does or does not generate a vehicle to
     }
 
     public void calculateMetrics() {
