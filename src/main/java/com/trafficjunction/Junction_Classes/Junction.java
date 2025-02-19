@@ -494,7 +494,7 @@ public class Junction {
                         // create new vehicle
                         // default values: max speed = 10.0f, length = 2.0f (MIGHT NEED OPTIMISE LOGIC TO CATER TO BUSSES/BIKES)
                         // timer = creation time (amount of time since simulation started)
-                        Vehicle vehicle = new Vehicle(timer, 10.0f, 2.0f);
+                        Vehicle vehicle = new Vehicle(time, max_speed, length);
 
                         // try to add vehicle to lane
                         if (lane.addVehicle()) {
