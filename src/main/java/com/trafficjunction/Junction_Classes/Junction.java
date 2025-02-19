@@ -516,10 +516,12 @@ public class Junction {
         return null;
     }
 
+    // want to be able to save all a junction's features into a text file (e.g. csv or JSON)
     public String convertToText() {
         return null;
     }
 
+    // should also be able to create the junction from the text file created above
     public void constructFromText(String text) {
 
     }
