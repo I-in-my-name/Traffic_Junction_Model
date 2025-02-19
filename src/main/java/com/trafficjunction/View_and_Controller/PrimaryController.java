@@ -18,19 +18,20 @@ public class PrimaryController {
     @FXML
     private GridPane vehicleNumGrid;
     @FXML
-    private ImageView nLane1, nLane2, nLane3, nLane4, nLane5;
+    private ImageView nLane0, nLane1, nLane2, nLane3, nLane4;
     @FXML
-    private ImageView eLane1, eLane2, eLane3, eLane4, eLane5;
+    private ImageView eLane0, eLane1, eLane2, eLane3, eLane4;
     @FXML
-    private ImageView sLane1, sLane2, sLane3, sLane4, sLane5;
+    private ImageView sLane0, sLane1, sLane2, sLane3, sLane4;
     @FXML
-    private ImageView wLane1, wLane2, wLane3, wLane4, wLane5;
+    private ImageView wLane0, wLane1, wLane2, wLane3, wLane4;
     @FXML
     private ImageView trafficLightButton;
 
     // Buttons for adding and subtracting the number of lanes.
     @FXML
-    private Button northLaneAdd, northLaneSub, eastLaneAdd, eastLaneSub, southLaneAdd, southLaneSub, westLaneAdd, westLaneSub;
+    private Button northLaneAdd, northLaneSub, eastLaneAdd, eastLaneSub, southLaneAdd, southLaneSub, westLaneAdd,
+            westLaneSub;
 
     // Current number of lanes for each road.
     int northLaneNum = 5;
@@ -54,37 +55,51 @@ public class PrimaryController {
         }
 
         // Initialize UILane objects
-        northRoadAllLanes = new UILane[]{
-            new UILane(nLane1, 1),
-            new UILane(nLane2, 2),
-            new UILane(nLane3, 3),
-            new UILane(nLane4, 4),
-            new UILane(nLane5, 5)
+        northRoadAllLanes = new UILane[] {
+                new UILane(nLane0, 0),
+                new UILane(nLane1, 1),
+                new UILane(nLane2, 2),
+                new UILane(nLane3, 3),
+                new UILane(nLane4, 4)
         };
 
-        eastRoadAllLanes = new UILane[]{
-            new UILane(eLane1, 1),
-            new UILane(eLane2, 2),
-            new UILane(eLane3, 3),
-            new UILane(eLane4, 4),
-            new UILane(eLane5, 5)
+        eastRoadAllLanes = new UILane[] {
+                new UILane(eLane0, 0),
+                new UILane(eLane1, 1),
+                new UILane(eLane2, 2),
+                new UILane(eLane3, 3),
+                new UILane(eLane4, 4)
         };
 
-        southRoadAllLanes = new UILane[]{
-            new UILane(sLane1, 1),
-            new UILane(sLane2, 2),
-            new UILane(sLane3, 3),
-            new UILane(sLane4, 4),
-            new UILane(sLane5, 5)
+        southRoadAllLanes = new UILane[] {
+                new UILane(sLane0, 0),
+                new UILane(sLane1, 1),
+                new UILane(sLane2, 2),
+                new UILane(sLane3, 3),
+                new UILane(sLane4, 4)
         };
 
-        westRoadAllLanes = new UILane[]{
-            new UILane(wLane1, 1),
-            new UILane(wLane2, 2),
-            new UILane(wLane3, 3),
-            new UILane(wLane4, 4),
-            new UILane(wLane5, 5)
+        westRoadAllLanes = new UILane[] {
+                new UILane(wLane0, 0),
+                new UILane(wLane1, 1),
+                new UILane(wLane2, 2),
+                new UILane(wLane3, 3),
+                new UILane(wLane4, 4)
         };
+
+        // Assign change image function to all lanes.
+        for (UILane lane : northRoadAllLanes) {
+            lane.getLane().setOnMouseClicked(event -> updateImage(lane, northRoadAllLanes));
+        }
+        for (UILane lane : eastRoadAllLanes) {
+            lane.getLane().setOnMouseClicked(event -> updateImage(lane, eastRoadAllLanes));
+        }
+        for (UILane lane : southRoadAllLanes) {
+            lane.getLane().setOnMouseClicked(event -> updateImage(lane, southRoadAllLanes));
+        }
+        for (UILane lane : westRoadAllLanes) {
+            lane.getLane().setOnMouseClicked(event -> updateImage(lane, westRoadAllLanes));
+        }
 
         // Allow right turns on the rightmost lane.
         northRoadAllLanes[0].enableRight();
@@ -151,7 +166,10 @@ public class PrimaryController {
 
     /*
      * Function to disable lanes.
-     * @param lanes - The array of UILane objects to disable. Enables left turns for the left-most lane.
+     * 
+     * @param lanes - The array of UILane objects to disable. Enables left turns for
+     * the left-most lane.
+     * 
      * @param laneNum - The current number of lanes that should be ENABLED.
      */
     @FXML
@@ -166,8 +184,11 @@ public class PrimaryController {
     }
 
     /*
-     * Function to enable another lane. Also enables left turns for the left-most lane.
+     * Function to enable another lane. Also enables left turns for the left-most
+     * lane.
+     * 
      * @param lanes - The array of UILane objects to enable.
+     * 
      * @param laneNum - The current number of lanes that should be ENABLED.
      */
     @FXML
@@ -207,5 +228,34 @@ public class PrimaryController {
             }
         }
         return returnVal;
+    }
+
+    private void updateImage(UILane lane, UILane[] laneArr) {
+        lane.changeImage();
+
+        // Update the surrounding lanes based on the current lane's type.
+        if (lane.getPosition() > 0) {
+            if (lane.isLeft()) {
+                laneArr[lane.getPosition() - 1].enableLeft();
+            } else {
+                laneArr[lane.getPosition() - 1].disableLeft();
+            }
+        }
+
+        if (lane.getPosition() < laneArr.length - 1) {
+            if (lane.isRight()) {
+                laneArr[lane.getPosition() + 1].enableRight();
+            } else {
+                laneArr[lane.getPosition() + 1].disableRight();
+            }
+        }
+
+        // Ensure the current lane's type is valid based on the surrounding lanes.
+        if (lane.getPosition() < laneArr.length - 1 && !laneArr[lane.getPosition() + 1].isLeft() && lane.isLeft()) {
+            lane.disableLeft();
+        }
+        if (lane.getPosition() > 0 && !laneArr[lane.getPosition() - 1].isRight() && lane.isRight()) {
+            lane.disableRight();
+        }
     }
 }

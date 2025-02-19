@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
 /*
  * Lane object specifically for UI purposes.
  */
 public class UILane {
     private ImageView lane; // The lane ImageView associated with this object.
-    private int position; // The integer value of this lane's position (e.g. lane 1, lane 2). Lane closest to the oncoming lanes is considered lane 1.
+    private int position; // The integer value of this lane's position (e.g. lane 1, lane 2). Lane closest
+                          // to the oncoming lanes is considered lane 1.
     private boolean enableLeft; // Enables left-turn options to be cycled through.
     private boolean enableRight; // Enables right-turn options to be cycled through.
     private int currentImageIndex = 0; // The index of the current image it is assigned to.
@@ -19,31 +19,53 @@ public class UILane {
     private ArrayList<String> laneImagePaths = new ArrayList<String>();
     private String currentImagePath;
 
+    private boolean isLeft; // Whether the lane is a left-turn lane.
+    private boolean isRight; // Whether the lane is a right-turn lane.
+
     /*
-     * Default constructor method, assumes middle lane and sets enableLeft and enableRight to false.
+     * Default constructor method, assumes middle lane and sets enableLeft and
+     * enableRight to false.
+     * 
      * @param laneObj - The ImageView that this object should be associated with.
+     * 
+     * @param position - The integer value of the lane's position (e.g. lane 1, lane
+     * 2). Lane closest to the oncoming lanes is considered lane 0.
      */
     public UILane(ImageView laneObj, int position) {
         this.lane = laneObj;
         this.enableLeft = false;
+        this.isLeft = false;
         this.enableRight = false;
+        this.isRight = false;
+        this.position = position;
         this.laneImagePaths.add("/assets/straightOnRoad.png");
         this.currentImagePath = laneImagePaths.get(0);
 
-        this.lane.setOnMouseClicked(event -> changeImage());
+        // this.lane.setOnMouseClicked(event -> changeImage());
     }
 
     /*
-     * Secondary constructor methods which allows enableLeft and enableRight to be specified.
+     * Secondary constructor methods which allows enableLeft and enableRight to be
+     * specified.
+     * 
      * @param laneObj - The ImageView that this object should be associated with.
-     * @param position - The integer value of the lane's position (e.g. lane 1, lane 2). Lane closest to the oncoming lanes is considered lane 1.
-     * @param enableLeft - A boolean value deciding if the lane should be allowed to cycle between left-turn options.
-     * @param enableRight - A boolean value deciding if the lane should be allowed to cycle between right-turn options.
+     * 
+     * @param position - The integer value of the lane's position (e.g. lane 1, lane
+     * 2). Lane closest to the oncoming lanes is considered lane 0.
+     * 
+     * @param enableLeft - A boolean value deciding if the lane should be allowed to
+     * cycle between left-turn options.
+     * 
+     * @param enableRight - A boolean value deciding if the lane should be allowed
+     * to cycle between right-turn options.
      */
-    public UILane(ImageView laneObj, boolean enableLeft, boolean enableRight) {
+    public UILane(ImageView laneObj, boolean enableLeft, boolean enableRight, int position) {
         this.lane = laneObj;
         this.enableLeft = false;
         this.enableRight = false;
+        this.isLeft = false;
+        this.isRight = false;
+        this.position = position;
 
         this.laneImagePaths.add("/assets/straightOnRoad.png");
         this.currentImagePath = laneImagePaths.get(0);
@@ -55,8 +77,6 @@ public class UILane {
             this.enableRight();
             addHoverEffect();
         }
-
-
     }
 
     /* Method to disable this lane. */
@@ -93,7 +113,7 @@ public class UILane {
             // Add left turn images.
             laneImagePaths.add("/assets/leftOnlyRoad.png");
             laneImagePaths.add("/assets/straightOnAndLeftRoad.png");
-            
+
             // If right is also true, then add turning both lanes.
             if (this.enableRight) {
                 laneImagePaths.add("/assets/straightLeftRightRoad.png");
@@ -133,7 +153,8 @@ public class UILane {
             laneImagePaths.remove("/assets/leftOnlyRoad.png");
             laneImagePaths.remove("/assets/straightOnAndLeftRoad.png");
 
-            // Attempts to remove the turning to both direction image. May not always work but returns false in that case and continues to run.
+            // Attempts to remove the turning to both direction image. May not always work
+            // but returns false in that case and continues to run.
             laneImagePaths.remove("/assets/straightLeftRightRoad.png");
 
             // Change to a new image if the current image is now invalid.
@@ -160,7 +181,8 @@ public class UILane {
             laneImagePaths.remove("/assets/rightOnlyRoad.png");
             laneImagePaths.remove("/assets/straightOnAndRightRoad.png");
 
-            // Attempts to remove the turning to both direction image. May not always work but returns false in that case and continues to run.
+            // Attempts to remove the turning to both direction image. May not always work
+            // but returns false in that case and continues to run.
             laneImagePaths.remove("/assets/straightLeftRightRoad.png");
 
             // Change to a new image if the current image is now invalid.
@@ -180,6 +202,7 @@ public class UILane {
      */
     public void switchLeft() {
         this.enableLeft = !this.enableLeft;
+        this.isLeft = !this.isLeft;
     }
 
     /*
@@ -187,6 +210,7 @@ public class UILane {
      */
     public void switchRight() {
         this.enableRight = !this.enableRight;
+        this.isRight = !this.isRight;
     }
 
     /*
@@ -216,6 +240,27 @@ public class UILane {
      */
     public int getPosition() {
         return this.position;
+    }
+
+    /*
+     * Getter method for the lane field.
+     */
+    public ImageView getLane() {
+        return this.lane;
+    }
+
+    /*
+     * Getter method for the isLeft field.
+     */
+    public boolean isLeft() {
+        return this.isLeft;
+    }
+
+    /*
+     * Getter method for the isRight field.
+     */
+    public boolean isRight() {
+        return this.isRight;
     }
 
 }
