@@ -12,6 +12,59 @@ public class JunctionTests {
     static void setup() {
         junction = new Junction();
     }
+
+    // Test functionality of verifyJunction
+    // Dependent on addEntryLane
+    @Test
+    void testVerifyJunctionPositive() {
+        // junction is valid if 4 entry lanes and each entry lane has valid direction
+
+        // Test plan
+        // Case 1: No entry lanes. Expected: False
+        // Case 2: 3 entry lanes (all valid directions). Expected: False
+        // Case 3: 4 entry lanes (all valid directions). Expected: true
+        // Case 4: 4 entry lanes (one invalid direction). Expected: false
+        // Case 5: 5 entry lanes (all valid directions). Expected false
+
+        // case 1
+        Junction junction = new Junction();
+        boolean expected = false;
+        assertEquals(expected, junction.verifyJunction());
+
+        // case 2
+        junction.getEntryLanes().get(0).add(new Lane(1.f, new TrafficLight(), "L"));
+        junction.getEntryLanes().get(1).add(new Lane(1.f, new TrafficLight(), "F"));
+        junction.getEntryLanes().get(2).add(new Lane(1.f, new TrafficLight(), "R"));
+        assertEquals(expected, junction.verifyJunction());
+
+        // case 3
+        Junction junction = new Junction();
+        junction.getEntryLanes().get(0).add(new Lane(1.f, new TrafficLight(), "L"));
+        junction.getEntryLanes().get(1).add(new Lane(1.f, new TrafficLight(), "R"));
+        junction.getEntryLanes().get(2).add(new Lane(1.f, new TrafficLight(), "FL"));
+        junction.getEntryLanes().get(3).add(new Lane(1.f, new TrafficLight(), "LF"));
+        expected = true;
+        assertEquals(expected, junction.verifyJunction());
+
+        // case 4
+        Junction junction = new Junction();
+        junction.getEntryLanes().get(0).add(new Lane(1.f, new TrafficLight(), "L"));
+        junction.getEntryLanes().get(1).add(new Lane(1.f, new TrafficLight(), "R"));
+        junction.getEntryLanes().get(2).add(new Lane(1.f, new TrafficLight(), "FL"));
+        junction.getEntryLanes().get(3).add(new Lane(1.f, new TrafficLight(), "LFA"));
+        expected = false;
+        assertEquals(expected, junction.verifyJunction());
+
+        // case 4
+        Junction junction = new Junction();
+        junction.getEntryLanes().get(0).add(new Lane(1.f, new TrafficLight(), "L"));
+        junction.getEntryLanes().get(1).add(new Lane(1.f, new TrafficLight(), "R"));
+        junction.getEntryLanes().get(2).add(new Lane(1.f, new TrafficLight(), "FL"));
+        junction.getEntryLanes().get(3).add(new Lane(1.f, new TrafficLight(), "LF"));
+        junction.getEntryLanes().get(4).add(new Lane(1.f, new TrafficLight(), "F"));
+        expected = false;
+        assertEquals(expected, junction.verifyJunction());
+    }
     
     @Test
     void testsetNumLanesEntryNegative() {

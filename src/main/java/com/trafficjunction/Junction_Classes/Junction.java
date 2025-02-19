@@ -1,4 +1,5 @@
 package com.trafficjunction.Junction_Classes;
+import java.util.Random;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.Map;
 
 public class Junction {
 
-    // Questions: what sort of lists / arrays? Array lists?
     private List<List<Lane>> entry_lanes = new ArrayList<>();   // Entry lanes
     private List<List<Lane>> exit_lanes = new ArrayList<>();    // Exit lanes
     /** 
@@ -137,7 +137,7 @@ public class Junction {
         }
         // Add a default lane to the road
         // TODO DEFAULT ENTRY LANE?
-        Lane lane = new Lane(30.f, traffic_lights.get(0), null);
+        Lane lane = new Lane(30.f, traffic_lights.get(0), "F");
         road.add(lane);
         return true;
     }
@@ -279,9 +279,33 @@ public class Junction {
     }
     // set exit lane as bus ...
 
+    // Written test for
+    // valid junction:
+    // - 4 entry lanes
+    // - each entry lane has valid direction (string containing max one of each char 'R', 'L', 'F')
+    /*
+     * Returns true if this junction is valid.
+     * A valid junction is defined by its entry lanes. If it has 4 valid entry lanes 
+     * (meaning 4 lists of lanes as entryLanes attribute) then it is valid.
+     * A valid lane is one with a valid direction.
+     */
     public boolean verifyJunction() {
-        
-        return false;
+        if (entry_lanes.size() != 4)
+            return false;
+        for (int i = 0; i < 4; i++) {
+            for (Lane lane : entry_lanes.get(i)) {
+                // TODO: Move validate lane direction logic into shared thing somewhere
+                // currently repeating this logic in different ways in different functions
+                // ideally should not do that
+                if (lane.getDirection().toUpperCase().length() <= 3) {
+                    for (char c : lane.getDirection().toUpperCase().toCharArray()) {
+                        if (c != 'L' && c != 'R' && c != 'F')
+                            return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /** 
@@ -358,12 +382,14 @@ public class Junction {
         }
     }
 
+    // TODO: Is this a simple setter or any validation required?
     public void setTrafficLightConfig(TrafficLightConfig config) {
         
     }
 
     // side1 = junction entry direction, side2 = junction exit direction
     // objective: return (random) 1 of the list of routes between entry & exit
+    // BUT in what cases would there be more than one possible route to take from side 1 to side 2, unless the vehicle wants to change lane?
     public void findRoute(int side1, int side2) {
         // side 1 (chooses lane) -> middle lane -> side 2 (chooses lane)
         // find random lane on side 1 that goes to middle and goes to side 2
@@ -402,6 +428,27 @@ public class Junction {
 
     public void createVehicles() {
         
+        float dt = 0.5f; // simulation time step
+
+        for (Map.Entry<String, Integer> rateEntry : vehicle_rate.entrySet()) { // loop over each vehicle rate key
+            String key = rateEntry.getKey(); // e.g. ets
+            int rate = rateEntry.getValue(); // vehicles per hour for this movement
+
+            // calculate probabiloty that vehicle arrives during this time step
+            double arrivalProbability = (rate/3600.0) * dt;
+
+            // if vehicle arrives
+            if (Math.random() < arrivalProbability) {
+                // Parse the key:
+                // The first character represents the entry side (n,e,s,w)
+                // The third character represents the desired exit direction.
+                char entrySide = key.charAt(0);
+                char destLetter = key.charAt(2);
+                char turn = 'F';  // default to straight (F)
+
+                // Determine the turning movement based on entry side and destination.
+            }
+        }        
         // loop through all directions across roads
         // vph is set in each road direction (e.g. NORTH road) + which lane it is exiting
 
@@ -409,7 +456,7 @@ public class Junction {
     }
 
     public void calculateMetrics() {
-
+    
     }
 
     public JunctionMetrics getMetrics() {

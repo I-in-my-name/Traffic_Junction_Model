@@ -1,7 +1,7 @@
 package com.trafficjunction.Junction_Classes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test; 
 
 public class VehicleTests {
 

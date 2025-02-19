@@ -3,6 +3,13 @@ package com.trafficjunction.Junction_Classes;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Traffic Light Initial Config:
+- user inputs the time interval traffic lights will be green form, this will be uniform across all roads
+- traffic lights follow a set cycle starting from North road going clockwise. Since there are 4 roads, it takes 2 runs to complete a cycle (parallel roads are green simultaneously)
+- After cycle the user can input the pedestrian crossing period.
+*/
+
 
 public class TrafficLightConfig {
     /**
