@@ -11,7 +11,7 @@ public class Vehicle {
     private List<Lane> desired_route;
 
     private VehicleMetrics metrics;
-    private float start_time;
+    private float creation_time;
     private float current_time;
 
     // Should vehicle be abstract class only defined by Car and Bus classes?
@@ -21,7 +21,7 @@ public class Vehicle {
         this.length = length;
         this.metrics = new VehicleMetrics(time);
         
-        this.start_time = time;
+        this.creation_time = time;
         this.current_time = time;
     }
 
@@ -94,16 +94,48 @@ public class Vehicle {
         this.update(time, lane, index);
     }
     // Overload method so we can get the index without searching for the vehicle in the lane
-    public void update(float time, Lane lane, int index) {
+    public void update(float start_time, Lane lane, int index) {
         // Attributes (will remove these after having finished implementing):
         //float speed;
         //float max_speed;
         //float length;
+        float time_difference = start_time - this.current_time;
         float position = lane.getVehicles().get(index).getLeft();
+
+        if (time_difference <= 0) {
+            return; // If time matches then function can stop
+        } else if (speed == 0) {   // If the vehicle is currently not moving
+            if (index == 0) {   // The vehicle is first in the lane
+                float traversable_distance = calculateDistanceFromTime(time_difference);
+                if (position >= traversable_distance) {
+                    
+                }
+            } else {    // The vehicle has another in front of it
+                float traversable_distance = calculateDistanceFromTime(time_difference);
+
+                Pair<Float,Vehicle> pos_vehicle = lane.getVehicles().get(index-1);  // Gets the entry of the next vehicle
+                float next_vehicle_position = pos_vehicle.getLeft();                // Gets the next vehicle position on the lane
+                float vehicle_length = pos_vehicle.getRight().getLength();          // Gets the next vehicle's length
+
+                float difference = next_vehicle_position + vehicle_length - position;   // Calculates how far away the vehicles are
+
+                if (difference >= traversable_distance) {
+                    
+                }
+            }
+        } else { // If the vehicle is moving
+
+        }
+
+
+        
         if (index == 0) {
-            if (position == 0) {
+            if (position <= 0) {
                 // Check trafficlight
             } else {
+                // Toggle speed and record time if needed
+                
+
                 // check if car can move to trafficlight
                 // if so then do so, then move to the above??
                 // if not then just move
@@ -121,6 +153,16 @@ public class Vehicle {
                 // otherwise just move until the car is 2m behind the next one
             }
         }
+    }
+
+    // 
+    public float calculateTimeFromDistance(float distance_to_travel) {
+        float time_taken = distance_to_travel / this.max_speed;
+        return time_taken;
+    }
+    public float calculateDistanceFromTime(float time_to_travel) {
+        float distance = 0;
+        return distance;
     }
 
     // method: get vehicle position: used in lane class for deleting vehicles. 
