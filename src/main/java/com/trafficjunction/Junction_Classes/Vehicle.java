@@ -64,7 +64,7 @@ public class Vehicle {
                 metrics.startMoving(time);  // Resume movement
             }
             lane.removeVehicle();
-            List<Lane> lanes = lane.getComesFrom();
+            List<Lane> lanes = lane.getGoingTo();
             if (lanes == null) {
                 // TODO: delete self, pass metrics to JunctionMetrics somehow.
             } else {

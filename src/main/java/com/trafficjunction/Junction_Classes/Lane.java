@@ -33,9 +33,29 @@ public class Lane {
 
     // Written test
     // Updates direction
-    public void setDirection(String newDirection) {
-        // if (newDirection != "f" || newDirection != "l") - potentially go 2 directions? so more than 1 char?
-        this.direction = newDirection; // need to restrict param to N, S etc
+    public boolean setDirection(String newDirection) {
+        //edge case guard
+        if (newDirection.length() == 0) return false;
+
+        // Check content/ Check for duplicates
+        for (int i = 0; i < newDirection.length(); i++) {
+            char character_i = newDirection.charAt(i); // Gets the i'th characthter in direction
+            String character = Character.toString(character_i); // Converts the character to a string so the (.contains()) method can be used
+            String allowed = "lfr";     // Allowed characters
+            if (!allowed.contains(character)) {
+                return false;
+            } else {
+                // Check if there is a duplicate character
+                for (int j = i + 1; j < newDirection.length(); j++) {
+                    char character_j = newDirection.charAt(j);
+                    if (character_i == character_j) {
+                        return false;
+                    }
+                }
+            }
+        }
+        this.direction = newDirection;
+        return true;
     }
 
     // Doesn't need test
@@ -53,7 +73,8 @@ public class Lane {
     // Written test
     // Update lane length
     public boolean setLength(float newLength) {
-        if (newLength <= 0) {
+        //utterly arbitrary number for length
+        if (newLength <= 0 || newLength >= 5000) {
             return false;
         }
         this.length = newLength;
@@ -134,6 +155,11 @@ public class Lane {
 
             newPosition = lastPosition + lastVehicleLength; // Position it right after the last one
         }
+        // check the lane length isn't violated
+        if (newPosition + vehicle.getLength() > this.getLength()){
+            return false;
+        }
+
 
         vehicles.add(new Pair<>(newPosition, vehicle)); // Add to the back of the list
         return true;
@@ -158,7 +184,7 @@ public class Lane {
         Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1);
         float backmostVehiclePos = lastVehicle.getLeft(); // get pos
 
-        return backmostVehiclePos >= (length - 2);
+        return backmostVehiclePos >= (length - lastVehicle.getRight().getLength());
     }
 
     /**

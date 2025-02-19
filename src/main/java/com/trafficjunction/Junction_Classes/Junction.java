@@ -1,4 +1,5 @@
 package com.trafficjunction.Junction_Classes;
+import java.util.Random;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.Map;
 
 public class Junction {
 
-    // Questions: what sort of lists / arrays? Array lists?
     private List<List<Lane>> entry_lanes = new ArrayList<>();   // Entry lanes
     private List<List<Lane>> exit_lanes = new ArrayList<>();    // Exit lanes
     /** 
@@ -55,7 +55,9 @@ public class Junction {
         
         // Create one trafficlight
         traffic_lights = new ArrayList<>();
-        traffic_lights.add(new TrafficLight());
+        for (int i = 0; i < 3; i++) {
+            traffic_lights.add(new TrafficLight());
+        }
     }
 
     /** 
@@ -137,7 +139,7 @@ public class Junction {
         }
         // Add a default lane to the road
         // TODO DEFAULT ENTRY LANE?
-        Lane lane = new Lane(30.f, traffic_lights.get(0), null);
+        Lane lane = new Lane(30.f, traffic_lights.get(0), "F");
         road.add(lane);
         return true;
     }
@@ -207,7 +209,8 @@ public class Junction {
     public boolean setNumLanesEntry(int side, int number) {
         
         //Checks to see if a reasonable amount of lanes has been chosen
-        if (number < 1 || number > 5){
+        //And that the value for 'sides' is valid
+        if ((number < 0 || number > 5) || (side < 0 || side > 3)){
             // If not do not add any lanes and retun false
             return false;
         }
@@ -227,7 +230,7 @@ public class Junction {
 
     public boolean setNumLanesExit(int side, int number) {
         //Checks to see if a reasonable amount of lanes has been chosen
-        if (number < 1 || number > 5){
+        if (number < 0 || number > 5){
             // If not do not add any lanes and retun false
             return false;
         } else {
@@ -249,26 +252,9 @@ public class Junction {
         // Check the validity of the direction string
             // Check size
         if (direction.length() > 3) {
-            return false;   // If direction string is longer than 3 characters, then it is definetely invalid
+            return false;   // If direction string is longer than 3 characters, then it is definitely invalid
         }
-            // Check content/ Check for duplicates
         
-        for (int i = 0; i < 4; i++) {
-            char character_i = direction.charAt(i); // Gets the i'th characthter in direction
-            String character = Character.toString(character_i); // Converts the character to a string so the (.contains()) method can be used
-            String allowed = "LFR";     // Allowed characters
-            if (!allowed.contains(character)) {
-                return false;
-            } else {
-                // Check if there is a duplicate character
-                for (int j = i + 1; j < 4; j++) {
-                    char character_j = direction.charAt(j);
-                    if (character_i == character_j) {
-                        return false;
-                    }
-                }
-            }
-        }
         // Check that a valid side and index has been given
         if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
             // If it is valid set direction
@@ -295,9 +281,33 @@ public class Junction {
     }
     // set exit lane as bus ...
 
+    // Written test for
+    // valid junction:
+    // - 4 entry lanes
+    // - each entry lane has valid direction (string containing max one of each char 'R', 'L', 'F')
+    /*
+     * Returns true if this junction is valid.
+     * A valid junction is defined by its entry lanes. If it has 4 valid entry lanes 
+     * (meaning 4 lists of lanes as entryLanes attribute) then it is valid.
+     * A valid lane is one with a valid direction.
+     */
     public boolean verifyJunction() {
-        
-        return false;
+        if (entry_lanes.size() != 4)
+            return false;
+        for (int i = 0; i < 4; i++) {
+            for (Lane lane : entry_lanes.get(i)) {
+                // TODO: Move validate lane direction logic into shared thing somewhere
+                // currently repeating this logic in different ways in different functions
+                // ideally should not do that
+                if (lane.getDirection().toUpperCase().length() <= 3) {
+                    for (char c : lane.getDirection().toUpperCase().toCharArray()) {
+                        if (c != 'L' && c != 'R' && c != 'F')
+                            return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /** 
@@ -374,12 +384,14 @@ public class Junction {
         }
     }
 
+    // TODO: Is this a simple setter or any validation required?
     public void setTrafficLightConfig(TrafficLightConfig config) {
         
     }
 
     // side1 = junction entry direction, side2 = junction exit direction
     // objective: return (random) 1 of the list of routes between entry & exit
+    // user can configure different lane types e.g. only left turn
     public void findRoute(int side1, int side2) {
         // side 1 (chooses lane) -> middle lane -> side 2 (chooses lane)
         // find random lane on side 1 that goes to middle and goes to side 2
@@ -418,24 +430,100 @@ public class Junction {
 
     public void createVehicles() {
         
-        // loop through all directions across roads
-        // vph is set in each road direction (e.g. NORTH road) + which lane it is exiting
+        float dt = 0.5f; // simulation time step
 
-        // every second it does or does not generate a vehicle to
+        for (Map.Entry<String, Integer> rateEntry : vehicle_rate.entrySet()) { // loop over each vehicle rate key
+            String key = rateEntry.getKey(); // e.g. ets
+            int rate = rateEntry.getValue(); // vehicles per hour for this movement
+
+            // calculate probabiloty that vehicle arrives during this time step
+            double arrivalProbability = (rate/3600.0) * dt;
+
+            // if vehicle arrives
+            if (Math.random() < arrivalProbability) {
+                // parse the key:
+                // the first character represents the entry side (n,e,s,w)
+                // the third character represents the desired exit direction
+                char entrySide = key.charAt(0);
+                char destLetter = key.charAt(2);
+                char turn = 'F';  // default to straight (F)
+
+                // determine the turning movement based on entry side and destination
+                // e.g. if a vehicle is coming from North, and destLetter is 'e' then turn 'L'
+                switch (entrySide) {
+                case 'n':
+                    if (destLetter == 'e') turn = 'L';
+                    else if (destLetter == 's') turn = 'F';
+                    else if (destLetter == 'w') turn = 'R';
+                    break;
+                case 'e':
+                    if (destLetter == 's') turn = 'L';
+                    else if (destLetter == 'w') turn = 'F';
+                    else if (destLetter == 'n') turn = 'R';
+                    break;
+                case 's':
+                    if (destLetter == 'w') turn = 'L';
+                    else if (destLetter == 'n') turn = 'F';
+                    else if (destLetter == 'e') turn = 'R';
+                    break;
+                case 'w':
+                    if (destLetter == 'n') turn = 'L';
+                    else if (destLetter == 'e') turn = 'F';
+                    else if (destLetter == 's') turn = 'R';
+                    break;
+                default:
+                    // if  entry side is not valid, skip key
+                    continue;
+                }
+
+                // map entry side to an index in entry_lanes e.g. 'n' --> 0
+                int sideIndex = 0;
+                switch (entrySide) {
+                    case 'n': sideIndex = 0; break;
+                    case 'e': sideIndex = 1; break;
+                    case 's': sideIndex = 2; break;
+                    case 'w': sideIndex = 3; break;
+                }
+
+                // get list of entry lanes for this side
+                List<Lane> lanes = entry_lanes.get(sideIndex);
+                boolean vehicleAdded = false;
+
+                // look for matching entry lane
+                for (Lane lane : lanes) {
+                    // lane.getDirection should return a relative direction string like 'L', 'F', 'R'
+                    if (lane.getDirection() != null && lane.getDirection().contains(String.valueOf(turn))) {
+                        // create new vehicle
+                        // default values: max speed = 10.0f, length = 2.0f (MIGHT NEED OPTIMISE LOGIC TO CATER TO BUSSES/BIKES)
+                        // timer = creation time (amount of time since simulation started)
+                        Vehicle vehicle = new Vehicle(time, max_speed, length);
+
+                        // try to add vehicle to lane
+                        if (lane.addVehicle()) {
+                            vehicleAdded = true;
+                            break;
+                        }
+                    }
+                }
+                
+            }
+        }        
     }
 
     public void calculateMetrics() {
-
+    
     }
 
     public JunctionMetrics getMetrics() {
         return null;
     }
 
+    // want to be able to save all a junction's features into a text file (e.g. csv or JSON)
     public String convertToText() {
         return null;
     }
 
+    // should also be able to create the junction from the text file created above
     public void constructFromText(String text) {
 
     }
