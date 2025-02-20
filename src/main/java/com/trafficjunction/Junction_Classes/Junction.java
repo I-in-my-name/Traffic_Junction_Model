@@ -285,7 +285,7 @@ public class Junction {
     // valid junction:
     // - 4 entry lanes
     // - each entry lane has valid direction (string containing max one of each char 'R', 'L', 'F')
-    /*
+    /**
      * Returns true if this junction is valid.
      * A valid junction is defined by its entry lanes. If it has 4 valid entry lanes 
      * (meaning 4 lists of lanes as entryLanes attribute) then it is valid.

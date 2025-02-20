@@ -51,7 +51,8 @@ public class TrafficLightConfigTests {
         List<Integer> returnedStateAtThirty = trafficLightConfig.getStates(30.f);
 
         assertEquals(states1, returnedStateAtZero);
-        //assertEquals(states2);
+        assertEquals(states2, returnedStateAtTen);
+        assertEquals(states3, returnedStateAtFifteen);
         
     }
 

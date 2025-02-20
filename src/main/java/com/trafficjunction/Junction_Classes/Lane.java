@@ -35,7 +35,7 @@ public class Lane {
     // Updates direction
     public boolean setDirection(String newDirection) {
         //edge case guard
-        if (newDirection.length() == 0) return false;
+        if (newDirection.length() == 0 || newDirection.length() > 3) return false;
 
         // Check content/ Check for duplicates
         for (int i = 0; i < newDirection.length(); i++) {
