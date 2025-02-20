@@ -83,6 +83,8 @@ public class PrimaryController {
             }
         });
 
+        buttonHoverEffects();
+
         // Initialize UILane objects
         northRoadAllLanes = new UILane[] {
                 new UILane(nLane0, 0),
@@ -283,4 +285,24 @@ public class PrimaryController {
             }
         }
     }
+
+    /*
+     * Function to apply button hover effects to required buttons. Call in the
+     * initialize function.
+     */
+    private void buttonHoverEffects() {
+        String buttonHoverStyle = "-fx-effect: dropShadow(gaussian, rgba(0, 200, 255, 0.7), 15, 0.5, 0, 0);" +
+                "-fx-scale-x: 1.1;" +
+                "-fx-scale-y: 1.1;";
+
+        // Apply to traffic light button.
+        trafficLightButton.setOnMouseEntered(event -> {
+            trafficLightButton.setStyle(buttonHoverStyle);
+        });
+
+        trafficLightButton.setOnMouseExited(event -> {
+            trafficLightButton.setStyle("");
+        });
+    }
+
 }
