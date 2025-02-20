@@ -48,30 +48,32 @@ public class Vehicle {
     }
 
     /**
+     * TODO: remove this if not needed
+     * 
      * Updates the vehicle's movement based on lane conditions.
      * If the traffic light is red (state = 0), the vehicle stops.
      * If the light is green (state = 1), the vehicle moves.
      */
-    public void updateMovement(float time, Lane lane) {
-        TrafficLight trafficLight = lane.getTrafficLight();
+    //public void updateMovement(float time, Lane lane) {
+    //    TrafficLight trafficLight = lane.getTrafficLight();
         
-        if (trafficLight.getState() == 0 || lane.isFull()) {  // 0 = Red
-            if (this.speed != 0) {
-                metrics.stopMoving(time);  // Track wait time
-            }
-        } else if (trafficLight.getState() == 1) {  // 1 = Green
-            if (this.speed == 0) {
-                metrics.startMoving(time);  // Resume movement
-            }
-            lane.removeVehicle();
-            List<Lane> lanes = lane.getGoingTo();
-            if (lanes == null) {
-                // TODO: delete self, pass metrics to JunctionMetrics somehow.
-            } else {
-                lanes.get(0).addVehicle(this);
-            }
-        }
-    }
+    //    if (trafficLight.getState() == 0 || lane.isFull()) {  // 0 = Red
+    //        if (this.speed != 0) {
+    //            metrics.stopMoving(time);  // Track wait time
+    //        }
+    //    } else if (trafficLight.getState() == 1) {  // 1 = Green
+    //        if (this.speed == 0) {
+    //            metrics.startMoving(time);  // Resume movement
+    //        }
+    //        lane.removeVehicle();
+    //        List<Lane> lanes = lane.getGoingTo();
+    //        if (lanes == null) {
+    //            // TODO: delete self, pass metrics to JunctionMetrics somehow.
+    //        } else {
+    //            lanes.get(0).addVehicle(this);
+    //        }
+    //    }
+    //}
 
 ///
 
@@ -94,74 +96,65 @@ public class Vehicle {
         this.update(time, lane, index);
     }
     // Overload method so we can get the index without searching for the vehicle in the lane
-    public void update(float start_time, Lane lane, int index) {
-        // Attributes (will remove these after having finished implementing):
-        //float speed;
-        //float max_speed;
-        //float length;
-        float time_difference = start_time - this.current_time;
-        float position = lane.getVehicles().get(index).getLeft();
-
-        if (time_difference <= 0) {
-            return; // If time matches then function can stop
-        } else if (speed == 0) {   // If the vehicle is currently not moving
-            if (index == 0) {   // The vehicle is first in the lane
-                float traversable_distance = calculateDistanceFromTime(time_difference);
-                // Travel until 
-                if (position >= traversable_distance) {
-                    
-                }
-            } else {    // The vehicle has another in front of it
-                float traversable_distance = calculateDistanceFromTime(time_difference);
-
-                Pair<Float,Vehicle> pos_vehicle = lane.getVehicles().get(index-1);  // Gets the entry of the next vehicle
-                float next_vehicle_position = pos_vehicle.getLeft();                // Gets the next vehicle position on the lane
-                float vehicle_length = pos_vehicle.getRight().getLength();          // Gets the next vehicle's length
-
-                float difference = next_vehicle_position + vehicle_length - position;   // Calculates how far away the vehicles are
-
-                if (difference > 2) {   // If the distance to the next vehicle is greater than 2m
-                    this.speed = this.max_speed; // Initialise movement
-                    if (difference - 1 >= traversable_distance) {
-                        // move by travel_distance
-                    } else if (true) {
-                        // move by difference - 1, stop moving again
-                    }
-                }
-            }
-        } else { // If the vehicle is moving
-
+    public void update(float new_time, Lane lane, int index) {
+        // Get needed variables:
+        float time_difference = new_time - this.current_time;			// Gets the time increment increase
+        if (time_difference < 0.f || index >= lane.getVehicles().size() || index < 0) { // If index is out of bounds, or no update is needed
+            return;
         }
+        Pair<Float,Vehicle> this_pair = lane.getVehicles().get(index);	// Gets the pair which stores this vehicle
+        float position = this_pair.getLeft();	// Gets the vehicle's current position
 
-
-        
+        float traversable_position;		// Get the possible distance our vehicle can/should move forward
         if (index == 0) {
-            if (position <= 0) {
-                // Check trafficlight
-            } else {
-                // Toggle speed and record time if needed
-                
-
-                // check if car can move to trafficlight
-                // if so then do so, then move to the above??
-                // if not then just move
-            }
+            traversable_position = 0;
         } else {
             Pair<Float,Vehicle> pos_vehicle = lane.getVehicles().get(index-1);  // Gets the entry of the next vehicle
             float next_vehicle_position = pos_vehicle.getLeft();                // Gets the next vehicle position on the lane
             float vehicle_length = pos_vehicle.getRight().getLength();          // Gets the next vehicle's length
-            float difference = next_vehicle_position + vehicle_length - position;   // Calculates how far away the vehicles are
-            if (difference < 3) {
-                // don't move
-            } else {
-                // check if it is further than the reachable distance
-                // if so then just move
-                // otherwise just move until the car is 2m behind the next one
+            traversable_position = next_vehicle_position + vehicle_length + 1.f;
+        }
+
+        if (position < traversable_position) { // If the vehicle can move
+            if (this.speed != 0) {
+                this.speed = max_speed;
+                // TODO: save time to vehicle metrics
+            }
+            // Travel possible distance:
+            float max_traversable_distance = calculateDistanceFromTime(time_difference);
+            float traversable_distance = traversable_position - position;
+            float distance = Math.min(traversable_distance, max_traversable_distance);
+            this_pair.setLeft(distance);
+            // Calculate time taken:
+            float time_taken = calculateTimeFromDistance(distance);
+            this.current_time += time_taken;
+            
+            // Run function again in case reaching the end of the lane; (current_time) is updated, so it won't run infinitely:
+            this.update(new_time, lane, index);
+
+        } else { // The vehicle can not move OR is at 0 and waiting for trafficlights
+            boolean can_proceed = lane.canPass();
+            if (index == 0 && position == 0.f && can_proceed) { // If we are able to go to the next lane
+                // TODO: Remove vehicle from (lane)
+                // TODO: Remember to shift list up if needed
+                Lane next_lane = this.popRoute();
+                if (next_lane != null && lane.getGoingTo().contains(next_lane)) {
+                    next_lane.addVehicle(this);
+                    this.update(new_time, next_lane, index);
+                } else if (lane.getGoingTo().size() != 0) {
+                    // Go to a random available lane
+                } else {
+                    // Vehicle has reached the end of the route
+                    // Give vehicle metrics to junction somehow (TODO: Discuss Start and End 'nodes'?)
+                }
+            } else if (this.speed != 0) {
+                this.speed = 0;
+                // TODO: save time to vehicle metrics
             }
         }
     }
 
-    // 
+    // Methods to go from time (s) to distance (m) and vice versa, dependant on speed/max speed of vehicle
     public float calculateTimeFromDistance(float distance_to_travel) {
         float time_taken = distance_to_travel / this.max_speed;
         return time_taken;

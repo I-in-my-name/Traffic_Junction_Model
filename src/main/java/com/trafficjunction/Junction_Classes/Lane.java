@@ -107,6 +107,13 @@ public class Lane {
         return this.trafficLight;
     }
 
+    /**
+     * Return if the lane can be passed to the next one
+     */
+    public boolean canPass() {
+        return (this.trafficLight == null || this.trafficLight.getState() == 1);
+    }
+
     // Doesn't need test
     public void setTrafficLight(TrafficLight tl) {
         this.trafficLight = tl;
@@ -188,6 +195,8 @@ public class Lane {
     }
 
     /**
+     * (This function is to be removed unless decided to be necessary)
+     * 
      * Updates all vehicles in the lane based on the traffic light's state.
      * - If the traffic light is red (state = 0) or the lane is blocked, vehicles stop.
      * - If the traffic light is green (state = 1), vehicles resume movement.
@@ -195,22 +204,22 @@ public class Lane {
      *
      * @param time The current simulation time (in seconds).
      */
-    public void updateTraffic(float time) {
-        TrafficLight trafficLight = this.getTrafficLight(); // Retrieve the lane's traffic light
+    //public void updateTraffic(float time) {
+    //    TrafficLight trafficLight = this.getTrafficLight(); // Retrieve the lane's traffic light
 
-        for (Pair<Float, Vehicle> pos_vehicle : vehicles) {  // Loop through all vehicles in the lane
-            Vehicle vehicle = pos_vehicle.getRight(); // Extract the Vehicle object from the Pair
+    //    for (Pair<Float, Vehicle> pos_vehicle : vehicles) {  // Loop through all vehicles in the lane
+    //        Vehicle vehicle = pos_vehicle.getRight(); // Extract the Vehicle object from the Pair
 
-            // If the light is red (0) or the lane is blocked, stop the vehicle
-            if (trafficLight.getState() == 0 || this.isFull()) {  
-                vehicle.updateMovement(time, this);  // Stop the vehicle (tracked in VehicleMetrics)
+    //        // If the light is red (0) or the lane is blocked, stop the vehicle
+    //        if (trafficLight.getState() == 0 || this.isFull()) {  
+    //            vehicle.updateMovement(time, this);  // Stop the vehicle (tracked in VehicleMetrics)
 
-            // If the light is green (1), allow movement
-            } else if (trafficLight.getState() == 1) {  
-                vehicle.updateMovement(time, this);  // Allow vehicle to move
-            }
-        }
-    }
+    //        // If the light is green (1), allow movement
+    //        } else if (trafficLight.getState() == 1) {  
+    //            vehicle.updateMovement(time, this);  // Allow vehicle to move
+    //        }
+    //    }
+    //}
 
 
     /**
