@@ -75,7 +75,7 @@
                         <TextField fx:id="westRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
-                  <Button fx:id="confirmDurationButton" mnemonicParsing="false" prefHeight="82.0" prefWidth="160.0" text="Submit">
+                  <Button fx:id="confirmDurationButton" mnemonicParsing="false" onAction="#confirmLightDurations" prefHeight="82.0" prefWidth="160.0" text="Submit">
                      <font>
                         <Font size="18.0" />
                      </font>

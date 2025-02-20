@@ -1,6 +1,7 @@
 package com.trafficjunction.View_and_Controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -28,28 +29,43 @@ public class TrafficLightController {
      */
     @FXML
     public Integer[] confirmLightDurations() {
-        try {
-            int northDuration = Integer.parseInt(northRoadDuration.getText());
-            int eastDuration = Integer.parseInt(eastRoadDuration.getText());
-            int southDuration = Integer.parseInt(southRoadDuration.getText());
-            int westDuration = Integer.parseInt(westRoadDuration.getText());
-
-            Integer[] durations = { northDuration, eastDuration, southDuration, westDuration };
-
-            if (durations != null) {
-                stage.close();
-                return durations;
-            }
-            return durations;
-
-        } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid number.");
+        // Check if any fields are empty.
+        if (northRoadDuration.getText().trim().isEmpty() || eastRoadDuration.getText().trim().isEmpty()
+                || southRoadDuration.getText().trim().isEmpty() || westRoadDuration.getText().trim().isEmpty()) {
+            showErrorAlert("Error", "Please fill in all fields.");
+            return null;
         }
-        return null;
+
+        try {
+            int northRoadDuration = Integer.parseInt(this.northRoadDuration.getText().trim());
+            int eastRoadDuration = Integer.parseInt(this.eastRoadDuration.getText().trim());
+            int southRoadDuration = Integer.parseInt(this.southRoadDuration.getText().trim());
+            int westRoadDuration = Integer.parseInt(this.westRoadDuration.getText().trim());
+
+            if (northRoadDuration <= 0 || eastRoadDuration <= 0 || southRoadDuration <= 0 || westRoadDuration <= 0) {
+                showErrorAlert("Error", "Please enter a positive integer for each field.");
+                return null;
+            }
+
+            Integer[] durations = { northRoadDuration, eastRoadDuration, southRoadDuration, westRoadDuration };
+            return durations;
+        } catch (NumberFormatException e) {
+            showErrorAlert("Error", "Please enter a valid integer for each field.");
+            return null;
+        }
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(stage);
+        alert.showAndWait();
     }
 
 }
