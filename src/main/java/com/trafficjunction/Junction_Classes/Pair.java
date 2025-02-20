@@ -14,7 +14,15 @@ class Pair<K, V> { // amount of time the taffic light will be in a given state
         return left;
     }
 
+    public void setLeft(K k) {
+        this.left = k;
+    }
+
     public V getRight() {
         return right;
+    }
+
+    public void setRight(V v) {
+        this.right = v;
     }
 }
