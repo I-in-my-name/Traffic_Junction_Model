@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.UILane;
 
 public class PrimaryController {
@@ -56,7 +57,7 @@ public class PrimaryController {
         // Input validation against words.
         for (Node node : vehicleNumGrid.getChildren()) {
             if (node instanceof TextField) {
-                applyNumericRestriction((TextField) node);
+                DataSanitisation.applyNumericRestriction((TextField) node);
             }
         }
 
@@ -232,14 +233,6 @@ public class PrimaryController {
         lanes[laneNum - 1].enableLeft();
         // Disable left turns from the previous highest lane number.
         lanes[laneNum - 2].disableLeft();
-    }
-
-    private void applyNumericRestriction(TextField textField) {
-        UnaryOperator<TextFormatter.Change> filter = change -> {
-            String newText = change.getControlNewText();
-            return newText.matches("\\d{0,6}") ? change : null;
-        };
-        textField.setTextFormatter(new TextFormatter<>(filter));
     }
 
     @FXML

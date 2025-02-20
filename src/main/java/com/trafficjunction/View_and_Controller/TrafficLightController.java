@@ -1,6 +1,9 @@
 package com.trafficjunction.View_and_Controller;
 
+import com.trafficjunction.UI_Utilities.DataSanitisation;
+
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -19,6 +22,15 @@ public class TrafficLightController {
 
     @FXML
     private Stage stage;
+
+    @FXML
+    private void initialize() {
+        // Make sure only numbers can be inputted into the traffic light fields.
+        DataSanitisation.applyNumericRestriction(northRoadDuration);
+        DataSanitisation.applyNumericRestriction(eastRoadDuration);
+        DataSanitisation.applyNumericRestriction(southRoadDuration);
+        DataSanitisation.applyNumericRestriction(westRoadDuration);
+    }
 
     /*
      * Function to return the light durations for each road. Returns null if the

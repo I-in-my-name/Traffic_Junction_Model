@@ -2,6 +2,7 @@ module-info.class
 com\trafficjunction\UserInputData.class
 com\trafficjunction\View_and_Controller\PrimaryController.class
 com\trafficjunction\InputData.class
+com\trafficjunction\UI_Utilities\DataSanitisation.class
 com\trafficjunction\View_and_Controller\App.class
 com\trafficjunction\View_and_Controller\TrafficLightController.class
 com\trafficjunction\OutputData.class
