@@ -51,6 +51,7 @@ public class Vehicle {
      * Updates the vehicle's movement based on lane conditions.
      * If the traffic light is red (state = 0), the vehicle stops.
      * If the light is green (state = 1), the vehicle moves.
+     * Time here is an objective timestamp and is not relative.
      */
     public void updateMovement(float time, Lane lane) {
         TrafficLight trafficLight = lane.getTrafficLight();
@@ -58,10 +59,12 @@ public class Vehicle {
         if (trafficLight.getState() == 0 || lane.isFull()) {  // 0 = Red
             if (this.speed != 0) {
                 metrics.stopMoving(time);  // Track wait time
+                speed = 0;
             }
         } else if (trafficLight.getState() == 1) {  // 1 = Green
             if (this.speed == 0) {
                 metrics.startMoving(time);  // Resume movement
+                speed = max_speed;
             }
             lane.removeVehicle();
             List<Lane> lanes = lane.getGoingTo();

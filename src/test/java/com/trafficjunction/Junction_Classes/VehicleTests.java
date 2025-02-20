@@ -29,7 +29,7 @@ public class VehicleTests {
        float initialPosition = entryLane.getVehicles().get(0).getLeft();
 
        // if 0 time has passed, nothing should change.
-       vehicle.update(0.f, entryLane);
+       vehicle.update(1.f, entryLane);
        assertEquals(initialPosition, entryLane.getVehicles().get(0).getLeft());
        assertEquals(0, exitLane.getVehicleNum());
 
@@ -37,11 +37,18 @@ public class VehicleTests {
        // vehicle should be in next lane
        // (as instataneous acceleration so immediately vehicle speed = 1 distance / time unit,
        // so in one time unit go 1 distance > distance remaining in lane -> in next lane).
-        vehicle.update(1.0f, entryLane);
+
+        boolean returned = vehicle.update(1.f, entryLane);
+        assertEquals(true, returned);
+
+
+        vehicle.update(1.f +100.f, entryLane);
 
         //interim tests
         assertEquals(1,entryLane.getTrafficLight().getState());
         assertEquals(false,entryLane.isFull());
+        assertEquals(true,entryLane.getGoingTo().size() > 0);
+vehicle.update(1.f, entryLane);
 
         assertEquals(0, entryLane.getVehicleNum());
         assertEquals(1, exitLane.getVehicleNum());
