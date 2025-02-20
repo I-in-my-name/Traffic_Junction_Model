@@ -3,6 +3,13 @@ package com.trafficjunction.Junction_Classes;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Traffic Light Initial Config:
+- user inputs the time interval traffic lights will be green form, this will be uniform across all roads
+- traffic lights follow a set cycle starting from North road going clockwise. Since there are 4 roads, it takes 2 runs to complete a cycle (parallel roads are green simultaneously)
+- After cycle the user can input the pedestrian crossing period.
+*/
+
 
 public class TrafficLightConfig {
     /**
@@ -21,34 +28,60 @@ public class TrafficLightConfig {
         cycle_duration = 0;
     }
 
-    public boolean addState() {
-        return false;
+    public boolean addState(Float time, List<Integer> states) {
+        if (time <= 0 || states == null || states.isEmpty()) {
+            return false;
+        }
+        else {
+            Pair<Float, List<Integer>> thisCycle = new Pair<>(time, states);
+            record.add(thisCycle);
+            cycle_duration += time; // Update total cycle duration
+            return true;
+        }
     }
 
     public boolean removeState(int index) {
+        if (record.size() < index) {
+            return false;
+        } else {
+            float time = record.get(index).getLeft();
+            cycle_duration -= time;
+            record.remove(index);
+            return true;
+        }
         
-        return false;
     }
 
     public boolean setState(float time, int state, int record_index) {
-        //float currentTime = 0;
-        //int i = 0;
-        //if (record_index < 0 || record_index >= record.size() || state < 0 || state >= record.size()) {
-        //    return false;
-        //} else {
-        //    while (currentTime < time && found == false) {
-        //        currentTime = currentTime + record.get(i).getLeft();
-        //        i ++;
-        //    }
-        //    record.get(i).getRight().set(record_index, state);
-        //    return true;
-        //}
-        return false;
+        float currentTime = 0;
+        int i = 0;
+        boolean found = false;
+        if (record_index < 0 || record_index >= record.size() || state < 0 || state >= record.size()) {
+            return false;
+        } else {
+            while (found == false) {
+                currentTime = currentTime + record.get(i).getLeft();
+                if (currentTime > time) {
+                    found = true;
+                } else {
+                    i++;
+                }
+            }
+            record.get(i).getRight().set(record_index, state);
+            return true;
+        }
     }
 
-    public boolean insertState(int index, float time, List<Integer> state) {
-
-        return false;
+    public boolean insertState(int index, float time, List<Integer> states) {
+        if (index < 0 || index > record.size()) {
+            return false;
+        } else {
+            Pair <Float, List<Integer>> thisCycle = new Pair<>(time, states);
+            record.remove(index);
+            record.add(index, thisCycle);
+            return true;
+        }
+       
     }
     
     public List<Integer> getStates(float time) {

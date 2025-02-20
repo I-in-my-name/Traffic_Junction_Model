@@ -226,7 +226,7 @@ public class Lane {
         int index = 0;
         for (Pair<Float,Vehicle> pos_vehicle : vehicles) {
             Vehicle vehicle = pos_vehicle.getRight();
-            vehicle.update(time, this, index);
+            vehicle.update(time, this, index);  // Give an index
             index++;
         }
     }

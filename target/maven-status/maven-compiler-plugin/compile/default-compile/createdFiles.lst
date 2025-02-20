@@ -1,6 +1,7 @@
 com/trafficjunction/Junction_Classes/Vehicle.class
 com/trafficjunction/OutputData.class
 com/trafficjunction/Junction_Classes/TrafficLightConfig.class
+com/trafficjunction/Junction_Classes/Bus.class
 com/trafficjunction/View_and_Controller/App.class
 com/trafficjunction/Junction_Classes/Junction.class
 com/trafficjunction/View_and_Controller/SecondaryController.class
