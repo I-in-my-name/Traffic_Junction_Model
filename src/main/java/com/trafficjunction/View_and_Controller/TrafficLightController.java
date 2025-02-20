@@ -60,6 +60,10 @@ public class TrafficLightController {
             }
 
             Integer[] durations = { northRoadDuration, eastRoadDuration, southRoadDuration, westRoadDuration };
+
+            // TODO
+            // Add a confirmation window and send data to data store.
+            stage.close();
             return durations;
         } catch (NumberFormatException e) {
             showErrorAlert("Error", "Please enter a valid integer for each field.");
