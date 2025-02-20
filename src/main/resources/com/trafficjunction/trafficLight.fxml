@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficjunction.View_and_Controller.TrafficLightController">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-width: 0 0 1 0;">
          <children>
@@ -54,7 +54,7 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <TextField GridPane.columnIndex="1" />
+                        <TextField fx:id="northRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="East:" wrappingWidth="87.638671875" GridPane.rowIndex="1">
                            <font>
                               <Font size="18.0" />
@@ -70,12 +70,12 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="eastRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="southRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="westRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
-                  <Button mnemonicParsing="false" prefHeight="82.0" prefWidth="160.0" text="Submit">
+                  <Button fx:id="confirmDurationButton" mnemonicParsing="false" prefHeight="82.0" prefWidth="160.0" text="Submit">
                      <font>
                         <Font size="18.0" />
                      </font>

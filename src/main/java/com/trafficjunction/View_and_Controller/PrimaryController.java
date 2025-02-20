@@ -1,14 +1,20 @@
 package com.trafficjunction.View_and_Controller;
 
+import java.io.IOException;
 import java.util.function.UnaryOperator;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import com.trafficjunction.UI_Utilities.UILane;
 
@@ -53,6 +59,29 @@ public class PrimaryController {
                 applyNumericRestriction((TextField) node);
             }
         }
+
+        // Add button press to traffic light to open the window.
+        trafficLightButton.setOnMouseClicked(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trafficjunction/trafficLight.fxml"));
+                Parent root = loader.load();
+
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Traffic Light Controller");
+                stage.initModality(Modality.APPLICATION_MODAL);
+
+                // Get controller and set the stage
+                TrafficLightController controller = loader.getController();
+                controller.setStage(stage);
+
+                stage.show();
+            } catch (IOException e) {
+                System.out.println("Error loading traffic light FXML: " + e);
+                e.printStackTrace();
+            }
+        });
 
         // Initialize UILane objects
         northRoadAllLanes = new UILane[] {
@@ -236,26 +265,22 @@ public class PrimaryController {
         // Update the surrounding lanes based on the current lane's type.
         if (lane.getPosition() > 0) {
             if (lane.isLeft()) {
+                System.out.println("Enabling left for lane " + laneArr[lane.getPosition() - 1].getPosition());
                 laneArr[lane.getPosition() - 1].enableLeft();
             } else {
+                System.out.println("Disabling left for lane " + laneArr[lane.getPosition() - 1].getPosition());
                 laneArr[lane.getPosition() - 1].disableLeft();
             }
         }
 
         if (lane.getPosition() < laneArr.length - 1) {
             if (lane.isRight()) {
+                System.out.println("Enabling right for lane " + laneArr[lane.getPosition() + 1].getPosition());
                 laneArr[lane.getPosition() + 1].enableRight();
             } else {
+                System.out.println("Disabling right for lane " + laneArr[lane.getPosition() + 1].getPosition());
                 laneArr[lane.getPosition() + 1].disableRight();
             }
-        }
-
-        // Ensure the current lane's type is valid based on the surrounding lanes.
-        if (lane.getPosition() < laneArr.length - 1 && !laneArr[lane.getPosition() + 1].isLeft() && lane.isLeft()) {
-            lane.disableLeft();
-        }
-        if (lane.getPosition() > 0 && !laneArr[lane.getPosition() - 1].isRight() && lane.isRight()) {
-            lane.disableRight();
         }
     }
 }
