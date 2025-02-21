@@ -1,6 +1,5 @@
 com/trafficjunction/View_and_Controller/App.class
 com/trafficjunction/View_and_Controller/PrimaryController.class
-com/trafficjunction/View_and_Controller/Saving_Utils/SaveMementoController.class
 com/trafficjunction/JunctionConfiguration$directions.class
 module-info.class
 com/trafficjunction/UI_Utilities/UILane.class
