@@ -255,28 +255,7 @@ public class PrimaryController {
     }
 
     private void updateImage(UILane lane, UILane[] laneArr) {
-        lane.changeImage();
 
-        // Update the surrounding lanes based on the current lane's type.
-        if (lane.getPosition() > 0) {
-            if (lane.isLeft()) {
-                System.out.println("Enabling left for lane " + laneArr[lane.getPosition() - 1].getPosition());
-                laneArr[lane.getPosition() - 1].enableLeft();
-            } else {
-                System.out.println("Disabling left for lane " + laneArr[lane.getPosition() - 1].getPosition());
-                laneArr[lane.getPosition() - 1].disableLeft();
-            }
-        }
-
-        if (lane.getPosition() < laneArr.length - 1) {
-            if (lane.isRight()) {
-                System.out.println("Enabling right for lane " + laneArr[lane.getPosition() + 1].getPosition());
-                laneArr[lane.getPosition() + 1].enableRight();
-            } else {
-                System.out.println("Disabling right for lane " + laneArr[lane.getPosition() + 1].getPosition());
-                laneArr[lane.getPosition() + 1].disableRight();
-            }
-        }
     }
 
     /*
