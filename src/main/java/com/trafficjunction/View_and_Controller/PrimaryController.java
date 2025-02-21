@@ -3,9 +3,9 @@ package com.trafficjunction.View_and_Controller;
 import java.io.File;
 import java.io.IOException;
 
+import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.UILane;
-import com.trafficjunction.UserInputData;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +19,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -64,6 +63,7 @@ public class PrimaryController {
 
     //File system Java resources:
     FileChooser fileChooser = new FileChooser();
+    
 
 
     @FXML
@@ -214,11 +214,10 @@ public class PrimaryController {
         //######################### Saving and Memento's section ###################//
 
         fileChooser.setTitle("value");
-        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
         loadMenuItem.setOnAction((ActionEvent event) -> {
-            fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
+            File chosenFile = fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
             try{
-                //TODO: get the data
+                //gatherUserData().loadObject(chosenFile);
                 
                 //UserInputData.saveObject();
                 //get data from program
@@ -231,7 +230,7 @@ public class PrimaryController {
             File chosenFile = fileChooser.showSaveDialog((Stage) vehicleNumGrid.getScene().getWindow());
             try {
                 //move into program
-                UserInputData.loadObject(chosenFile);
+                gatherUserData().saveObject(chosenFile);
             } catch (Exception e) {
             }
         });
@@ -341,7 +340,7 @@ public class PrimaryController {
         });
     }
 
-    private UserInputData gatherUserData(){
+    private JunctionConfiguration gatherUserData(){
         //This is notably in order.
         int[] sequentialList = new int[12];
         int index = 0;
@@ -358,8 +357,15 @@ public class PrimaryController {
                 index++;
             } catch (Exception ignored) {}
         }
-        UserInputData data = new UserInputData();
-        return data;
+        JunctionConfiguration data = new JunctionConfiguration();
+        if (data.setDirectionInfo(sequentialList)) return data;
+
+        //TODO ERROR HANDLING, needs to be handled elsewhere to appropriately show error message.
+        return null;
+    }
+
+    private boolean populateFieldsWithData(){
+        return false;
     }
 
 }
