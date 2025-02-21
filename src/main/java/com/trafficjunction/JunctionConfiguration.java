@@ -5,12 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.trafficjunction.JunctionConfiguration.directions;
 
-public class JunctionConfiguration {
+public class JunctionConfiguration implements Serializable{
     enum directions{
         nte,nts,ntw,
 
@@ -83,6 +84,7 @@ public class JunctionConfiguration {
             out.writeObject(this);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -95,6 +97,7 @@ public class JunctionConfiguration {
             ){
             return (JunctionConfiguration) in.readObject();
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

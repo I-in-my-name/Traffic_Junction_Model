@@ -218,11 +218,9 @@ public class PrimaryController {
             File chosenFile = fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
             try{
                 JunctionConfiguration configuration = JunctionConfiguration.loadObject(chosenFile);
-                
-                //UserInputData.saveObject();
-                //get data from program
-                int t;
-            } catch (Exception e) {
+
+                populateFieldsWithData(configuration);
+            } catch (Exception e) { e.printStackTrace();
             }
         });
         
@@ -278,22 +276,11 @@ public class PrimaryController {
     }
 
     @FXML
-    private int[] runSimulationButtonPress() {
-        int[] returnVal = new int[12];
-        int counter = 0;
-        for (Node node : vehicleNumGrid.getChildren()) {
-            if (node instanceof TextField) {
-                int val;
-                if (((TextField) node).getText().equals("")) {
-                    val = 0;
-                } else {
-                    val = Integer.parseInt(((TextField) node).getText());
-                }
-                returnVal[counter] = val;
-                counter += 1;
-            }
-        }
-        return returnVal;
+    private void runSimulationButtonPress() {
+        JunctionConfiguration userData = gatherUserData();
+        
+        //TODO call simulation
+        
     }
 
     private void updateImage(UILane lane, UILane[] laneArr) {
@@ -350,15 +337,15 @@ public class PrimaryController {
         for (Node child : vehicleNumGrid.getChildren()) {
             try {
                 TextField field = (TextField) child;
-                String text = field.getText();
+                String text = field.getText(); // replaces invisible/non-printable characters
                 int number = 0;
 
                 if (!text.isEmpty()){
-                    number = Integer.getInteger(field.getText()); 
+                    number = Integer.parseInt(text); 
                 }
                 sequentialList[index] = number;
                 index++;
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {ignored.printStackTrace();}
         }
         JunctionConfiguration data = new JunctionConfiguration();
         if (data.setDirectionInfo(sequentialList)) return data;
@@ -367,8 +354,15 @@ public class PrimaryController {
         return null;
     }
     private boolean populateFieldsWithData(JunctionConfiguration configuration){
-        configuration.getDirectionInfo();
-        return false;
+        int[] directionalThroughput = configuration.getDirectionInfo();
+        int index = 0;
+        for (Node child : vehicleNumGrid.getChildren()) {
+            try {
+                TextField field = (TextField) child;
+                field.setText(String.valueOf(directionalThroughput[index])); 
+                index++;
+            } catch (Exception ignored) {}
+        }
+        return true;
     }
-
 }
