@@ -128,7 +128,7 @@
             </VBox>
             <VBox maxWidth="768.0" minWidth="768.0" prefWidth="768.0">
                <children>
-                  <VBox alignment="CENTER" maxHeight="144.0" minHeight="144.0" prefHeight="144.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: black;">
+                  <VBox alignment="BOTTOM_CENTER" maxHeight="144.0" minHeight="144.0" prefHeight="144.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: black;">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Junction Visualisation" textAlignment="CENTER" wrappingWidth="768.0">
                            <font>
@@ -136,6 +136,37 @@
                            </font>
                         </Text>
                         <ProgressBar prefHeight="20.0" prefWidth="719.0" progress="0.25" />
+                        <HBox alignment="BOTTOM_LEFT" prefHeight="58.0" prefWidth="768.0">
+                           <children>
+                              <Button fx:id="undoButton" mnemonicParsing="false" onAction="#undo" prefHeight="50.0" prefWidth="52.0">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/Icons/undo.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="redoButton" mnemonicParsing="false" onAction="#redo" prefHeight="52.0" prefWidth="52.0">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../assets/Icons/redo.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </HBox>
                      </children>
                   </VBox>
                   <AnchorPane prefHeight="576.0" prefWidth="768.0">

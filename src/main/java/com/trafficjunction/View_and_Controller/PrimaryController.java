@@ -6,6 +6,8 @@ import java.io.IOException;
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.UILane;
+import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
+import com.trafficjunction.View_and_Controller.Saving_Utils.ConfigurationSnapshot;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,7 +66,15 @@ public class PrimaryController {
     //File system Java resources:
     public FileChooser fileChooser = new FileChooser();
     
+    //Undo Redo FXML Links:
+    @FXML
+    private Button undoButton;
+    @FXML
+    private Button redoButton;
 
+    //Undo Redo Java resources:
+    private CareTaker careTaker = new CareTaker();
+    private JunctionConfiguration configuration = new JunctionConfiguration();
 
     @FXML
     private void initialize() {
@@ -217,8 +227,10 @@ public class PrimaryController {
         loadMenuItem.setOnAction((ActionEvent event) -> {
             File chosenFile = fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
             try{
-                JunctionConfiguration configuration = JunctionConfiguration.loadObject(chosenFile);
-
+                JunctionConfiguration loadedConfiguration = JunctionConfiguration.loadObject(chosenFile);
+                configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
+                careTaker.addSnap(new ConfigurationSnapshot(configuration));
+                System.out.println("SNAPSHOT ADDED");
                 populateFieldsWithData(configuration);
             } catch (Exception e) { e.printStackTrace();
             }
@@ -364,5 +376,18 @@ public class PrimaryController {
             } catch (Exception ignored) {}
         }
         return true;
+    }
+    @FXML
+    private void undo(){
+        System.out.println("undo pressed");
+        careTaker.undo();
+        populateFieldsWithData(configuration);
+        
+    }
+    @FXML
+    private void redo(){
+        System.out.println("undo pressed");
+        careTaker.redo();
+        populateFieldsWithData(configuration);
     }
 }
