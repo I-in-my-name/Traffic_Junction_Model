@@ -12,60 +12,102 @@ public class UILane {
     private ImageView lane; // The lane ImageView associated with this object.
     private boolean leftEnabled; // Enables left-turn options to be cycled through.
     private boolean rightEnabled; // Enables right-turn options to be cycled through.
-    private boolean isLeft; // Whether the lane is a left-turn lane.
-    private boolean isRight; // Whether the lane is a right-turn lane.
 
-    private int currentImageIndex = 0; // The index of the current image it is assigned to.
+    private RoadType roadType; // The road type associated with this lane.
+    private ArrayList<RoadType> allAllowedRoads; // All the road types that are allowed for this lane.
+    private int currentRoadCounter = 0;
+    public boolean isDisabled = false;
 
-    private ArrayList<String> laneImagePaths = new ArrayList<String>();
-    private String currentImagePath;
-
-    /*
-     * Default constructor method, assumes middle lane and sets enableLeft and
-     * enableRight to false.
-     * 
-     * @param laneObj - The ImageView that this object should be associated with.
-     * 
-     * @param position - The integer value of the lane's position (e.g. lane 1, lane
-     * 2). Lane closest to the oncoming lanes is considered lane 0.
-     */
     public UILane(ImageView laneObj) {
         this.lane = laneObj;
         this.leftEnabled = false;
         this.rightEnabled = false;
-        this.isLeft = false;
-        this.isRight = false;
-        this.laneImagePaths.add("/assets/straightOnRoad.png"); // Add on the straight road image. This is the default.
-        this.currentImagePath = laneImagePaths.get(0);
+        this.roadType = new RoadType("/assets/straightOnRoad.png", true, false, false); // Add on the straight road.
+        this.allAllowedRoads = new ArrayList<RoadType>();
+        this.allAllowedRoads.add(roadType);
 
-        // this.lane.setOnMouseClicked(event -> changeImage());
+        // Update image to maintain consistency.
+        this.update();
     }
 
-    /* Method to disable this lane. */
-    public void disableLane() {
-        // TODO Disable left and right enabled.
-        this.lane.setDisable(true);
-        this.lane.setImage(new Image(getClass().getResourceAsStream("/assets/blackedOutRoad.png")));
+    /*
+     * Method to update the lane image, and make sure enabled variables are in line
+     * with image.
+     */
+    public void update() {
+        // For when the lane is disabled.
+        if (!this.isDisabled) {
+            // Account for overflow if lanes are removed but counter is not updated.
+            if (this.currentRoadCounter > this.allAllowedRoads.size() - 1) {
+                this.currentRoadCounter = 0;
+            }
 
+            // Get current roadtype.
+            this.roadType = this.allAllowedRoads.get(this.currentRoadCounter);
+            this.lane.setImage(new Image(getClass().getResourceAsStream(this.roadType.getImagePath())));
+        }
+
+        this.leftEnabled = this.roadType.getLeft();
+        this.rightEnabled = this.roadType.getRight();
+
+        // If both left and right turns are allowed, ensure that the three way roadType
+        // is added.
+        if (this.leftEnabled && this.rightEnabled) {
+            this.allAllowedRoads.add(new RoadType("/assets/straightLeftRightRoad.png", true, true, true));
+        }
     }
 
     /* Method to enable this lane. */
     public void enableLane() {
-        // TODO Go back to previous left and right enabled.
+        this.isDisabled = false;
         this.lane.setDisable(false);
-        this.lane.setImage(new Image(getClass().getResourceAsStream(laneImagePaths.get(this.currentImageIndex))));
+        update();
+    }
 
+    /* Method to disable this lane. */
+    public void disableLane() {
+        this.isDisabled = true;
+        this.lane.setDisable(true);
+        this.roadType = new RoadType("/assets/blackedOutRoad.png", false, false, false);
+        this.update();
     }
 
     /*
-     * Method to switch to the next image.
+     * Method to switch to the next image. Should only be called after the lane has
+     * been clicked.
      */
     public void changeImage() {
-        // TODO
-        // Change image and decide whether the new image is left or a right turn. If it
-        // is either, enable the respective turn.
-        this.currentImageIndex = (currentImageIndex + 1) % laneImagePaths.size();
-        this.lane.setImage(new Image(getClass().getResourceAsStream(laneImagePaths.get(currentImageIndex))));
+        this.currentRoadCounter = (this.currentRoadCounter + 1) % this.allAllowedRoads.size();
+        this.update();
+        return;
+    }
+
+    /*
+     * Method to add left turn roadtypes to this lane.
+     */
+    public void addLeftTurns() {
+        this.allAllowedRoads.add(new RoadType("/assets/leftOnlyRoad.png", false, true, false));
+        this.allAllowedRoads.add(new RoadType("/assets/straightOnAndLeftRoad.png", true, true, false));
+        update();
+    }
+
+    /*
+     * Method to add right turn roadtypes to this lane.
+     */
+    public void addRightTurns() {
+        this.allAllowedRoads.add(new RoadType("/assets/rightOnlyRoad.png", false, false, true));
+        this.allAllowedRoads.add(new RoadType("/assets/straightOnAndRightRoad.png", true, false, true));
+        update();
+    }
+
+    public void removeLeftTurns() {
+        this.allAllowedRoads.removeIf(roadType -> roadType.getLeft());
+        update();
+    }
+
+    public void removeRightTurns() {
+        this.allAllowedRoads.removeIf(roadType -> roadType.getRight());
+        update();
     }
 
     /*
@@ -91,24 +133,13 @@ public class UILane {
     }
 
     /*
-     * Getter method for the lane field.
+     * Getter method for lane ImageView.
      */
     public ImageView getLane() {
         return this.lane;
     }
 
-    /*
-     * Getter method for the isLeft field.
-     */
-    public boolean isLeft() {
-        return this.isLeft;
+    public RoadType getRoadType() {
+        return this.roadType;
     }
-
-    /*
-     * Getter method for the isRight field.
-     */
-    public boolean isRight() {
-        return this.isRight;
-    }
-
-}
+};

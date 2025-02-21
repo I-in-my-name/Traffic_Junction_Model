@@ -6,11 +6,14 @@ package com.trafficjunction.UI_Utilities;
  */
 
 public class RoadType {
-    String imagePath;
-    boolean straight;
-    boolean left;
-    boolean right;
+    String imagePath; // The path to the image of the road.
+    boolean straight; // Whether the road allows going straight.
+    boolean left; // Whether the road allows turning left.
+    boolean right; // Whether the road allows turning right.
 
+    /*
+     * Constructor method for the RoadType class.
+     */
     public RoadType(String imagePath, boolean straight, boolean left, boolean right) {
         this.imagePath = imagePath;
         this.straight = straight;
@@ -37,5 +40,12 @@ public class RoadType {
      */
     public boolean getRight() {
         return right;
+    }
+
+    /*
+     * Getter method for the image path of the road.
+     */
+    public String getImagePath() {
+        return imagePath;
     }
 }

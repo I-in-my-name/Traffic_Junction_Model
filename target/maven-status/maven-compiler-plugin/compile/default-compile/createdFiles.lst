@@ -1,4 +1,5 @@
 module-info.class
+com\trafficjunction\UI_Utilities\RoadType.class
 com\trafficjunction\UserInputData.class
 com\trafficjunction\View_and_Controller\PrimaryController.class
 com\trafficjunction\InputData.class
