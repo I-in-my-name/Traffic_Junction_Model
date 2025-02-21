@@ -1,23 +1,27 @@
 package com.trafficjunction.View_and_Controller;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.function.UnaryOperator;
 
+import com.trafficjunction.UI_Utilities.DataSanitisation;
+import com.trafficjunction.UI_Utilities.UILane;
+import com.trafficjunction.UserInputData;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import com.trafficjunction.UI_Utilities.DataSanitisation;
-import com.trafficjunction.UI_Utilities.UILane;
 
 public class PrimaryController {
 
@@ -51,6 +55,16 @@ public class PrimaryController {
     private UILane[] eastRoadAllLanes;
     private UILane[] southRoadAllLanes;
     private UILane[] westRoadAllLanes;
+
+    //File system FXML Links:
+    @FXML
+    private MenuItem saveMenuItem;
+    @FXML
+    private MenuItem loadMenuItem;
+
+    //File system Java resources:
+    FileChooser fileChooser = new FileChooser();
+
 
     @FXML
     private void initialize() {
@@ -194,6 +208,35 @@ public class PrimaryController {
                 subtractLane(westRoadAllLanes, westLaneNum);
             }
         });
+
+
+
+        //######################### Saving and Memento's section ###################//
+
+        fileChooser.setTitle("value");
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
+        loadMenuItem.setOnAction((ActionEvent event) -> {
+            fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
+            try{
+                //TODO: get the data
+                
+                //UserInputData.saveObject();
+                //get data from program
+                int t;
+            } catch (Exception e) {
+            }
+        });
+        
+        saveMenuItem.setOnAction((ActionEvent event) -> {
+            File chosenFile = fileChooser.showSaveDialog((Stage) vehicleNumGrid.getScene().getWindow());
+            try {
+                //move into program
+                UserInputData.loadObject(chosenFile);
+            } catch (Exception e) {
+            }
+        });
+        
+
     }
 
     /*
@@ -296,6 +339,27 @@ public class PrimaryController {
         trafficLightButton.setOnMouseExited(event -> {
             trafficLightButton.setStyle("");
         });
+    }
+
+    private UserInputData gatherUserData(){
+        //This is notably in order.
+        int[] sequentialList = new int[12];
+        int index = 0;
+        for (Node child : vehicleNumGrid.getChildren()) {
+            try {
+                TextField field = (TextField) child;
+                String text = field.getText();
+                int number = 0;
+
+                if (!text.isEmpty()){
+                    number = Integer.getInteger(field.getText()); 
+                }
+                sequentialList[index] = number;
+                index++;
+            } catch (Exception ignored) {}
+        }
+        UserInputData data = new UserInputData();
+        return data;
     }
 
 }

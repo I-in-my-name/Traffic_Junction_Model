@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -15,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficjunction.View_and_Controller.PrimaryController">
+<VBox prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficjunction.View_and_Controller.PrimaryController">
    <children>
       <HBox>
          <children>
@@ -25,11 +29,32 @@
                      <children>
                         <HBox alignment="CENTER" maxHeight="144.0" maxWidth="256.0" minHeight="144.0" minWidth="256.0" prefHeight="144.0" prefWidth="256.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: black;">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Input Parameters" textAlignment="CENTER" wrappingWidth="241.50390625">
-                                 <font>
-                                    <Font size="25.0" />
-                                 </font>
-                              </Text>
+                              <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Input Parameters" textAlignment="CENTER" wrappingWidth="241.50390625">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                    </Text>
+                                    <HBox alignment="BOTTOM_LEFT" prefHeight="63.0" prefWidth="242.0">
+                                       <children>
+                                          <MenuBar prefHeight="27.0" prefWidth="244.0">
+                                            <menus>
+                                              <Menu mnemonicParsing="false" text="File">
+                                                <items>
+                                                  <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="load Junction" />
+                                                      <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="save Junction" />
+                                                </items>
+                                              </Menu>
+                                            </menus>
+                                             <HBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </HBox.margin>
+                                          </MenuBar>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
                         </HBox>
                      </children>
@@ -41,7 +66,7 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <GridPane fx:id="vehicleNumGrid" alignment="CENTER" maxWidth="200.0" prefWidth="200.0" stylesheets="@../../styles/styles.css">
+                        <GridPane fx:id="vehicleNumGrid" alignment="CENTER" maxWidth="200.0" prefWidth="200.0">
                           <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="80.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="85.0" />
