@@ -62,7 +62,7 @@ public class PrimaryController {
     private MenuItem loadMenuItem;
 
     //File system Java resources:
-    FileChooser fileChooser = new FileChooser();
+    public FileChooser fileChooser = new FileChooser();
     
 
 

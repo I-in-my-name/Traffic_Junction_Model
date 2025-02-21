@@ -103,18 +103,18 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EAST" GridPane.rowIndex="4" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SOUTH" GridPane.rowIndex="7" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="WEST" GridPane.rowIndex="10" />
-                              <TextField GridPane.columnIndex="2" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="9" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="10" />
-                              <TextField GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                              <TextField promptText="0" GridPane.columnIndex="2" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                              <TextField promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="11" />
                            </children>
                         </GridPane>
                         <Button fx:id="runSimulationButton" alignment="CENTER" mnemonicParsing="false" onAction="#runSimulationButtonPress" prefHeight="46.0" prefWidth="148.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Run Simulation" textAlignment="CENTER">
