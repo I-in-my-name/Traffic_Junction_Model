@@ -265,6 +265,9 @@ public class PrimaryController {
                 }
             }
 
+            // If the road is a straight road, make sure the lanes to the left and right
+            // are not left or right turn lanes. UNLESS they are the end roads.
+
             // Update any lanes that may not have been affected in case.
             laneArr[i].update();
         }

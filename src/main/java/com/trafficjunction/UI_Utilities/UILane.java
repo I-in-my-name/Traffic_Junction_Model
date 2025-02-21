@@ -86,6 +86,7 @@ public class UILane {
      * Method to add left turn roadtypes to this lane.
      */
     public void addLeftTurns() {
+        this.allAllowedRoads.removeIf(roadType -> roadType.getLeft());
         this.allAllowedRoads.add(new RoadType("/assets/leftOnlyRoad.png", false, true, false));
         this.allAllowedRoads.add(new RoadType("/assets/straightOnAndLeftRoad.png", true, true, false));
         update();
@@ -95,6 +96,7 @@ public class UILane {
      * Method to add right turn roadtypes to this lane.
      */
     public void addRightTurns() {
+        this.allAllowedRoads.removeIf(roadType -> roadType.getRight());
         this.allAllowedRoads.add(new RoadType("/assets/rightOnlyRoad.png", false, false, true));
         this.allAllowedRoads.add(new RoadType("/assets/straightOnAndRightRoad.png", true, false, true));
         update();
