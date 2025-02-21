@@ -8,7 +8,18 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.trafficjunction.JunctionConfiguration.directions;
+
 public class JunctionConfiguration {
+    enum directions{
+        nte,nts,ntw,
+
+        ets,etw,etn,
+
+        stw,stn,ste,
+
+        wtn,wte,wts,
+    }
     /*
      * Of Note:
      * the ordering here follows a NESW system and a clockwise sub system, i.e 
@@ -16,35 +27,26 @@ public class JunctionConfiguration {
      * consider all values in east, 
      * E to N is last in the list e:... because going clockwise from East, South is next.directionalThroughput
      */
-    private Map<String, Integer> directionalThroughput = new HashMap<>();
+    private Map<directions, Integer> directionalThroughput = new HashMap<>();
 
     //Logic: Partial configurations must be valid for the save features to work, so no constructor inputs.
     public boolean setDirectionInfo(int[] input) {
-
         //potentially a section for further validation to return false
-
-        directionalThroughput.put("nte", input[0]);
-        directionalThroughput.put("nts", input[1]);
-        directionalThroughput.put("ntw", input[2]);
-        directionalThroughput.put("ets", input[3]);
-        directionalThroughput.put("etw", input[4]);
-        directionalThroughput.put("etn", input[5]);
-        directionalThroughput.put("ste", input[6]);
-        directionalThroughput.put("stn", input[7]);
-        directionalThroughput.put("stw", input[8]);
-        directionalThroughput.put("wte", input[9]);
-        directionalThroughput.put("wtn", input[10]);
-        directionalThroughput.put("wts", input[11]);
+        directions[] values = directions.values();
+        for (int i = 0; i < values.length; i++) {
+            directionalThroughput.put(values[i], input[i]);
+        }
         return true;
     }
-    /*
-     * @param direction: The direction for which the information is required.
-     * 
-     * @return: The number of vehicles in the given direction, or null if invalid
-     * direction.
-     */
-    public Integer getDirectionInfo(String direction) {
-        return directionalThroughput.get(direction);
+    //returns according to system outlined in enum outlined
+    public int[] getDirectionInfo(){
+        int[] info = new int[12]; 
+        directions[] values = directions.values();
+        for (int i = 0; i < values.length; i++) {
+            info[i] = directionalThroughput.get(values[i]);
+        }
+
+        return info;
     }
 
     /*
@@ -55,17 +57,21 @@ public class JunctionConfiguration {
      * @return bool: True if the value has been updated, or false if the direction
      * is invalid.
      */
-    public boolean setDirectionInfo(String direction, int num) {
-        if (directionalThroughput.containsKey(direction)) {
-            directionalThroughput.put(direction, num);
-            return true;
-        } else {
-            return false;
-        }
+    public boolean setOneDirection(directions direction, int num) {
+        directionalThroughput.replace(direction, num);
+        return true;
     }
 
 
-
+    /*
+     * @param direction: The direction for which the information is required.
+     * 
+     * @return: The number of vehicles in the given direction, or null if invalid
+     * direction.
+     */
+    public Integer getOneDirection(directions direction) {
+        return directionalThroughput.get(direction);
+    }
 
 
     public boolean saveObject(File objectFile){

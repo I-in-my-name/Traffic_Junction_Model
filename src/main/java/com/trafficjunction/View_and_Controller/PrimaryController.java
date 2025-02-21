@@ -217,7 +217,7 @@ public class PrimaryController {
         loadMenuItem.setOnAction((ActionEvent event) -> {
             File chosenFile = fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
             try{
-                //gatherUserData().loadObject(chosenFile);
+                JunctionConfiguration configuration = JunctionConfiguration.loadObject(chosenFile);
                 
                 //UserInputData.saveObject();
                 //get data from program
@@ -340,6 +340,9 @@ public class PrimaryController {
         });
     }
 
+    /*
+     * Both of the next two functions must be added to whenever new data is decided to be relevant
+     */
     private JunctionConfiguration gatherUserData(){
         //This is notably in order.
         int[] sequentialList = new int[12];
@@ -363,8 +366,8 @@ public class PrimaryController {
         //TODO ERROR HANDLING, needs to be handled elsewhere to appropriately show error message.
         return null;
     }
-
-    private boolean populateFieldsWithData(){
+    private boolean populateFieldsWithData(JunctionConfiguration configuration){
+        configuration.getDirectionInfo();
         return false;
     }
 

@@ -6,6 +6,8 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
+import com.trafficjunction.JunctionConfiguration.directions;
+
 public class SaveLoadTests {
 
     @Test
@@ -21,12 +23,12 @@ public class SaveLoadTests {
             original.saveObject(saveFile);
 
             //first value will be set to 10
-            original.setDirectionInfo("nte", 10);
+            original.setOneDirection(directions.nte, 10);
 
             loaded = JunctionConfiguration.loadObject(saveFile);
 
-            assertEquals(10,original.getDirectionInfo("nte"));
-            assertEquals(1, loaded.getDirectionInfo("nte"));
+            assertEquals(10,original.getOneDirection(directions.nte));
+            assertEquals(1, loaded.getOneDirection(directions.nte));
         
         }catch(Exception ignored){}
 
