@@ -244,33 +244,35 @@ public class PrimaryController {
             // Check for left turns.
             if (laneArr[i].getRoadType().getLeft()) {
                 if (i > 0) {
-                    // Make sure lane is not disabled.
-                    if (laneArr[i - 1].isDisabled) {
-                        continue;
-                    } else {
-                        laneArr[i - 1].addLeftTurns();
-                    }
+                    laneArr[i - 1].addLeftTurns();
                 }
             }
 
             // Do the same for right turns.
             if (laneArr[i].getRoadType().getRight()) {
                 if (i < laneArr.length - 1) {
-                    // Make sure lane is not disabled.
-                    if (laneArr[i + 1].isDisabled) {
-                        continue;
-                    } else {
-                        laneArr[i + 1].addRightTurns();
-                    }
+                    laneArr[i + 1].addRightTurns();
                 }
             }
 
             // If the road is a straight road, make sure the lanes to the left and right
             // are not left or right turn lanes. UNLESS they are the end roads.
+            if (!laneArr[i].getRoadType().getLeft() && !laneArr[i].getRoadType().getRight()) {
+                if (i > 0) {
+                    laneArr[i - 1].removeLeftTurns();
+                }
+                if (i < laneArr.length - 1) {
+                    laneArr[i + 1].removeRightTurns();
+                }
+            }
 
             // Update any lanes that may not have been affected in case.
             laneArr[i].update();
         }
+
+        // Re-updating the end lanes in case they were changed.
+        laneArr[laneNum - 1].addLeftTurns();
+        laneArr[0].addRightTurns();
 
     }
 

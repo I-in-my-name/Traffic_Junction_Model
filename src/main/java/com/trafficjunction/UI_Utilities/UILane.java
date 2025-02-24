@@ -52,8 +52,9 @@ public class UILane {
 
         // If both left and right turns are allowed, ensure that the three way roadType
         // is added.
-        if (this.leftEnabled && this.rightEnabled) {
-            this.allAllowedRoads.add(new RoadType("/assets/straightLeftRightRoad.png", true, true, true));
+        RoadType allTurns = new RoadType("/assets/straightLeftRightRoad.png", true, true, true);
+        if (this.leftEnabled && this.rightEnabled && !allAllowedRoads.contains(allTurns)) {
+            this.allAllowedRoads.add(allTurns);
         }
     }
 
@@ -86,6 +87,9 @@ public class UILane {
      * Method to add left turn roadtypes to this lane.
      */
     public void addLeftTurns() {
+        if (this.isDisabled) {
+            return;
+        }
         this.allAllowedRoads.removeIf(roadType -> roadType.getLeft());
         this.allAllowedRoads.add(new RoadType("/assets/leftOnlyRoad.png", false, true, false));
         this.allAllowedRoads.add(new RoadType("/assets/straightOnAndLeftRoad.png", true, true, false));
@@ -96,6 +100,9 @@ public class UILane {
      * Method to add right turn roadtypes to this lane.
      */
     public void addRightTurns() {
+        if (this.isDisabled) {
+            return;
+        }
         this.allAllowedRoads.removeIf(roadType -> roadType.getRight());
         this.allAllowedRoads.add(new RoadType("/assets/rightOnlyRoad.png", false, false, true));
         this.allAllowedRoads.add(new RoadType("/assets/straightOnAndRightRoad.png", true, false, true));
@@ -141,6 +148,9 @@ public class UILane {
         return this.lane;
     }
 
+    /*
+     * Getter method for the roadtype.
+     */
     public RoadType getRoadType() {
         return this.roadType;
     }
