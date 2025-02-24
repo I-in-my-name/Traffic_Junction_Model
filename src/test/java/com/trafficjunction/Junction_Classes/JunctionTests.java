@@ -13,6 +13,150 @@ public class JunctionTests {
         junction = new Junction();
     }
 
+    // Test functionality and validation of add entry lane
+    @Test
+    void testAddEntryLane() {
+        /*
+         * addEntryLane
+         * Should add a default entry lane to the given side if that entry side
+         * has less than 4 lanes already 
+         */
+        // new junction so we know it has 0 entry lanes to begin with
+        Junction junction = new Junction();
+        boolean expected;
+        boolean result;
+        int expectedSize;
+
+        // Side parameter only valid when >= 0 and < 4,
+        // test this validation
+        expected = false;
+
+        result = junction.addEntryLane(-1);
+        assertEquals(expected, result);
+
+        result = junction.addEntryLane(4);
+        assertEquals(expected, result);
+
+        // Test functionality of adding a lane
+        expected = true;
+
+        result = junction.addEntryLane(0);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+
+        result = junction.addEntryLane(0);
+        assertEquals(expected, result);
+        expectedSize = 2;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+
+        result = junction.addEntryLane(0);
+        assertEquals(expected, result);
+        expectedSize = 3;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+
+        result = junction.addEntryLane(0);
+        assertEquals(expected, result);
+        expectedSize = 4;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+
+        result = junction.addEntryLane(1);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getEntryLanes().get(1));
+
+        result = junction.addEntryLane(2);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getEntryLanes().get(2));
+
+        result = junction.addEntryLane(3);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getEntryLanes().get(3));
+
+
+        // Test validation of not adding more than 4 to one side
+        expected = false;
+        result = junction.addEntryLane(0);
+        assertEquals(expected, result);
+        expectedSize = 4;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+    }
+
+    // Test functionality and validation of add exit lane
+    // same exact testing logic of adding entry lane test (above)
+    // TODO: Merge these methods / logic in some way?
+    @Test
+    void testAddExitLane() {
+        /*
+         * addExitLane
+         * Should add a default exit lane to the given side if that exit side
+         * has less than 4 lanes already 
+         */
+        // new junction so we know it has 0 entry lanes to begin with
+        Junction junction = new Junction();
+        boolean expected;
+        boolean result;
+        int expectedSize;
+
+        // Side parameter only valid when >= 0 and < 4,
+        // test this validation
+        expected = false;
+
+        result = junction.addExitLane(-1);
+        assertEquals(expected, result);
+
+        result = junction.addExitLane(4);
+        assertEquals(expected, result);
+
+        // Test functionality of adding a lane
+        expected = true;
+
+        result = junction.addExitLane(0);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getexitLanes().get(0));
+
+        result = junction.addExitLane(0);
+        assertEquals(expected, result);
+        expectedSize = 2;
+        assertEquals(expectedSize, junction.getexitLanes().get(0));
+
+        result = junction.addExitLane(0);
+        assertEquals(expected, result);
+        expectedSize = 3;
+        assertEquals(expectedSize, junction.getexitLanes().get(0));
+
+        result = junction.addExitLane(0);
+        assertEquals(expected, result);
+        expectedSize = 4;
+        assertEquals(expectedSize, junction.getexitLanes().get(0));
+
+        result = junction.addExitLane(1);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getexitLanes().get(1));
+
+        result = junction.addExitLane(2);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getexitLanes().get(2));
+
+        result = junction.addExitLane(3);
+        assertEquals(expected, result);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getexitLanes().get(3));
+
+
+        // Test validation of not adding more than 4 to one side
+        expected = false;
+        result = junction.addExitLane(0);
+        assertEquals(expected, result);
+        expectedSize = 4;
+        assertEquals(expectedSize, junction.getexitLanes().get(0));
+    }
+
     // Test functionality of verifyJunction
     // Dependent on addEntryLane
     @Test
