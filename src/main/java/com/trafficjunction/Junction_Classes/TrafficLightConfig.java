@@ -28,6 +28,7 @@ public class TrafficLightConfig {
         cycle_duration = 0;
     }
 
+    // Test written
     public boolean addState(Float time, List<Integer> states) {
         if (time <= 0 || states == null || states.isEmpty()) {
             return false;
@@ -41,7 +42,7 @@ public class TrafficLightConfig {
     }
 
     public boolean removeState(int index) {
-        if (record.size() < index) {
+        if (index < 0 || index >= record.size()) {
             return false;
         } else {
             float time = record.get(index).getLeft();
@@ -49,7 +50,6 @@ public class TrafficLightConfig {
             record.remove(index);
             return true;
         }
-        
     }
 
     public boolean setState(float time, int state, int record_index) {
@@ -72,8 +72,13 @@ public class TrafficLightConfig {
         }
     }
 
+    // Test written
+    /*
+     * Add state given index, time and list of states
+     * Replaces the state at the given index with the given state
+     */
     public boolean insertState(int index, float time, List<Integer> states) {
-        if (index < 0 || index > record.size()) {
+        if (index < 0 || index >= record.size()) {
             return false;
         } else {
             Pair <Float, List<Integer>> thisCycle = new Pair<>(time, states);
@@ -84,6 +89,7 @@ public class TrafficLightConfig {
        
     }
     
+    // Test written
     public List<Integer> getStates(float time) {
         if (record.isEmpty()) {
             return null;  // Early return if no configurations are defined
@@ -107,6 +113,11 @@ public class TrafficLightConfig {
         }
 
         return null;  // In case no match was found (shouldn't happen with the modulo adjustment)
+    }
+
+    // public getter for testing purposes
+    public Pair<Float, List<Integer>> getStateByIndex(int index) {
+        return this.record.get(index);
     }
     
 }
