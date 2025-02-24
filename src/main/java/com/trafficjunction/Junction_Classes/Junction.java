@@ -131,6 +131,9 @@ public class Junction {
      * @return - If the lane was added.
      */
     public boolean addEntryLane(int side) {
+        // check 0 <= side <= 3
+        if (side < 0 || side > 3)
+            return false;
         // Get the road on the desired side
         List<Lane> road = entry_lanes.get(side);
         // Check if the road has less than 5 lanes
@@ -150,10 +153,13 @@ public class Junction {
      * @return - If the lane was removed.
      */
     public boolean removeEntryLane(int side) {
+        // check 0 <= side <= 3
+        if (side < 0 || side > 3)
+            return false;
         // Get the road on the desired side
         List<Lane> road = entry_lanes.get(side);
         // Check that the road will have at least 0 lanes after removal
-        if (road.size() < 1) {
+        if (road.size() <= 0) {
             return false;
         }
         // Remove the lane at the end of the list
@@ -168,6 +174,9 @@ public class Junction {
      * @return - If the lane was added.
      */
     public boolean addExitLane(int side) {
+        // check 0 <= side <= 3
+        if (side < 0 || side > 3)
+            return false;
         // Get the road on the desired side
         List<Lane> road = exit_lanes.get(side);
         // Check if the road has less than 5 lanes
@@ -187,10 +196,13 @@ public class Junction {
      * @return - If the lane was removed.
      */
     public boolean removeExitLane(int side) {
+        // check 0 <= side <= 3
+        if (side < 0 || side > 3)
+            return false;
         // Get the road on the desired side
         List<Lane> road = exit_lanes.get(side);
         // Check that the road will have at least 0 lanes after removal
-        if (road.size() < 1) {
+        if (road.size() <= 0) {
             return false;
         }
         // Remove the lane at the end of the list

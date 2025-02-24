@@ -84,8 +84,9 @@ public class JunctionTests {
         junction.addExitLane(3);
         junction.addExitLane(3);
         junction.addExitLane(3);
+        junction.addExitLane(3);
         result = junction.removeExitLane(3);
-        expectedSize = 3;
+        expectedSize = 4;
         assertEquals(expectedSize, junction.getexitLanes().get(3).size());
         assertEquals(expected, result);
 
@@ -166,8 +167,9 @@ public class JunctionTests {
         junction.addEntryLane(3);
         junction.addEntryLane(3);
         junction.addEntryLane(3);
+        junction.addEntryLane(3);
         result = junction.removeEntryLane(3);
-        expectedSize = 3;
+        expectedSize = 4;
         assertEquals(expectedSize, junction.getEntryLanes().get(3).size());
         assertEquals(expected, result);
 
@@ -210,45 +212,50 @@ public class JunctionTests {
         result = junction.addEntryLane(0);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+        assertEquals(expectedSize, junction.getEntryLanes().get(0).size());
 
         result = junction.addEntryLane(0);
         assertEquals(expected, result);
         expectedSize = 2;
-        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+        assertEquals(expectedSize, junction.getEntryLanes().get(0).size());
 
         result = junction.addEntryLane(0);
         assertEquals(expected, result);
         expectedSize = 3;
-        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+        assertEquals(expectedSize, junction.getEntryLanes().get(0).size());
 
         result = junction.addEntryLane(0);
         assertEquals(expected, result);
         expectedSize = 4;
-        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+        assertEquals(expectedSize, junction.getEntryLanes().get(0).size());
+
+        result = junction.addEntryLane(0);
+        assertEquals(expected, result);
+        expectedSize = 5;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0).size());
 
         result = junction.addEntryLane(1);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getEntryLanes().get(1));
+        assertEquals(expectedSize, junction.getEntryLanes().get(1).size());
 
         result = junction.addEntryLane(2);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getEntryLanes().get(2));
+        assertEquals(expectedSize, junction.getEntryLanes().get(2).size());
 
         result = junction.addEntryLane(3);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getEntryLanes().get(3));
+        assertEquals(expectedSize, junction.getEntryLanes().get(3).size());
 
 
-        // Test validation of not adding more than 4 to one side
+        // Test validation of not adding more than 5 to one side
         expected = false;
         result = junction.addEntryLane(0);
         assertEquals(expected, result);
-        expectedSize = 4;
-        assertEquals(expectedSize, junction.getEntryLanes().get(0));
+        expectedSize = 5;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0).size());
     }
 
     // Test functionality and validation of add exit lane
@@ -283,45 +290,50 @@ public class JunctionTests {
         result = junction.addExitLane(0);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getexitLanes().get(0));
+        assertEquals(expectedSize, junction.getexitLanes().get(0).size());
 
         result = junction.addExitLane(0);
         assertEquals(expected, result);
         expectedSize = 2;
-        assertEquals(expectedSize, junction.getexitLanes().get(0));
+        assertEquals(expectedSize, junction.getexitLanes().get(0).size());
 
         result = junction.addExitLane(0);
         assertEquals(expected, result);
         expectedSize = 3;
-        assertEquals(expectedSize, junction.getexitLanes().get(0));
+        assertEquals(expectedSize, junction.getexitLanes().get(0).size());
 
         result = junction.addExitLane(0);
         assertEquals(expected, result);
         expectedSize = 4;
-        assertEquals(expectedSize, junction.getexitLanes().get(0));
+        assertEquals(expectedSize, junction.getexitLanes().get(0).size());
+
+        result = junction.addExitLane(0);
+        assertEquals(expected, result);
+        expectedSize = 5;
+        assertEquals(expectedSize, junction.getexitLanes().get(0).size());
 
         result = junction.addExitLane(1);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getexitLanes().get(1));
+        assertEquals(expectedSize, junction.getexitLanes().get(1).size());
 
         result = junction.addExitLane(2);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getexitLanes().get(2));
+        assertEquals(expectedSize, junction.getexitLanes().get(2).size());
 
         result = junction.addExitLane(3);
         assertEquals(expected, result);
         expectedSize = 1;
-        assertEquals(expectedSize, junction.getexitLanes().get(3));
+        assertEquals(expectedSize, junction.getexitLanes().get(3).size());
 
 
-        // Test validation of not adding more than 4 to one side
+        // Test validation of not adding more than 5 to one side
         expected = false;
         result = junction.addExitLane(0);
         assertEquals(expected, result);
-        expectedSize = 4;
-        assertEquals(expectedSize, junction.getexitLanes().get(0));
+        expectedSize = 5;
+        assertEquals(expectedSize, junction.getexitLanes().get(0).size());
     }
 
     // Test functionality of verifyJunction
