@@ -6,9 +6,102 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-
-
 public class TrafficLightConfigTests {
+
+    // Test functionality and validation of set tate function
+    // Dependent on functionality of addState method
+    @Test testInsertState() {
+        TrafficLightConfig trafficLightConfig = new TrafficLightConfig();
+        boolean expected;
+        boolean result;
+
+        // Test functionality
+        expected = true;
+
+        List<Integer> states1 = new ArrayList<>();
+        states1.add(0);
+        states1.add(1);
+        states1.add(1);
+        states1.add(0);
+        result = trafficLightConfig.insertState(10.f, states1, 0);
+        assertEquals(expected, result);
+        assertEquals(10.f, trafficLightConfig.getStateByIndex(0).getLeft());
+        assertEquals(states1, trafficLightConfig.getStateByIndex(0).getRight());
+
+        List<Integer> states2 = new ArrayList<>();
+        states2.add(1);
+        states2.add(0);
+        states2.add(0);
+        states2.add(1);
+        result = trafficLightConfig.insertState(5.f, states2, 0);
+        assertEquals(expected, result);
+        // testing correct order of insertion (at start)
+        assertEquals(5.f, trafficLightConfig.getStateByIndex(0).getLeft());
+        assertEquals(states2, trafficLightConfig.getStateByIndex(0).getRight());
+        assertEquals(10.f, trafficLightConfig.getStateByIndex(1).getLeft());
+        assertEquals(states1, trafficLightConfig.getStateByIndex(1).getRight());
+
+        List<Integer> states3 = new ArrayList<>();
+        states3.add(1);
+        states3.add(1);
+        states3.add(1);
+        states3.add(1);
+        result = trafficLightConfig.insertState(7.5f, states3, 1);
+        assertEquals(expected, result);
+        // testing correct order of insertion (inbetween)
+        assertEquals(5.f, trafficLightConfig.getStateByIndex(0).getLeft());
+        assertEquals(states2, trafficLightConfig.getStateByIndex(0).getRight());
+        assertEquals(7.5f, trafficLightConfig.getStateByIndex(1).getLeft());
+        assertEquals(states3, trafficLightConfig.getStateByIndex(1).getRight());
+        assertEquals(10.f, trafficLightConfig.getStateByIndex(2).getLeft());
+        assertEquals(states1, trafficLightConfig.getStateByIndex(2).getRight());
+
+        List<Integer> states4 = new ArrayList<>();
+        states4.add(1);
+        states4.add(1);
+        states4.add(1);
+        states4.add(0);
+        result = trafficLightConfig.insertState(12.5f, states4, 3);
+        assertEquals(expected, result);
+        // testing correct order of insertion (at end)
+        assertEquals(5.f, trafficLightConfig.getStateByIndex(0).getLeft());
+        assertEquals(states2, trafficLightConfig.getStateByIndex(0).getRight());
+        assertEquals(7.5f, trafficLightConfig.getStateByIndex(1).getLeft());
+        assertEquals(states3, trafficLightConfig.getStateByIndex(1).getRight());
+        assertEquals(10.f, trafficLightConfig.getStateByIndex(2).getLeft());
+        assertEquals(states1, trafficLightConfig.getStateByIndex(2).getRight());
+        assertEquals(12.5f, trafficLightConfig.getStateByIndex(3).getLeft());
+        assertEquals(states4, trafficLightConfig.getStateByIndex(3).getRight());
+
+        // Test validation
+        expected = false;
+
+        // should not insert with negative index
+        result = trafficLightConfig.insertState(12.5f, states4, -1);
+        assertEquals(expected, result);
+        // assert same values as before
+        assertEquals(5.f, trafficLightConfig.getStateByIndex(0).getLeft());
+        assertEquals(states2, trafficLightConfig.getStateByIndex(0).getRight());
+        assertEquals(7.5f, trafficLightConfig.getStateByIndex(1).getLeft());
+        assertEquals(states3, trafficLightConfig.getStateByIndex(1).getRight());
+        assertEquals(10.f, trafficLightConfig.getStateByIndex(2).getLeft());
+        assertEquals(states1, trafficLightConfig.getStateByIndex(2).getRight());
+        assertEquals(12.5f, trafficLightConfig.getStateByIndex(3).getLeft());
+        assertEquals(states4, trafficLightConfig.getStateByIndex(3).getRight());
+
+        // should not insert with index greater than length 
+        result = trafficLightConfig.insertState(12.5f, states4, 5);
+        assertEquals(expected, result);
+        // assert same values as before
+        assertEquals(5.f, trafficLightConfig.getStateByIndex(0).getLeft());
+        assertEquals(states2, trafficLightConfig.getStateByIndex(0).getRight());
+        assertEquals(7.5f, trafficLightConfig.getStateByIndex(1).getLeft());
+        assertEquals(states3, trafficLightConfig.getStateByIndex(1).getRight());
+        assertEquals(10.f, trafficLightConfig.getStateByIndex(2).getLeft());
+        assertEquals(states1, trafficLightConfig.getStateByIndex(2).getRight());
+        assertEquals(12.5f, trafficLightConfig.getStateByIndex(3).getLeft());
+        assertEquals(states4, trafficLightConfig.getStateByIndex(3).getRight());
+    }
 
     // Test functionality and validation of remove state function
     // Dependent on addState functionality
@@ -156,10 +249,10 @@ public class TrafficLightConfigTests {
     // Test functionality of insert state function
     // Dependent on addState functionality, getState functionality
     @Test
-    void testInsertState() {
+    void testSetState() {
         /*
-        * Add state given index, time and list of states
-        * Replaces the state at the given index with the given state
+        * Set state given index, time and list of states
+        * Essentially replaces the state at the given index with the given state
         */
         TrafficLightConfig trafficLightConfig = new TrafficLightConfig();
         boolean expected;
@@ -194,11 +287,11 @@ public class TrafficLightConfigTests {
 
         // Test functionality of inserting and replacing states
         expected = true;
-        result = trafficLightConfig.insertState(2, 7.5f, states4);
+        result = trafficLightConfig.setState(2, 7.5f, states4);
         assertEquals(states4, trafficLightConfig.getStates(21.f));
         assertEquals(expected, result);
 
-        result = trafficLightConfig.insertState(2, 7.5f, states3);
+        result = trafficLightConfig.setState(2, 7.5f, states3);
         assertEquals(states3, trafficLightConfig.getStates(21.f));
         assertEquals(expected, result);
 
@@ -211,7 +304,7 @@ public class TrafficLightConfigTests {
         states4.add(0);
         states4.add(0);
         states4.add(0);
-        result = trafficLightConfig.insertState(0, 20.f, states5);
+        result = trafficLightConfig.setState(0, 20.f, states5);
         assertEquals(expected, result);
 
         assertEquals(states5, trafficLightConfig.getStates(0.f));
@@ -224,7 +317,7 @@ public class TrafficLightConfigTests {
         // Should reject when index < 0 or index > # of traffic light states
         expected = false;
 
-        result = trafficLightConfig.insertState(-1, 20.f, states5);
+        result = trafficLightConfig.setState(-1, 20.f, states5);
         assertEquals(expected, result);
         // assert the beahviour should be the same as before
         assertEquals(states5, trafficLightConfig.getStates(0.f));
@@ -233,7 +326,7 @@ public class TrafficLightConfigTests {
         assertEquals(states2, trafficLightConfig.getStates(25.f));
         assertEquals(states3, trafficLightConfig.getStates(35.f));
 
-        result = trafficLightConfig.insertState(3, 20.f, states5);
+        result = trafficLightConfig.setState(3, 20.f, states5);
         assertEquals(expected, result);
         // assert the beahviour should be the same as before
         assertEquals(states5, trafficLightConfig.getStates(0.f));

@@ -41,6 +41,7 @@ public class TrafficLightConfig {
         }
     }
 
+    // Test written
     public boolean removeState(int index) {
         if (index < 0 || index >= record.size()) {
             return false;
@@ -52,22 +53,13 @@ public class TrafficLightConfig {
         }
     }
 
-    public boolean setState(float time, int state, int record_index) {
-        float currentTime = 0;
-        int i = 0;
-        boolean found = false;
-        if (record_index < 0 || record_index >= record.size() || state < 0 || state >= record.size()) {
+    // Test written
+    public boolean insertState(float time, List<Integer> states, int index) {
+        if (index < 0 || index > record.size()) {
             return false;
         } else {
-            while (found == false) {
-                currentTime = currentTime + record.get(i).getLeft();
-                if (currentTime > time) {
-                    found = true;
-                } else {
-                    i++;
-                }
-            }
-            record.get(i).getRight().set(record_index, state);
+            Pair <Float, List<Integer>> thisCycle = new Pair<>(time, states);
+            record.add(index, thisCycle);
             return true;
         }
     }
@@ -77,7 +69,7 @@ public class TrafficLightConfig {
      * Add state given index, time and list of states
      * Replaces the state at the given index with the given state
      */
-    public boolean insertState(int index, float time, List<Integer> states) {
+    public boolean setState(int index, float time, List<Integer> states) {
         if (index < 0 || index >= record.size()) {
             return false;
         } else {
@@ -86,7 +78,6 @@ public class TrafficLightConfig {
             record.add(index, thisCycle);
             return true;
         }
-       
     }
     
     // Test written
