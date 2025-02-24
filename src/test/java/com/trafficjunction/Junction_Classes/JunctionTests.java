@@ -13,6 +13,173 @@ public class JunctionTests {
         junction = new Junction();
     }
 
+    // Test functionality and validation of remove exit lane
+    // dependent on addExitLane
+    // the same exact test as removeEntryLane
+    // TODO: Merge these methods into one? Or just okay to repeat logic?
+    // might be okay to just repeat it as combining could more complex than its worth
+    @Test
+    void testRemoveExitLane() {
+        /**
+        * Remove Exit Lane method
+        * Parameters - the side which we want to remove a lane in.
+        * @return - If the lane was removed.
+        */
+        // new junction so we know it has 0 exit lanes to begin with
+        Junction junction = new Junction();
+        boolean expected;
+        boolean result;
+        int expectedSize;
+
+        // test validation for side < 0 and side > 3
+        expected = false;
+
+        result = junction.removeExitLane(-1);
+        assertEquals(expected, result);
+
+        result = junction.removeExitLane(4);
+        assertEquals(expected, result);
+
+        // test functionality for removing lanes
+        // must first add lanes to remove (this is why this is dependent
+        // on addExitLane method)
+        junction.addExitLane(1);
+        junction.addExitLane(1);
+        junction.addExitLane(1);
+
+        expected = true;
+
+        result = junction.removeExitLane(1);
+        expectedSize = 2;
+        assertEquals(expectedSize, junction.getexitLanes().get(1).size());
+        assertEquals(expected, result);
+
+        result = junction.removeExitLane(1);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getexitLanes().get(1).size());
+        assertEquals(expected, result);
+
+        result = junction.removeExitLane(1);
+        expectedSize = 0;
+        assertEquals(expectedSize, junction.getexitLanes().get(1).size());
+        assertEquals(expected, result);
+
+        junction.addExitLane(0);
+        result = junction.removeExitLane(0);
+        expectedSize = 0;
+        assertEquals(expectedSize, junction.getexitLanes().get(0).size());
+        assertEquals(expected, result);
+
+        junction.addExitLane(2);
+        junction.addExitLane(2);
+        junction.addExitLane(2);
+        junction.addExitLane(2);
+        result = junction.removeExitLane(2);
+        expectedSize = 3;
+        assertEquals(expectedSize, junction.getexitLanes().get(2).size());
+        assertEquals(expected, result);
+
+        junction.addExitLane(3);
+        junction.addExitLane(3);
+        junction.addExitLane(3);
+        junction.addExitLane(3);
+        junction.addExitLane(3);
+        result = junction.removeExitLane(3);
+        expectedSize = 3;
+        assertEquals(expectedSize, junction.getexitLanes().get(3).size());
+        assertEquals(expected, result);
+
+        
+        // test validation when attempting to remove from 0 exit lanes
+        expected = false;
+        result = junction.removeExitLane(1);
+        expectedSize = 0;
+        assertEquals(expectedSize, junction.getexitLanes().get(1).size());
+        assertEquals(expected, result);
+    }
+
+    // Test functionality and validation of remove entry lane
+    // dependent on addEntryLane
+    @Test
+    void testRemoveEntryLane() {
+        /**
+        * Remove Entry Lane method
+        * Parameters - the side which we want to remove a lane in.
+        * @return - If the lane was removed.
+        */
+        // new junction so we know it has 0 entry lanes to begin with
+        Junction junction = new Junction();
+        boolean expected;
+        boolean result;
+        int expectedSize;
+
+        // test validation for side < 0 and side > 3
+        expected = false;
+
+        result = junction.removeEntryLane(-1);
+        assertEquals(expected, result);
+
+        result = junction.removeEntryLane(4);
+        assertEquals(expected, result);
+
+        // test functionality for removing lanes
+        // must first add lanes to remove (this is why this is dependent
+        // on addEntryLane method)
+        junction.addEntryLane(1);
+        junction.addEntryLane(1);
+        junction.addEntryLane(1);
+
+        expected = true;
+
+        result = junction.removeEntryLane(1);
+        expectedSize = 2;
+        assertEquals(expectedSize, junction.getEntryLanes().get(1).size());
+        assertEquals(expected, result);
+
+        result = junction.removeEntryLane(1);
+        expectedSize = 1;
+        assertEquals(expectedSize, junction.getEntryLanes().get(1).size());
+        assertEquals(expected, result);
+
+        result = junction.removeEntryLane(1);
+        expectedSize = 0;
+        assertEquals(expectedSize, junction.getEntryLanes().get(1).size());
+        assertEquals(expected, result);
+
+        junction.addEntryLane(0);
+        result = junction.removeEntryLane(0);
+        expectedSize = 0;
+        assertEquals(expectedSize, junction.getEntryLanes().get(0).size());
+        assertEquals(expected, result);
+
+        junction.addEntryLane(2);
+        junction.addEntryLane(2);
+        junction.addEntryLane(2);
+        junction.addEntryLane(2);
+        result = junction.removeEntryLane(2);
+        expectedSize = 3;
+        assertEquals(expectedSize, junction.getEntryLanes().get(2).size());
+        assertEquals(expected, result);
+
+        junction.addEntryLane(3);
+        junction.addEntryLane(3);
+        junction.addEntryLane(3);
+        junction.addEntryLane(3);
+        junction.addEntryLane(3);
+        result = junction.removeEntryLane(3);
+        expectedSize = 3;
+        assertEquals(expectedSize, junction.getEntryLanes().get(3).size());
+        assertEquals(expected, result);
+
+        
+        // test validation when attempting to remove from 0 entry lanes
+        expected = false;
+        result = junction.removeEntryLane(1);
+        expectedSize = 0;
+        assertEquals(expectedSize, junction.getEntryLanes().get(1).size());
+        assertEquals(expected, result);
+    }
+
     // Test functionality and validation of add entry lane
     @Test
     void testAddEntryLane() {
