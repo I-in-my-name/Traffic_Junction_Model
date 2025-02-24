@@ -307,6 +307,8 @@ public class Junction {
         if (entry_lanes.size() != 4)
             return false;
         for (int i = 0; i < 4; i++) {
+            if (entry_lanes.get(i).isEmpty())
+                return false; // Junction is not valid if a side does not have any lanes
             for (Lane lane : entry_lanes.get(i)) {
                 // TODO: Move validate lane direction logic into shared thing somewhere
                 // currently repeating this logic in different ways in different functions
