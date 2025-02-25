@@ -72,6 +72,9 @@ public class RoadType {
                 roadType.getRight() == this.right;
     }
 
+    /*
+     * Method to generate a hashcode for the roadtype object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(this.imagePath, this.straight, this.left, this.right);
