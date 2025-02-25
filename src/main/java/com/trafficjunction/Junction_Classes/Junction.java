@@ -53,11 +53,14 @@ public class Junction {
             exit_lanes.add(new ArrayList<>());
         }
         
-        // Create one trafficlight
+        // Create one trafficlight per road
         traffic_lights = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             traffic_lights.add(new TrafficLight());
         }
+
+        // Create a traffic light config
+        tl_config = new TrafficLightConfig();
     }
 
     /** 
@@ -142,7 +145,12 @@ public class Junction {
         }
         // Add a default lane to the road
         // TODO DEFAULT ENTRY LANE?
-        Lane lane = new Lane(30.f, traffic_lights.get(0), "F");
+        /**Currently:
+         * Length of 30
+         * Traffic light is shared across road
+         * Initially the direction is only forward
+         */
+        Lane lane = new Lane(30.f, traffic_lights.get(side), "F");
         road.add(lane);
         return true;
     }

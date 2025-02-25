@@ -10,7 +10,7 @@ public class TrafficLightConfigTests {
 
     // Test functionality and validation of set tate function
     // Dependent on functionality of addState method
-    @Test testInsertState() {
+    @Test void testInsertState() {
         TrafficLightConfig trafficLightConfig = new TrafficLightConfig();
         boolean expected;
         boolean result;

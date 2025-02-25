@@ -151,17 +151,18 @@ public class Lane {
             return false;
         }
 
-        float newPosition;
+        float newPosition = this.length;
 
-        if (vehicles.isEmpty()) {
-            newPosition = 0; // First vehicle starts at position 0
-        } else {
-            Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1); // Get last vehicle
-            float lastPosition = lastVehicle.getLeft();
-            float lastVehicleLength = lastVehicle.getRight().getLength(); // uses getLength() from vehicle class 
+        //  TODO: remove this (below) and alter test for it. Cars should always be added to the back of the lane
+        //if (vehicles.isEmpty()) {
+        //    newPosition = 0; // First vehicle starts at position 0
+        //} else {
+        //    Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1); // Get last vehicle
+        //    float lastPosition = lastVehicle.getLeft();
+        //    float lastVehicleLength = lastVehicle.getRight().getLength(); // uses getLength() from vehicle class 
 
-            newPosition = lastPosition + lastVehicleLength; // Position it right after the last one
-        }
+        //    newPosition = lastPosition + lastVehicleLength; // Position it right after the last one
+        //}
         // check the lane length isn't violated
         if (newPosition + vehicle.getLength() > this.getLength()){
             return false;

@@ -119,7 +119,7 @@ public class Vehicle {
         if (position < traversable_position) { // If the vehicle can move
             if (this.speed != 0) {
                 this.speed = max_speed;
-                // TODO: save time to vehicle metrics
+                metrics.startMoving(this.current_time); // Saves time to vehicle metrics
             }
             // Travel possible distance:
             float max_traversable_distance = calculateDistanceFromTime(time_difference);
@@ -136,21 +136,35 @@ public class Vehicle {
         } else { // The vehicle can not move OR is at 0 and waiting for trafficlights
             boolean can_proceed = lane.canPass();
             if (index == 0 && position == 0.f && can_proceed) { // If we are able to go to the next lane
-                // TODO: Remove vehicle from (lane)
+                lane.removeVehicle();                           // Remove vehicle
                 // TODO: Remember to shift list up if needed
                 Lane next_lane = this.popRoute();
                 if (next_lane != null && lane.getGoingTo().contains(next_lane)) {
                     next_lane.addVehicle(this);
                     this.update(new_time, next_lane, index);
-                } else if (lane.getGoingTo().size() != 0) {
-                    // Go to a random available lane
+                } else if (!lane.getGoingTo().isEmpty()) {  // If there is one or more possible lanes for the vehicle to go in
+                    List<Lane> next_lanes = lane.getGoingTo();
+                    // Go to the lane with the least number of vehicles:
+                    int check_index = 1;
+                    int lowest_index = 0;
+                    int least_v = next_lanes.get(0).getVehicleNum();    // Initially gets the number of vehicles in the first possible lane
+                    while (check_index != next_lanes.size()) {
+                        int new_v = next_lanes.get(check_index).getVehicleNum();    // Get number of vehicles in the first lane
+                        if (least_v > new_v) {          // Compares num of vehicles between current lowest and another lane's
+                            lowest_index = check_index;
+                            least_v = new_v;
+                        }
+                        check_index++;
+                    }
+                    Lane desiredLane = next_lanes.get(lowest_index);    // Gets the lane
+                    desiredLane.addVehicle(this);                       // Adds vehicle
                 } else {
                     // Vehicle has reached the end of the route
                     // Give vehicle metrics to junction somehow (TODO: Discuss Start and End 'nodes'?)
                 }
-            } else if (this.speed != 0) {
+            } else if (this.speed != 0) {   // If the vehicle has speed meaning it has stopped when the method executed this time
                 this.speed = 0;
-                // TODO: save time to vehicle metrics
+                metrics.stopMoving(this.current_time); // Saves time to vehicle metrics
             }
         }
     }
