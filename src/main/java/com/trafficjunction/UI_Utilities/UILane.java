@@ -45,6 +45,8 @@ public class UILane {
             // Get current roadtype.
             this.roadType = this.allAllowedRoads.get(this.currentRoadCounter);
             this.lane.setImage(new Image(getClass().getResourceAsStream(this.roadType.getImagePath())));
+        } else {
+            this.lane.setImage(new Image(getClass().getResourceAsStream(this.roadType.getImagePath())));
         }
 
         this.leftEnabled = this.roadType.getLeft();
