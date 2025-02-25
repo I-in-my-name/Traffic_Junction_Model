@@ -254,6 +254,8 @@ public class PrimaryController {
             }
         });
 
+        System.out.println("End position is " + carImage.localToScene(carImage.getBoundsInLocal()));
+
     }
 
     /*

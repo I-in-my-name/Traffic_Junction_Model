@@ -32,8 +32,10 @@ public class AnimationHandler {
 
     public void createAnimation(int inDir, int inLane, int outDir, int outLane, ImageView car) {
         car.toFront();
-        Path path = new Path();
+        car.setLayoutX(inLanes[inDir][inLane].getX());
+        car.setLayoutY(inLanes[inDir][inLane].getY());
 
+        Path path = new Path();
         // Path starts at these coordinates.
         path.getElements().add(new MoveTo(inLanes[inDir][inLane].getX(), inLanes[inDir][inLane].getY()));
 
@@ -50,7 +52,7 @@ public class AnimationHandler {
 
         arcTo.setRadiusX(radius);
         arcTo.setRadiusY(radius);
-        arcTo.setLargeArcFlag(false);
+        arcTo.setLargeArcFlag(true);
         arcTo.setSweepFlag(true);
         path.getElements().add(arcTo);
 
@@ -64,8 +66,6 @@ public class AnimationHandler {
         System.out.println("Starting position is " + car.localToScene(car.getBoundsInLocal()));
         transition.play();
         System.out.println("Car is moving from " + inLanes[inDir][inLane] + " to " + outLanes[outDir][outLane]);
-        System.out.println("End position is " + car.localToScene(car.getBoundsInLocal()));
-
         return;
     }
 

@@ -305,7 +305,7 @@
                               <Image url="@../../assets/trafficLight.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="carImage" fitHeight="46.0" fitWidth="46.0" layoutX="512.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                        <ImageView fx:id="carImage" fitHeight="46.0" fitWidth="46.0" layoutX="170.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                            <image>
                               <Image url="@../../assets/car.png" />
                            </image>
