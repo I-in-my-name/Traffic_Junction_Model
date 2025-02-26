@@ -282,13 +282,26 @@ public class LaneTests {
 
         // mock values irrelevant to test
         // start with 3 vehicles
-        Lane lane = new Lane(10.f, new TrafficLight(), "f");
+        Lane lane = new Lane(100.f, new TrafficLight(), "f");
         Vehicle vehicle1 = new Vehicle(1.f, 1.f, 1.f);
         Vehicle vehicle2 = new Vehicle(1.f, 1.f, 1.f);
         Vehicle vehicle3 = new Vehicle(1.f, 1.f, 1.f);
         lane.addVehicle(vehicle1);
+        System.out.println(lane);
+        lane.update(1.f);
+        lane.update(2.f);
+        lane.update(3.f);
+        lane.update(4.f);
+        lane.update(10.f);
+        lane.update(20.f);
+        lane.update(30.f);
+        System.out.println(lane);
         lane.addVehicle(vehicle2);
+        System.out.println(lane);
+        lane.update(1.f);
+        System.out.println(lane);
         lane.addVehicle(vehicle3);
+        System.out.println(lane);
 
         // remove those 3 vehicles, should work
         result = lane.removeVehicle();

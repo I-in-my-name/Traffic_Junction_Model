@@ -194,4 +194,14 @@ public class Vehicle {
     }
 
     // method: get vehicle position: used in lane class for deleting vehicles. 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Vehicle [");
+        builder.append(Float.toString(speed));
+        builder.append(", ");
+        builder.append(Float.toString(length));
+        builder.append("]");
+        return builder.toString();
+    }
 }

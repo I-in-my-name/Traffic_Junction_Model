@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class VehicleTests {
 
-    // Depends on Lane.getVehicles
+    // Depends on Lane.getVehicles, addComingLane, addGoingLane
     // Test working functionality of update function
     @Test
     void testUpdatePositive() {

@@ -1,5 +1,7 @@
 package com.trafficjunction.Junction_Classes;
 
+import javax.crypto.KEM;
+
 class Pair<K, V> { // amount of time the taffic light will be in a given state
 // the state (e.g. red =)
     K left;
@@ -24,5 +26,10 @@ class Pair<K, V> { // amount of time the taffic light will be in a given state
 
     public void setRight(V v) {
         this.right = v;
+    }
+
+    @Override
+    public String toString() {
+        return "("+ this.left.toString() + ", " + this.right.toString() + ")";
     }
 }

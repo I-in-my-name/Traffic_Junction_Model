@@ -3,24 +3,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lane {
-    private List<Lane> goesTo; // lanes that current lane leads to
-    private List<Lane> comesFrom; // previous lanes connected to current lane
+    private List<Lane> goes_to; // lanes that current lane leads to
+    private List<Lane> comes_from; // previous lanes connected to current lane
     private float length; // length of lane
     
     private List<Pair<Float, Vehicle>> vehicles;
 
-    private TrafficLight trafficLight; 
+    private TrafficLight traffic_light; 
     private String direction; // N, S, E, W --> can formalise later
-    private boolean busLane; // if bus lane
+    private boolean bus_lane; // if bus lane
 
-    public Lane(float length, TrafficLight trafficLight, String direction) {
-		this.goesTo = new ArrayList<>();
-        this.comesFrom = new ArrayList<>();
+    public Lane(float length, TrafficLight traffic_light, String direction) {
+		this.goes_to = new ArrayList<>();
+        this.comes_from = new ArrayList<>();
         
         this.length = length;
-        this.trafficLight = trafficLight;
+        this.traffic_light = traffic_light;
         this.direction = direction;
-        this.busLane = false;
+        this.bus_lane = false;
 
         vehicles = new ArrayList<>();
     }
@@ -60,8 +60,8 @@ public class Lane {
 
     // Doesn't need test
     // Updates if the lane is a bus lane
-    public void setBusLane(boolean isBusLane) {
-        this.busLane = isBusLane; // need to restrict param to N, S etc
+    public void setBusLane(boolean isbus_lane) {
+        this.bus_lane = isbus_lane; // need to restrict param to N, S etc
     }
 
     // Doesn't need test
@@ -85,53 +85,53 @@ public class Lane {
     // Add a lane that connects to this lane
     public void addComingLane(Lane lane) {
         if (lane != null) {
-            comesFrom.add(lane);
+            comes_from.add(lane);
         }
     }
 
     // Doesn't need test
-    // Removes a lane from the comesFrom list
+    // Removes a lane from the comes_from list
     public void removeComingLane(Lane lane) {
-        comesFrom.remove(lane);
+        comes_from.remove(lane);
     }
 
     // Doesn't need test
     // Return list of connected lanes
     public List<Lane> getComesFrom() {
-        return comesFrom; 
+        return comes_from; 
     }
    
     // Doesn't need test
     public TrafficLight getTrafficLight() {
         // return the traffic light for a given lane (not the traffic light's state)
-        return this.trafficLight;
+        return this.traffic_light;
     }
 
     /**
      * Return if the lane can be passed to the next one
      */
     public boolean canPass() {
-        return (this.trafficLight == null || this.trafficLight.getState() == 1);
+        return (this.traffic_light == null || this.traffic_light.getState() == 1);
     }
 
     // Doesn't need test
     public void setTrafficLight(TrafficLight tl) {
-        this.trafficLight = tl;
+        this.traffic_light = tl;
     }
 
     // Doesn't need test
     public void addGoingLane(Lane lane) {
-        goesTo.add(lane);
+        goes_to.add(lane);
     }
 
     // Doesn't need test
     public void removeGoinglane(Lane lane) {
-        goesTo.remove(lane);
+        goes_to.remove(lane);
     }
 
     // Doesn't need test
     public List<Lane> getGoingTo() {
-        return goesTo; 
+        return goes_to; 
     }
 
     // Written test
@@ -151,18 +151,6 @@ public class Lane {
             return false;
         }
 
-        if (!vehicles.isEmpty()) {  // If lane is not empty
-            // Check last vehicle does not block the back of the lane:
-            Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1); // Get last vehicle
-            float lastPosition = lastVehicle.getLeft();
-            float lastVehicleLength = lastVehicle.getRight().getLength(); // uses getLength() from vehicle class
-
-            float position = lastPosition + lastVehicleLength; // The position behind the last vehicle
-            if (position >= this.length){
-                return false;
-            }
-        }
-
         vehicles.add(new Pair<>(this.length, vehicle)); // Add to the back of the list
         return true;
     }
@@ -177,7 +165,7 @@ public class Lane {
         return this.vehicles;
     }
 
-    // Written test
+    // Written test TODO: Fix tests
     public boolean isFull() {
         if (vehicles.isEmpty()) {
             return false;
@@ -200,17 +188,17 @@ public class Lane {
      * @param time The current simulation time (in seconds).
      */
     //public void updateTraffic(float time) {
-    //    TrafficLight trafficLight = this.getTrafficLight(); // Retrieve the lane's traffic light
+    //    TrafficLight traffic_light = this.getTrafficLight(); // Retrieve the lane's traffic light
 
     //    for (Pair<Float, Vehicle> pos_vehicle : vehicles) {  // Loop through all vehicles in the lane
     //        Vehicle vehicle = pos_vehicle.getRight(); // Extract the Vehicle object from the Pair
 
     //        // If the light is red (0) or the lane is blocked, stop the vehicle
-    //        if (trafficLight.getState() == 0 || this.isFull()) {  
+    //        if (traffic_light.getState() == 0 || this.isFull()) {  
     //            vehicle.updateMovement(time, this);  // Stop the vehicle (tracked in VehicleMetrics)
 
     //        // If the light is green (1), allow movement
-    //        } else if (trafficLight.getState() == 1) {  
+    //        } else if (traffic_light.getState() == 1) {  
     //            vehicle.updateMovement(time, this);  // Allow vehicle to move
     //        }
     //    }
@@ -235,4 +223,26 @@ public class Lane {
         }
     }
 
+    // Useful for testing
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Lane (");
+        if (this.traffic_light == null) {   // Lane has no traffic light
+            builder.append("-");
+        } else if (this.traffic_light.getState() == 0) {    // traffic light is red
+            builder.append("R");
+        } else {                            // Traffic light is green
+            builder.append("G");
+        }
+        builder.append(") [");
+        for (int i = 0; i < vehicles.size(); i++) {
+            builder.append(vehicles.get(i).toString());
+            if (i != vehicles.size() -1) {
+                builder.append(", ");
+            }
+        }
+        builder.append("]");
+        return builder.toString();
+    }
 }
