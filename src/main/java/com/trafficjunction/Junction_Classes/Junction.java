@@ -19,6 +19,7 @@ public class Junction {
      */
     
     private Map<String, Integer> vehicle_rate;  // Rate of vehicles coming into the junction for each direction
+    private Map<String, List<List<Lane>>> vehicle_routes;  // Valid routes for vehicles needing to go from one direction to another
     // Vehicle backlog?
 
     private List<TrafficLight> traffic_lights;  // List of all traffic lights
@@ -31,7 +32,8 @@ public class Junction {
 
     public Junction() {
         // Initialise
-
+        vehicle_routes = new HashMap<>();
+        
         // Set vehicle rate to be 0 for all directions
         vehicle_rate = new HashMap<>();
         vehicle_rate.put("nte", 0);
@@ -416,23 +418,71 @@ public class Junction {
         
     }
 
-    // side1 = junction entry direction, side2 = junction exit direction
-    // objective: return (random) 1 of the list of routes between entry & exit
-    // user can configure different lane types e.g. only left turn
-    public void findRoute(int side1, int side2) {
+    
+    /**
+     * Method to get all valid routes that go from the entry side to the exit side
+     * 
+     * This method has an optimization so it does not need to recalculate the same thing twice, by storing the result in a hashmap.
+     * 
+     * @param - indexes for start and end
+     * @return List<List<Lane>> - valid routes to go from entry_ind direction to exit_ind direction
+     */
+    public List<List<Lane>> findRoute(int entry_ind, int exit_ind) {
         // side 1 (chooses lane) -> middle lane -> side 2 (chooses lane)
         // find random lane on side 1 that goes to middle and goes to side 2
 
-        int turn = ((side2 - side1 + 4) % 4);
-        
-        switch(turn) {
-            case 0: // this shouldn't be
-            case 1: // left
-            case 2: // forward
-            case 3: // right
-            default: // probably won't need
+        // Initialise the variable to return:
+        List<List<Lane>> valid_routes;
+
+
+        String key = String.valueOf(entry_ind) + String.valueOf(exit_ind);  // key for storing the routes in a hashmap
+        valid_routes = vehicle_routes.get(key);
+        if (valid_routes != null) { // If the hashmap has already got the routes stored then it does not need to execute the rest of the function.
+            return valid_routes;
         }
-        // check if the leftmost lane goes left
+
+        int turn_num    = ((exit_ind - entry_ind + 4) % 4);
+        String turn_char  = switch(turn_num) { // Rule switch statement
+            case 1 -> "L";
+            case 2 -> "F";
+            case 3 -> "R";
+            default -> " "; // 0 or any other int won't be accepted and return an empty list
+        };
+
+        List<Lane> valid_entry_lanes    = new ArrayList<>();
+        List<Lane> possible_between_lanes   = new ArrayList<>();
+        valid_routes    = new ArrayList<>();
+        // Get valid entry lanes that go in the desired direction:
+        for (Lane entry_lane : this.entry_lanes.get(entry_ind)) {
+            String direction = entry_lane.getDirection();
+            if (direction.contains(turn_char)) {    // Lane goes in the direction we want
+                valid_entry_lanes.add(entry_lane);    // Add to possible entry lanes
+            }
+        }
+        // Get all the between lanes that lead to the desired exit lanes
+        for (Lane exit_lane : this.entry_lanes.get(exit_ind)) {
+            List<Lane> betweens = exit_lane.getComesFrom();
+            for (Lane between : betweens) {
+                possible_between_lanes.add(between);
+            }
+        }
+        // Loop through all the entry lanes, for each valid between lane, add the route:
+        List<Lane> route;
+        for (Lane entry_lane : valid_entry_lanes) {
+            //String direction = entry_lane.getGoingTo();
+            for (Lane between: entry_lane.getGoingTo()) {
+                if (possible_between_lanes.contains(between)) {
+                    route = new ArrayList<>();
+                    route.add(entry_lane);
+                    route.add(between);
+                    route.add(between.getGoingTo().get(0));
+                    valid_routes.add(route);
+                }
+            }
+        }
+        
+        vehicle_routes.put(key, valid_routes);  // Adds the routes to a map so they do not need to be recalculated
+        return valid_routes;
     }
 
     /* Calls everything to update: looks through all exiting lanes, updates all 
@@ -444,7 +494,7 @@ public class Junction {
     public void update(float time) {
         this.timer += time;     // Add time increment
         this.updateLights();    // Update traffic lights
-        this.createVehicles();
+        this.createVehicles(time);
         // update vehicles from exit lanes -> middle lanes -> starting lanes
         // use 3 for loops for each lane type 
         for (List<Lane> exitLaneList : exit_lanes) { // double for loop due to nested list for class attribute: outermost list stores list of lanes + then dir
@@ -472,94 +522,160 @@ public class Junction {
         }
     }
 
-    public void createVehicles() {
-        
-        float dt = 0.5f; // simulation time step
+    public void createVehicles(float dt) {
+        // dt is time difference
+        // this.timer used for time (seconds) since simulation start
+
+        // Algorithm to check if we need to create vehicle:
+        // time difference: dt
+        // vps = vehicles per second
+        // spv = seconds per 1 vehicle = 1/vps
+        // lowest multiple of spv < (current clock time - dt)
+        // while (multiple < current clock time)
+            // add spv to multiple
+            // create vehicle if still less than clock time
+
+        // List<Lane> routes =  findRoute(int entry_ind, int exit_ind)
+        // route = idnex 0 of routes
+        // entry lane = index 0 of route
+        // new_vehicle = new Car(float time, float max_speed, List<Lane> route)
+
+        /**
+         * Example 1:
+         * spv = 0.6
+         * clock| mult >= clock - dt ... mult < clock | created vehicles
+         * 0.5  | 0     | 1
+         * 1.0  | 0.6   | 1
+         * 1.5  | 1.2   | 1
+         * 
+         * Example 2:
+         * spv = 0.2
+         * clock| mult >= clock - dt ... mult < clock | created vehicles
+         * 0.5  | 0, 0.2, 0.4   |   3
+         * 1.0  | 0.6, 0.8      |   2
+         * 1.5  | 1, 1.2, 1.4   |   3
+         */
+
+        String direction_string = "nesw";
+        // use direction_string.indexOf(character);
 
         for (Map.Entry<String, Integer> rateEntry : vehicle_rate.entrySet()) { // loop over each vehicle rate key
             String key = rateEntry.getKey(); // e.g. ets
             int rate = rateEntry.getValue(); // vehicles per hour for this movement
 
-            // calculate probabiloty that vehicle arrives during this time step
-            double arrivalProbability = (rate/3600.0) * dt;
+            double vps = (rate/3600.0); // vehicles per second
+            double spv = 1/vps;
 
-            // if vehicle arrives
-            if (Math.random() < arrivalProbability) {
-                // parse the key:
-                // the first character represents the entry side (n,e,s,w)
-                // the third character represents the desired exit direction
-                char entrySide = key.charAt(0);
-                char destLetter = key.charAt(2);
-                char turn = 'F';  // default to straight (F)
-
-                // determine the turning movement based on entry side and destination
-                // e.g. if a vehicle is coming from North, and destLetter is 'e' then turn 'L'
-                switch (entrySide) {
-                case 'n':
-                    if (destLetter == 'e') turn = 'L';
-                    else if (destLetter == 's') turn = 'F';
-                    else if (destLetter == 'w') turn = 'R';
-                    break;
-                case 'e':
-                    if (destLetter == 's') turn = 'L';
-                    else if (destLetter == 'w') turn = 'F';
-                    else if (destLetter == 'n') turn = 'R';
-                    break;
-                case 's':
-                    if (destLetter == 'w') turn = 'L';
-                    else if (destLetter == 'n') turn = 'F';
-                    else if (destLetter == 'e') turn = 'R';
-                    break;
-                case 'w':
-                    if (destLetter == 'n') turn = 'L';
-                    else if (destLetter == 'e') turn = 'F';
-                    else if (destLetter == 's') turn = 'R';
-                    break;
-                default:
-                    // if  entry side is not valid, skip key
-                    continue;
+            int i = 0;
+            boolean higher = false;
+            double num = 0;
+            int carsToCreate = 0;
+            
+            while (higher = false) { 
+                num = spv * i;
+                if (num > this.timer - dt) {
+                    higher = true;
+                } else {
+                    i++;
                 }
-
-                // map entry side to an index in entry_lanes e.g. 'n' --> 0
-                int sideIndex = 0;
-                switch (entrySide) {
-                    case 'n': sideIndex = 0; break;
-                    case 'e': sideIndex = 1; break;
-                    case 's': sideIndex = 2; break;
-                    case 'w': sideIndex = 3; break;
-                }
-
-                // get list of entry lanes for this side
-                List<Lane> lanes = entry_lanes.get(sideIndex);
-                boolean vehicleAdded = false;
-
-                // look for matching entry lane
-                for (Lane lane : lanes) {
-                    // lane.getDirection should return a relative direction string like 'L', 'F', 'R'
-                    if (lane.getDirection() != null && lane.getDirection().contains(String.valueOf(turn))) {
-                        // create new vehicle
-                        // default values: max speed = 10.0f, length = 2.0f (MIGHT NEED OPTIMISE LOGIC TO CATER TO BUSSES/BIKES)
-                        // timer = creation time (amount of time since simulation started)
-                        /*
-                         * Remove comment next time you're developing
-                         * Vehicle vehicle = new Vehicle();
-                         */
-
-
-                        // try to add vehicle to lane
-                        /*
-                        * Remove comment next time you're developing
-                        *if (lane.addVehicle()) {
-                        *    vehicleAdded = true;
-                        *    break;
-                        *}
-                        */
-                    }
-                }
-                
             }
-        }        
+
+
+            while(num < this.getTimer()) {
+                char characterAtStart = key.charAt(0);
+                char characterAtEnd = key.charAt(2);
+
+                
+
+                int entry_ind = direction_string.indexOf(characterAtStart); //firstCharacter
+                int exit_ind = direction_string.indexOf(characterAtEnd); //lastCharacter
+            
+            
+                List<List<Lane>> routes =  findRoute(entry_ind, exit_ind); //create a new
+                num = num + spv;
+            }
+        }    
     }
+
+///**
+// * 
+
+//            // if vehicle arrives
+//            if (Math.random() < arrivalProbability) {
+//                // parse the key:
+//                // the first character represents the entry side (n,e,s,w)
+//                // the third character represents the desired exit direction
+//                char entrySide = key.charAt(0);
+//                char destLetter = key.charAt(2);
+//                char turn = 'F';  // default to straight (F)
+
+//                // determine the turning movement based on entry side and destination
+//                // e.g. if a vehicle is coming from North, and destLetter is 'e' then turn 'L'
+//                switch (entrySide) {
+//                case 'n':
+//                    if (destLetter == 'e') turn = 'L';
+//                    else if (destLetter == 's') turn = 'F';
+//                    else if (destLetter == 'w') turn = 'R';
+//                    break;
+//                case 'e':
+//                    if (destLetter == 's') turn = 'L';
+//                    else if (destLetter == 'w') turn = 'F';
+//                    else if (destLetter == 'n') turn = 'R';
+//                    break;
+//                case 's':
+//                    if (destLetter == 'w') turn = 'L';
+//                    else if (destLetter == 'n') turn = 'F';
+//                    else if (destLetter == 'e') turn = 'R';
+//                    break;
+//                case 'w':
+//                    if (destLetter == 'n') turn = 'L';
+//                    else if (destLetter == 'e') turn = 'F';
+//                    else if (destLetter == 's') turn = 'R';
+//                    break;
+//                default:
+//                    // if  entry side is not valid, skip key
+//                    continue;
+//                }
+
+//                // map entry side to an index in entry_lanes e.g. 'n' --> 0
+//                int sideIndex = 0;
+//                switch (entrySide) {
+//                    case 'n': sideIndex = 0; break;
+//                    case 'e': sideIndex = 1; break;
+//                    case 's': sideIndex = 2; break;
+//                    case 'w': sideIndex = 3; break;
+//                }
+
+//                // get list of entry lanes for this side
+//                List<Lane> lanes = entry_lanes.get(sideIndex);
+//                boolean vehicleAdded = false;
+
+//                // look for matching entry lane
+//                for (Lane lane : lanes) {
+//                    // lane.getDirection should return a relative direction string like 'L', 'F', 'R'
+//                    if (lane.getDirection() != null && lane.getDirection().contains(String.valueOf(turn))) {
+//                        // create new vehicle
+//                        // default values: max speed = 10.0f, length = 2.0f (MIGHT NEED OPTIMISE LOGIC TO CATER TO BUSSES/BIKES)
+//                        // timer = creation time (amount of time since simulation started)
+//                        /*
+//                         * Remove comment next time you're developing
+//                         * Vehicle vehicle = new Vehicle();
+//                         */
+
+
+//                        // try to add vehicle to lane
+//                        /*
+//                        * Remove comment next time you're developing
+//                        *if (lane.addVehicle()) {
+//                        *    vehicleAdded = true;
+//                        *    break;
+//                        *}
+//                        */
+//                    }
+//                }
+                
+//            }
+// */
 
     public void calculateMetrics() {
     

@@ -15,7 +15,10 @@ public class Vehicle {
     private float current_time;
 
     // Should vehicle be abstract class only defined by Car and Bus classes?
-    public Vehicle(float time, float max_speed, float length) {
+    public Vehicle(float time, float max_speed, float length) { // Overload method in the case that vehicle route is not specified
+        this(time, max_speed, length, null);
+    }
+    public Vehicle(float time, float max_speed, float length, List<Lane> route) {
         this.speed = max_speed;
         this.max_speed = max_speed;
         this.length = length;
@@ -23,6 +26,8 @@ public class Vehicle {
         
         this.creation_time = time;
         this.current_time = time;
+
+        this.desired_route = route;
     }
 
 /// Methods for VehicleMetrics:
@@ -45,6 +50,11 @@ public class Vehicle {
     // Don't need test for
     public float getLength() {
         return length;
+    }
+
+    // method to set the vehicles route
+    public void setRoute(List<Lane> route) {
+        this.desired_route = route;
     }
 
     /**

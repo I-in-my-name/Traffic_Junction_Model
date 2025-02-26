@@ -42,8 +42,8 @@ public class VehicleTests {
         //interim tests
         assertEquals(1,entryLane.getTrafficLight().getState());
         assertEquals(false,entryLane.isFull());
-        assertEquals(true,entryLane.getGoingTo().size() > 0);
-vehicle.update(1.f, entryLane);
+        assertEquals(true, entryLane.getGoingTo().size() > 0);
+        vehicle.update(1.f, entryLane);
 
         assertEquals(0, entryLane.getVehicleNum());
         assertEquals(1, exitLane.getVehicleNum());
