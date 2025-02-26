@@ -1,6 +1,9 @@
 package com.trafficjunction.Junction_Classes;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Queue;
 
 public class Vehicle {
 
@@ -8,7 +11,7 @@ public class Vehicle {
     private float max_speed;
     private float length;
     // May change to queue
-    private List<Lane> desired_route;
+    private Queue<Lane> desired_route;
 
     private VehicleMetrics metrics;
     private float creation_time;
@@ -16,7 +19,8 @@ public class Vehicle {
 
     // Should vehicle be abstract class only defined by Car and Bus classes?
     public Vehicle(float time, float max_speed, float length) { // Overload method in the case that vehicle route is not specified
-        this(time, max_speed, length, null);
+        // making empty object instead of null
+        this(time, max_speed, length, new ArrayList<Lane>());
     }
     public Vehicle(float time, float max_speed, float length, List<Lane> route) {
         this.speed = max_speed;
@@ -27,7 +31,7 @@ public class Vehicle {
         this.creation_time = time;
         this.current_time = time;
 
-        this.desired_route = route;
+        this.desired_route = new LinkedList<>(route);
     }
 
 /// Methods for VehicleMetrics:
@@ -44,7 +48,7 @@ public class Vehicle {
 
     // Don't need test for
     public Lane popRoute() {
-        return null;
+        return this.desired_route.poll();   // pop method
     }
     
     // Don't need test for
@@ -54,7 +58,7 @@ public class Vehicle {
 
     // method to set the vehicles route
     public void setRoute(List<Lane> route) {
-        this.desired_route = route;
+        this.desired_route = new LinkedList<>(route);
     }
 
     /**

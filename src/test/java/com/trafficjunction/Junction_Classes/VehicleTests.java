@@ -1,7 +1,7 @@
 package com.trafficjunction.Junction_Classes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test; 
+import org.junit.jupiter.api.Test;
 
 public class VehicleTests {
 
@@ -28,18 +28,18 @@ public class VehicleTests {
         entryLane.addVehicle(vehicle);
         float initialPosition = entryLane.getVehicles().get(0).getLeft();
 
-        // if 0 time has passed, nothing should change.
+        //// if 0 time has passed, nothing should change.
         vehicle.update(1.f, entryLane);
         assertEquals(initialPosition, entryLane.getVehicles().get(0).getLeft());
         assertEquals(0, exitLane.getVehicleNum());
 
-        // if 1 time has passed, something should change
-        // vehicle should be in next lane
-        // (as instataneous acceleration so immediately vehicle speed = 1 distance / time unit,
-        // so in one time unit go 1 distance > distance remaining in lane -> in next lane).
+        //// if 1 time has passed, something should change
+        //// vehicle should be in next lane
+        //// (as instataneous acceleration so immediately vehicle speed = 1 distance / time unit,
+        //// so in one time unit go 1 distance > distance remaining in lane -> in next lane).
         vehicle.update(2.f, entryLane);
 
-        //interim tests
+        ////interim tests
         assertEquals(1,entryLane.getTrafficLight().getState());
         assertEquals(false,entryLane.isFull());
         assertEquals(true, entryLane.getGoingTo().size() > 0);
@@ -47,6 +47,6 @@ public class VehicleTests {
 
         assertEquals(0, entryLane.getVehicleNum());
         assertEquals(1, exitLane.getVehicleNum());
-        // TODO: What is position of vehicle in exit lane? Should be back of lane?
+        //// TODO: What is position of vehicle in exit lane? Should be back of lane?
     }
 }
