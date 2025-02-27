@@ -1,7 +1,9 @@
 package com.trafficjunction.View_and_Controller;
 
 import java.io.IOException;
-import java.util.function.UnaryOperator;
+
+import com.trafficjunction.UI_Utilities.DataSanitisation;
+import com.trafficjunction.UI_Utilities.UILane;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,14 +12,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import com.trafficjunction.UI_Utilities.DataSanitisation;
-import com.trafficjunction.UI_Utilities.UILane;
 
 public class PrimaryController {
 
@@ -226,21 +224,35 @@ public class PrimaryController {
     }
 
     private void updateLanes(UILane lane, UILane[] laneArr, int laneNum) {
-        // Change the image of the current lane.
-        lane.changeImage();
 
         // The leftmost and rightmost lanes should have left and right turns
         // respectively.
         laneArr[laneNum - 1].addLeftTurns();
         laneArr[0].addRightTurns();
 
-        /*
-         * Now, go through every lane in this road.
-         * If the lane is a left-turn lane. Allow lane to the right of it to turn left.
-         * If the lane is a right-turn lane, allow lane to the left of it to turn left.
-         * Do not change lanes that are disabled.
-         */
+        lane.changeImage();
+
+        //for loop to build up ability to turn right/ take it away.
         for (int i = 0; i < laneNum; i++) {
+            // Check for left turns.
+            if (laneArr[i].getRoadType().getRight()) {
+                if (i < laneArr.length - 1) {
+                    // Make sure lane is not disabled.
+                    if (laneArr[i + 1].isDisabled) {
+                        continue;
+                    } else {
+                        laneArr[i + 1].addRightTurns();
+                    }
+                }
+            }
+            if (i > 0 && !laneArr[i-1].getRoadType().getRight()){
+                laneArr[i].removeRightTurns();
+                System.out.println("AAAA On lane " + i);
+            }
+            laneArr[i].update();
+        }
+
+        for (int i = laneArr.length - 1; i >= 0; i--) {
             // Check for left turns.
             if (laneArr[i].getRoadType().getLeft()) {
                 if (i > 0) {
@@ -252,25 +264,13 @@ public class PrimaryController {
                     }
                 }
             }
-
-            // Do the same for right turns.
-            if (laneArr[i].getRoadType().getRight()) {
-                if (i < laneArr.length - 1) {
-                    // Make sure lane is not disabled.
-                    if (laneArr[i + 1].isDisabled) {
-                        continue;
-                    } else {
-                        laneArr[i + 1].addRightTurns();
-                    }
-                }
+            if (i < laneArr.length - 1 && !laneArr[i + 1].getRoadType().getLeft()) {
+                laneArr[i].removeLeftTurns();
+                System.out.println("AAAACHOOO on lane " + i);
             }
-
-            // If the road is a straight road, make sure the lanes to the left and right
-            // are not left or right turn lanes. UNLESS they are the end roads.
-
-            // Update any lanes that may not have been affected in case.
             laneArr[i].update();
         }
+        // Change the image of the current lane.
 
     }
 
