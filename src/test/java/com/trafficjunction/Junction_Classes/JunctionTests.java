@@ -13,6 +13,40 @@ public class JunctionTests {
         junction = new Junction();
     }
 
+    // Dependent on addEntryLane
+    @Test
+    void testSetLaneTrafficLight() {
+        Junction junction = new Junction();
+
+        junction.addEntryLane(0);
+        junction.addEntryLane(0);
+        junction.addEntryLane(1);
+
+        TrafficLight light1 = new TrafficLight();
+        TrafficLight light2 = new TrafficLight();
+
+        // Test basic functionality of setting light
+        boolean expected = true;
+        boolean result; 
+
+        result = junction.setLaneTrafficLight(0, 1, light1);
+        assertEquals(expected, result);
+        assertEquals(light1, junction.getEntryLanes().get(0).get(1).getTrafficLight());
+        
+        result = junction.setLaneTrafficLight(0, 1, light2);
+        assertEquals(expected, result);
+        assertEquals(light2, junction.getEntryLanes().get(0).get(1).getTrafficLight());
+
+        // Test validation. No lanes for side 2, so should reject
+        expected = false;
+        result = junction.setLaneTrafficLight(2, 0, light1);
+        assertEquals(expected, result);
+
+        // No index 1 for side 1, so should reject
+        result = junction.setLaneTrafficLight(1, 1, light1);
+        assertEquals(expected, result);
+    }
+
     // Test functionality and validation of remove exit lane
     // dependent on addExitLane
     // the same exact test as removeEntryLane

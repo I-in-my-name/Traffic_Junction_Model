@@ -421,7 +421,7 @@ public class Junction {
     }
 
     public boolean setLaneTrafficLight(int side, int index, TrafficLight light) {
-        if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
+        if ((side >= 0 && index >= 0) && (entry_lanes.size() > side) && (entry_lanes.get(side).size() > index)) {
             Lane selected_lane = entry_lanes.get(side).get(index);
             selected_lane.setTrafficLight(light);
             return true;

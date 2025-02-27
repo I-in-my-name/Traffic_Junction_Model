@@ -35,7 +35,6 @@ public class JunctionMetrics {
         average_wait_time = 0.f;
         max_wait_time = 0.f;
         for (VehicleMetrics metric : vehicle_metrics) {
-            System.out.println(metric.getTotalWaitTime());
             average_wait_time += metric.getTotalWaitTime() / vehicle_metrics.size();
 
             if (metric.getTotalWaitTime() > max_wait_time)
