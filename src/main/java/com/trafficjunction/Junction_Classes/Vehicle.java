@@ -120,6 +120,12 @@ public class Vehicle {
         Pair<Float,Vehicle> this_pair = lane.getVehicles().get(index);	// Gets the pair which stores this vehicle
         float position = this_pair.getLeft();	// Gets the vehicle's current position
 
+        // If index == 0, traversable position = 0
+        // TODO / QUESTION: Is traversable position the length possible ot move
+        // or the new position that it could get to in theory if it kept moving?
+        // If the latter, then 0 makes sense
+        // otherwise it doesn't
+        // Code looks like it means the first though
         float traversable_position;		// Get the possible distance our vehicle can/should move forward
         if (index == 0) {
             traversable_position = 0;

@@ -21,7 +21,9 @@ public class VehicleMetricsTests {
         metrics.startMoving(30.f);
         metrics.stopMoving(41.f);
 
-        //Calculating metrics after final stop at 41.f (CONFIRM IF THIS IS CORRECT?)
+        metrics.calculateTotalWaitTime(41.f);
+
+        //Calculating metrics after final stop at 41.f 
         //metrics.calculateTotalWaitTime(41.f);
         float resultTotalWaitTime = metrics.getTotalWaitTime();
 
@@ -53,8 +55,32 @@ public class VehicleMetricsTests {
         metrics.calculateTotalWaitTime(startExistingTime + 41.f);
         resultTotalWaitTime = metrics.getTotalWaitTime();
 
-        expectedIdleTime = 9.f + 5.f + 11.f;
         expectedIdleTime = 5 + 10;
+        
+        assertEquals(expectedIdleTime, resultTotalWaitTime);
+
+        // Now testing but vehicle will not have stopped before exiting
+        // 
+        startExistingTime = 55.f;
+        metrics = new VehicleMetrics(startExistingTime);
+
+        // example timestamps
+
+        //Again we assume the vehicle starts off moving
+        // moving for 10 seconds
+        metrics.stopMoving(startExistingTime + 10.f);
+        // moving for 5 seconds
+        // stopped for 5 second
+        metrics.startMoving(startExistingTime + 15.f);
+        metrics.stopMoving(startExistingTime + 20.f);
+        // moving for 11 seconds
+        // stopped for 10 second
+        metrics.startMoving(startExistingTime + 30.f);
+
+        metrics.calculateTotalWaitTime(startExistingTime + 41.f);
+        resultTotalWaitTime = metrics.getTotalWaitTime();
+
+        expectedIdleTime = 5.f + 10.f;
         
         assertEquals(expectedIdleTime, resultTotalWaitTime);
     }

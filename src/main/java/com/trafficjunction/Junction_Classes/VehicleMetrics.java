@@ -35,18 +35,18 @@ class VehicleMetrics {
         this.isMoving = true; // assuming vehicles starts moving
     }
 
-    // TODO: Maintain valid state
-    // Right now if startmoving is called twice in a row vehicle metrics 
-    // would be in invalid state and wait times would be wrong
-    // same is stopmoving is called consecutively
-    // store flag of moving or not moving?
+    /*
+     * Changes made to how the metrics are calculated 
+     * Now adds the star ttimestamps as they come in and
+     * subtracts the stop timestamps as they come in
+     * Add the last stop timestamp when exiting 
+     */
 
     // Don't need test for
     public void startMoving(float timestamp) {
         if (!isMoving) { // prevent consecutive startMoving calls
             isMoving = true;
-            float lastStopTime = stopTimes.get(stopTimes.size() - 1);
-            totalWaitTime += (timestamp - lastStopTime);
+            totalWaitTime += timestamp;
         }
     }
 
@@ -56,6 +56,7 @@ class VehicleMetrics {
         if (isMoving) { // Prevent consecutive stopMoving calls
             isMoving = false;
             stopTimes.add(timestamp);
+            totalWaitTime -= timestamp;
         }
     }
 
@@ -63,7 +64,12 @@ class VehicleMetrics {
     // calculates total wait time once vehicle removed from simulation, ensures all waiting periods are summed prior to deletion
     public void calculateTotalWaitTime(float exitTimestamp) {
         if (!isMoving && !stopTimes.isEmpty()) {
-            totalWaitTime += (exitTimestamp - stopTimes.get(stopTimes.size() - 1));
+            // If not moving, then the last stop time is the final stop time
+            // add it to the total wait time as it has previously been subtracted from the wait time
+            // Essentially the time spent waiting doesn't care about the last stop time
+            // as it doesn't start moving again, so that time isn't relevant to waiting time
+            totalWaitTime += stopTimes.get(stopTimes.size() - 1); 
+            //totalWaitTime += (exitTimestamp - stopTimes.get(stopTimes.size() - 1));
         }
     }
 /*
