@@ -25,6 +25,8 @@ public class UILane {
         this.roadType = new RoadType("/assets/straightOnRoad.png", true, false, false); // Add on the straight road.
         this.allAllowedRoads = new ArrayList<RoadType>();
         this.allAllowedRoads.add(roadType);
+        this.addLeftTurns();
+        this.addRightTurns();
 
         // Update image to maintain consistency.
         this.update();
@@ -103,12 +105,12 @@ public class UILane {
     }
 
     public void removeLeftTurns() {
-        this.allAllowedRoads.removeIf(roadType -> roadType.getLeft());
+        // this.allAllowedRoads.removeIf(roadType -> roadType.getLeft());
         update();
     }
 
     public void removeRightTurns() {
-        this.allAllowedRoads.removeIf(roadType -> roadType.getRight());
+        // this.allAllowedRoads.removeIf(roadType -> roadType.getRight());
         update();
     }
 
