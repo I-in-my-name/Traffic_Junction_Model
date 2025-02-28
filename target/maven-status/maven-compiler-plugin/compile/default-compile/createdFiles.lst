@@ -1,10 +1,8 @@
-com\trafficjunction\Junction_Classes\Junction.class
 com\trafficjunction\Junction_Classes\TrafficLightConfig.class
 com\trafficjunction\Junction_Classes\Lane.class
 com\trafficjunction\Junction_Classes\Bus.class
 com\trafficjunction\UserInputData.class
 com\trafficjunction\View_and_Controller\PrimaryController.class
-com\trafficjunction\Junction_Classes\JunctionMetrics.class
 com\trafficjunction\InputData.class
 com\trafficjunction\Junction_Classes\VehicleMetrics.class
 com\trafficjunction\Junction_Classes\Car.class

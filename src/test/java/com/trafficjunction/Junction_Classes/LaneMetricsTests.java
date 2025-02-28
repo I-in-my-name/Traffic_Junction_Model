@@ -3,12 +3,35 @@ package com.trafficjunction.Junction_Classes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-public class JunctionMetricsTests {
+public class LaneMetricsTests {
+
+    @Test
+    void testMaxQueueLengthPositive() {
+        LaneMetrics laneMetrics = new LaneMetrics();
+
+        // Simple typical test case
+        // Record different sized queues at different times
+        // Output should be the highest queue given, which will be 50
+        laneMetrics.updateQueueSize(1.f, 2);
+        laneMetrics.updateQueueSize(2.f, 23);
+        laneMetrics.updateQueueSize(3.f, 49);
+        laneMetrics.updateQueueSize(4.f, 0);
+        laneMetrics.updateQueueSize(5.f, 23);
+        laneMetrics.updateQueueSize(6.f, 50); // 50 is biggest queue
+        laneMetrics.updateQueueSize(7.f, 45);
+        laneMetrics.updateQueueSize(8.f, 10);
+        laneMetrics.updateQueueSize(9.f, 3);
+
+        int expectedQueueLength = 50;
+        int actualQueueLength = laneMetrics.getMaxQueueLength();
+
+        assertEquals(expectedQueueLength, actualQueueLength);
+    }
     
     // Dependent on VehicleMetrics working correctly
     @Test
     void testCalculateMetricsPositive() {
-        JunctionMetrics junctionMetrics = new JunctionMetrics();
+        LaneMetrics laneMetrics = new LaneMetrics();
         // Testing one example case
         // Will test it produces expected values for average wait time,
         // max wait time, and average queue length
@@ -41,17 +64,17 @@ public class JunctionMetricsTests {
         vehicleThree.stopMoving(10.f);
         vehicleThree.calculateTotalWaitTime(10.f);
 
-        junctionMetrics.addVehicleMetric(vehicleOne);
-        junctionMetrics.addVehicleMetric(vehicleTwo);
-        junctionMetrics.addVehicleMetric(vehicleThree);
+        laneMetrics.addVehicleMetric(vehicleOne);
+        laneMetrics.addVehicleMetric(vehicleTwo);
+        laneMetrics.addVehicleMetric(vehicleThree);
 
         float expectedAverageWaitTime = (0.f + 20.f + 43.f) / 3.f;
         float expectedMaxWaitTime = 43.f;
 
-        junctionMetrics.calculateMetrics();
+        laneMetrics.calculateMetrics();
 
-        assertEquals(expectedAverageWaitTime, junctionMetrics.getAverageWaitTime());
-        assertEquals(expectedMaxWaitTime, junctionMetrics.getMaxWaitTime());
+        assertEquals(expectedAverageWaitTime, laneMetrics.getAverageWaitTime());
+        assertEquals(expectedMaxWaitTime, laneMetrics.getMaxWaitTime());
     }
 
 }

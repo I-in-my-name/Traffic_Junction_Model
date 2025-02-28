@@ -13,6 +13,8 @@ public class Lane {
     private String direction; // N, S, E, W --> can formalise later
     private boolean bus_lane; // if bus lane
 
+    private LaneMetrics metrics;
+
     public Lane(float length, TrafficLight traffic_light, String direction) {
 		this.goes_to = new ArrayList<>();
         this.comes_from = new ArrayList<>();
@@ -23,6 +25,8 @@ public class Lane {
         this.bus_lane = false;
 
         vehicles = new ArrayList<>();
+
+        metrics = new LaneMetrics();
     }
 
     // Doesn't need test
@@ -152,6 +156,7 @@ public class Lane {
         }
 
         vehicles.add(new Pair<>(this.length, vehicle)); // Add to the back of the list
+        metrics.addVehicleMetric(vehicle.getMetrics());
         return true;
     }
 
@@ -204,6 +209,18 @@ public class Lane {
     //    }
     //}
 
+    public float getMaxWaitTime() {
+        return metrics.getMaxWaitTime();
+    }
+
+    public float getAverageWaitTime() {
+        return metrics.getAverageWaitTime();
+    }
+
+    public int getMaxQueueLength() {
+        return metrics.getMaxQueueLength();
+    }
+
 
     /**
      * Method to update the lane
@@ -215,12 +232,21 @@ public class Lane {
     public void update(float time) {
         // TODO: shift stored values in index? Will this cause problems? If so then does the vehicles list need to be cloned?
         // List has a clone method but not for when it stores custom objects.
+        int currentQueueLength = 0;
+
         int index = 0;
         for (Pair<Float,Vehicle> pos_vehicle : vehicles) {
             Vehicle vehicle = pos_vehicle.getRight();
             vehicle.update(time, this, index);  // Give an index
             index++;
+            
+            // vehicle is considered to be waiting, i.e. in a queue,
+            // if its speed = 0. TODO: Does this make sense?
+            if (vehicle.getSpeed() == 0)
+                currentQueueLength++;
         }
+
+        metrics.updateQueueSize(time, currentQueueLength);
     }
 
     // Useful for testing

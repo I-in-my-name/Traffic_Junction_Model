@@ -199,6 +199,10 @@ public class Vehicle {
         return distance;
     }
 
+    public float getSpeed() {
+        return speed;
+    }
+
     // method: get vehicle position: used in lane class for deleting vehicles. 
     @Override
     public String toString() {

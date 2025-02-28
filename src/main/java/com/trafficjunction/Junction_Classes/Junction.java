@@ -27,9 +27,6 @@ public class Junction {
 
     private float timer;                // How much time has passed since the start of the simulation
 
-    private JunctionMetrics metrics;    // The metrics for the juntion
-
-
     public Junction() {
         // Initialise
         vehicle_routes = new HashMap<>();
@@ -143,8 +140,39 @@ public class Junction {
      * Accesses and returns the metrics of the junction
      * @return 
      */
-    public JunctionMetrics getJunctionMetric() {
-        return metrics;
+    //public JunctionMetrics getJunctionMetric() {
+    //    return metrics;
+    //}
+
+    public float getMaxWaitTime(int side) {
+        float maxWaitTime = -1;
+        for (Lane lane : entry_lanes.get(side)) {
+            if(maxWaitTime < lane.getMaxWaitTime())
+                maxWaitTime = lane.getMaxWaitTime();
+        }
+        return maxWaitTime;
+    }
+
+    public float getAverageWaitTime(int side) {
+        // There are multiple lanes per side
+        // Average of their averages would not be real average as differing
+        // # of vehicles per lane
+        int totalNumberOfVehicles = 0;
+        float totalWaitTime = 0;
+        for (Lane lane : entry_lanes.get(side)) {
+            totalNumberOfVehicles += lane.getVehicleNum();
+            totalWaitTime += lane.getAverageWaitTime() * lane.getVehicleNum();
+        }
+        return totalWaitTime / totalNumberOfVehicles;
+    }
+
+    public int getMaxQueueLength(int side) {
+        int maxQueueLength = -1;
+        for (Lane lane : entry_lanes.get(side)) {
+            if(maxQueueLength < lane.getMaxQueueLength())
+                maxQueueLength = lane.getMaxQueueLength();
+        }
+        return maxQueueLength;
     }
 
     /**
@@ -649,10 +677,6 @@ public class Junction {
 
     public void calculateMetrics() {
     
-    }
-
-    public JunctionMetrics getMetrics() {
-        return null;
     }
 
     // want to be able to save all a junction's features into a text file (e.g. csv or JSON)
