@@ -23,6 +23,8 @@ public class Vehicle {
         this(time, max_speed, length, new ArrayList<Lane>());
     }
     public Vehicle(float time, float max_speed, float length, List<Lane> route) {
+        
+        
         this.speed = max_speed;
         this.max_speed = max_speed;
         this.length = length;
@@ -136,16 +138,25 @@ public class Vehicle {
             traversable_position = next_vehicle_position + vehicle_length + 1.f;
         }
 
-        if (position < traversable_position) { // If the vehicle can move
+        // position > traversable_position means can move
+        // e.g. position = 0 means start. position = 50 means 50 away from start. 
+        // traversable position = 20 means should be able to move 30 forward
+        // TODO: this is right, right? Changed it when fixing bugs to run simulation
+        if (position > traversable_position) { // If the vehicle can move
             if (this.speed != 0) {
                 this.speed = max_speed;
                 metrics.startMoving(this.current_time); // Saves time to vehicle metrics
             }
             // Travel possible distance:
             float max_traversable_distance = calculateDistanceFromTime(time_difference);
-            float traversable_distance = traversable_position - position;
+            //float traversable_distance = traversable_position - position;
+            // changed this from above to below as position > traversable position,
+            // part of change described above
+            float traversable_distance = position - traversable_position;
             float distance = Math.min(traversable_distance, max_traversable_distance);
-            this_pair.setLeft(distance);
+            // position - distance is new position
+            // closer to 0 is closer to end of lane so position gets smaller as distance travelled grows
+            this_pair.setLeft(position - distance);
             // Calculate time taken:
             float time_taken = calculateTimeFromDistance(distance);
             this.current_time += time_taken;
@@ -153,7 +164,7 @@ public class Vehicle {
             // Run function again in case reaching the end of the lane; (current_time) is updated, so it won't run infinitely:
             this.update(new_time, lane, index);
 
-        } else { // The vehicle can not move OR is at 0 and waiting for trafficlights
+        } else { // The vehicle can not move OR is at 0 and waiting for TrafficLights
             boolean can_proceed = lane.canPass();
             if (index == 0 && position == 0.f && can_proceed) { // If we are able to go to the next lane
                 lane.removeVehicle();                           // Remove vehicle
@@ -191,11 +202,11 @@ public class Vehicle {
 
     // Methods to go from time (s) to distance (m) and vice versa, dependant on speed/max speed of vehicle
     public float calculateTimeFromDistance(float distance_to_travel) {
-        float time_taken = distance_to_travel / this.max_speed;
+        float time_taken = distance_to_travel / max_speed;
         return time_taken;
     }
     public float calculateDistanceFromTime(float time_to_travel) {
-        float distance = 0;
+        float distance = max_speed / time_to_travel;
         return distance;
     }
 

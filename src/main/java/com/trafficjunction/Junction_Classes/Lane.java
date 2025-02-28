@@ -13,6 +13,8 @@ public class Lane {
     private String direction; // N, S, E, W --> can formalise later
     private boolean bus_lane; // if bus lane
 
+    private boolean removedVehicle = false;
+
     private LaneMetrics metrics;
 
     public Lane(float length, TrafficLight traffic_light, String direction) {
@@ -144,7 +146,7 @@ public class Lane {
         if (vehicles.isEmpty()) {
             return false; // Lane is empty, nothing to remove
         }
-
+        removedVehicle = true;
         vehicles.remove(0); // Remove the first vehicle in the list (front of the lane)
         return true; // Successfully removed
     }
@@ -155,7 +157,7 @@ public class Lane {
             return false;
         }
 
-        vehicles.add(new Pair<>(this.length, vehicle)); // Add to the back of the list
+        vehicles.add(new Pair<>(length, vehicle)); // Add to the back of the list
         metrics.addVehicleMetric(vehicle.getMetrics());
         return true;
     }
@@ -221,6 +223,10 @@ public class Lane {
         return metrics.getMaxQueueLength();
     }
 
+    public void calculateMetrics() {
+        metrics.calculateMetrics();
+    }
+
 
     /**
      * Method to update the lane
@@ -244,6 +250,19 @@ public class Lane {
             // if its speed = 0. TODO: Does this make sense?
             if (vehicle.getSpeed() == 0)
                 currentQueueLength++;
+
+            // Prevents concurrent modification exception
+            // As vehicles removed themselves during this loop,
+            // the lane would continue to loop through all the vehicles
+            // Causing concurrent modification exception
+            // Now if a vehicle removes itself, the loop breaks early
+            // TODO: Could restrucure code to prevent this?
+            // e.g. have lane construct new list of vehicles that are still
+            // in its lane after this timestep?
+            if (removedVehicle) {
+                removedVehicle = false;
+                break;
+            }
         }
 
         metrics.updateQueueSize(time, currentQueueLength);
