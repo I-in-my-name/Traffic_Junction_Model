@@ -40,6 +40,9 @@ public class LaneMetrics {
         averageWaitTime = 0.f;
         maxWaitTime = 0.f;
         for (VehicleMetrics metric : vehicleMetrics) {
+            System.out.println("Vehicle metric:");
+            System.out.println(metric.getTotalWaitTime());
+            System.out.println();
             averageWaitTime += metric.getTotalWaitTime() / vehicleMetrics.size();
 
             if (metric.getTotalWaitTime() > maxWaitTime)

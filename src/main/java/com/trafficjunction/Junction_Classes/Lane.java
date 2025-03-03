@@ -17,6 +17,8 @@ public class Lane {
 
     private LaneMetrics metrics;
 
+    private int vehicleTotalNum = 0;
+
     public Lane(float length, TrafficLight traffic_light, String direction) {
 		this.goes_to = new ArrayList<>();
         this.comes_from = new ArrayList<>();
@@ -68,6 +70,10 @@ public class Lane {
     // Updates if the lane is a bus lane
     public void setBusLane(boolean isbus_lane) {
         this.bus_lane = isbus_lane; // need to restrict param to N, S etc
+    }
+
+    public boolean isBusLane() {
+        return bus_lane;
     }
 
     // Doesn't need test
@@ -156,10 +162,30 @@ public class Lane {
         if (isFull()) {
             return false;
         }
-
-        vehicles.add(new Pair<>(length, vehicle)); // Add to the back of the list
+        vehicleTotalNum += 1;
+        // Instead of adding vehicles at position length,
+        // add them to position of last vehicle + constant 
+        //vehicles.add(new Pair<>(length, vehicle)); // Add to the back of the lane
+        if (vehicles.isEmpty()) {
+            vehicles.add(new Pair<>(0.f, vehicle));
+            return true;
+        }
+        float maxPosition = 0.f;
+        for (Pair<Float, Vehicle> vehiclePairs : vehicles) {
+            float position = vehiclePairs.getLeft();
+            if (position > maxPosition)
+                maxPosition = position;
+        }
+        float constantSpacing = 2.f; // TODO: What is distance between cars?
+        float newPosition = maxPosition + constantSpacing;
+        vehicles.add(new Pair<>(newPosition, vehicle)); // Add to back of lane's list of cars
         metrics.addVehicleMetric(vehicle.getMetrics());
         return true;
+    }
+
+    // Number of total unique vehicles that have gone through this lane
+    public int getTotalVehicleNum() {
+        return vehicleTotalNum;
     }
 
     // Doesn't need test
@@ -178,10 +204,12 @@ public class Lane {
             return false;
         }
 
-        Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1);
-        float backmostVehiclePos = lastVehicle.getLeft(); // get pos
+        return false;
+        // Lane's should never be full?
+        //Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1);
+        //float backmostVehiclePos = lastVehicle.getLeft(); // get pos
 
-        return backmostVehiclePos >= (length - lastVehicle.getRight().getLength());
+        //return backmostVehiclePos >= (length - lastVehicle.getRight().getLength());
     }
 
     /**

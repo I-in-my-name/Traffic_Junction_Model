@@ -13,6 +13,32 @@ public class JunctionTests {
         junction = new Junction();
     }
 
+    @Test
+    void testLaneBus() {
+        // Test typical use case
+        boolean result;
+        boolean expected;
+
+        // Setup junction so we know its values
+        expected = true;
+        Junction junction = new Junction();
+        junction.addEntryLane(0);
+        junction.addEntryLane(0);
+        junction.addEntryLane(1);
+        junction.addEntryLane(1);
+        junction.addEntryLane(2);
+        junction.addEntryLane(2);
+
+        result = junction.setLaneBus(0, 1, true);
+        assertEquals(expected, result);
+        assertEquals(true, junction.getEntryLanes().get(0).get(1).isBusLane());
+        
+        // Test validation for index that doesn't exist
+        expected = false;
+        result = junction.setLaneBus(0, 2, true);
+        assertEquals(expected, result);
+    }
+
     // Dependent on addEntryLane
     @Test
     void testSetLaneTrafficLight() {
@@ -578,6 +604,34 @@ public class JunctionTests {
         assertEquals(true, result);
         newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
         assertEquals(expectedDirection, newDirection);
+    }
+
+    @Test
+    void testCreateVehicle() {
+        Junction junction = new Junction();
+
+        junction.addEntryLane(0);
+        junction.addEntryLane(0);
+        junction.addEntryLane(1);
+        junction.addEntryLane(1);
+        junction.addEntryLane(2);
+        junction.addEntryLane(2);
+        junction.addEntryLane(3);
+        junction.addEntryLane(3);
+
+        junction.addExitLane(0);
+        junction.addExitLane(0);
+        junction.addExitLane(1);
+        junction.addExitLane(1);
+        junction.addExitLane(2);
+        junction.addExitLane(2);
+        junction.addExitLane(3);
+
+        junction.connectJunction();
+
+        junction.createVehicles(10.f);
+
+        System.out.println(junction);
     }
 
 }

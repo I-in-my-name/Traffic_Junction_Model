@@ -33,11 +33,12 @@ public class SimulationTest {
             junction.update(timeStep);
             time += timeStep;
 
-            System.out.println(junction);
+            //System.out.println(junction);
         }
 
         junction.calculateMetrics();
-        System.out.println(junction.getAverageWaitTime(0));
+
+        /*System.out.println(junction.getAverageWaitTime(0));
         System.out.println(junction.getAverageWaitTime(1));
         System.out.println(junction.getAverageWaitTime(2));
         System.out.println(junction.getAverageWaitTime(3));
@@ -50,7 +51,7 @@ public class SimulationTest {
         System.out.println(junction.getMaxQueueLength(0));
         System.out.println(junction.getMaxQueueLength(1));
         System.out.println(junction.getMaxQueueLength(2));
-        System.out.println(junction.getMaxQueueLength(3));
+        System.out.println(junction.getMaxQueueLength(3));*/
     }
 
 }

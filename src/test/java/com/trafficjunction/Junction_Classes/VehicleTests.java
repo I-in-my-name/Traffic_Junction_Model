@@ -49,4 +49,5 @@ public class VehicleTests {
         assertEquals(1, exitLane.getVehicleNum());
         //// TODO: What is position of vehicle in exit lane? Should be back of lane?
     }
+
 }

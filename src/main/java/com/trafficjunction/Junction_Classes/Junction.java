@@ -179,8 +179,11 @@ public class Junction {
         int totalNumberOfVehicles = 0;
         float totalWaitTime = 0;
         for (Lane lane : entry_lanes.get(side)) {
-            totalNumberOfVehicles += lane.getVehicleNum();
-            totalWaitTime += lane.getAverageWaitTime() * lane.getVehicleNum();
+            totalNumberOfVehicles += lane.getTotalVehicleNum();
+            totalWaitTime += lane.getAverageWaitTime() * lane.getTotalVehicleNum();
+            System.out.println("Average wait times:");
+            System.out.println(lane.getTotalVehicleNum());
+            System.out.println(lane.getAverageWaitTime());
         }
         return totalWaitTime / totalNumberOfVehicles;
     }
@@ -353,10 +356,10 @@ public class Junction {
         }
     }
 
-    // TODO: Write test for
+    // Written test for 
     public boolean setLaneBus(int side, int index, boolean type) {
         // Check that a valid side and index has been given
-        if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
+        if ((side >= 0 && index >= 0) && (entry_lanes.size() > side) && (entry_lanes.get(side).size() > index)) {
             // If it is valid then set the bus lane
             Lane selected_lane = entry_lanes.get(side).get(index);
             selected_lane.setBusLane(type);
@@ -641,7 +644,9 @@ public class Junction {
         double past_time    = this.timer - dt; // dt is time difference
 
 
-        for (Map.Entry<String, Integer> rate_entry : vehicle_rate.entrySet()) { // loop over each vehicle rate key
+        // Loop over every direction by side to side direction, e.g. north to south 50 vehicles per hour
+        // string is direction
+        for (Map.Entry<String, Integer> rate_entry : vehicle_rate.entrySet()) { 
             String key = rate_entry.getKey(); // e.g. ets
             int rate = rate_entry.getValue(); // vehicles per hour for this movement
 
@@ -674,7 +679,6 @@ public class Junction {
                     succesfull = false;
                     routes_index = 0;
                     while(!succesfull && routes_index < routes_backlog.size()){
-                        System.out.println("Adding a vehicle");
                         succesfull = routes_backlog.get(routes_index).get(0).addVehicle(new_car);
                         routes_index++;
                     }
@@ -684,14 +688,22 @@ public class Junction {
                 }
             }
 
-            int entry_ind = direction_string.indexOf(key.charAt(0));    // Gets the index direction for the entry
-            int exit_ind = direction_string.indexOf(key.charAt(2));     // Gets the index direction for the exit
-            List<List<Lane>> routes = findRoute(entry_ind, exit_ind);   // Gets the routes that vehicles can travel
+            // Gets the index direction for the entry
+            int entry_ind = direction_string.indexOf(key.charAt(0));
+            
+            // Gets the index direction for the exit
+            int exit_ind = direction_string.indexOf(key.charAt(2));
+            
+            // Gets the routes that vehicles can travel
+            List<List<Lane>> routes = findRoute(entry_ind, exit_ind);
 
-            double multiple = Math.floor(past_time / spv) * spv;    // highest multiple lower or equal to past time
+            // highest multiple lower or equal to past time
+            double multiple = Math.floor(past_time / spv) * spv;
             if (multiple != past_time) {    // lowest multiple above or equal to past time
                 multiple += spv;
             }
+
+
             while (multiple < current_time) {
                 // create a vehicle
                 route = routes.get(0);
