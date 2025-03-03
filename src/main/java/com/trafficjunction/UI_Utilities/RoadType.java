@@ -9,9 +9,9 @@ import java.util.Objects;
 
 public class RoadType {
     String imagePath; // The path to the image of the road.
-    boolean straight; // Whether the road allows going straight.
-    boolean left; // Whether the road allows turning left.
-    boolean right; // Whether the road allows turning right.
+    boolean straight; // Whether the road is going straight.
+    boolean left; // Whether the road is a left turn.
+    boolean right; // Whether the road is a right turn.
 
     /*
      * Constructor method for the RoadType class.

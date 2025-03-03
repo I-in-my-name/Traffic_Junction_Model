@@ -238,12 +238,8 @@ public class PrimaryController {
 
     private void updateLanes(UILane lane, UILane[] laneArr, int laneNum) {
         // Change the image of the current lane.
-        lane.changeImage();
 
-        // The leftmost and rightmost lanes should have left and right turns
-        // respectively.
-        laneArr[laneNum - 1].addLeftTurns();
-        laneArr[0].addRightTurns();
+        lane.changeImage();
 
         /*
          * Now, go through every lane in this road.
@@ -252,6 +248,39 @@ public class PrimaryController {
          * Do not change lanes that are disabled.
          */
         for (int i = 0; i < laneNum; i++) {
+            System.out.println("On lane " + i);
+            // Check for left turns.
+            if (laneArr[i].getRoadType().getLeft()) {
+                if (i > 0) {
+                    laneArr[i - 1].addLeftTurns();
+                }
+            }
+
+            // Do the same for right turns.
+            if (laneArr[i].getRoadType().getRight()) {
+                if (i < laneArr.length - 1) {
+                    laneArr[i + 1].addRightTurns();
+                }
+            }
+
+            // If the road is a straight road, make sure the lanes to the left and right
+            // are not left or right turn lanes. UNLESS they are the end roads.
+            if (!laneArr[i].getRoadType().getLeft() && !laneArr[i].getRoadType().getRight()) {
+                if (i > 0) {
+                    laneArr[i - 1].removeLeftTurns();
+                }
+                if (i < laneArr.length - 1) {
+                    laneArr[i + 1].removeRightTurns();
+                }
+            }
+
+            // Update any lanes that may not have been affected in case.
+            laneArr[i].update();
+        }
+
+        for (int i = laneNum - 1; i >= 0; i--) {
+            System.out.println("On lane " + i);
+
             // Check for left turns.
             if (laneArr[i].getRoadType().getLeft()) {
                 if (i > 0) {
