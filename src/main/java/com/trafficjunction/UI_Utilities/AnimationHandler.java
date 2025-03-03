@@ -23,7 +23,7 @@ public class AnimationHandler {
                 // Divide or multiply by a constant to decrease / increase the tightness of
                 // curves.
                 double radius = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-                radius *= 1;
+                radius *= 0.7;
 
                 ArcTo arcTo = new ArcTo();
                 arcTo.setX(endX);
@@ -271,6 +271,76 @@ public class AnimationHandler {
                 return paths;
         }
 
+        // ---- Paths from South.
+        public Path[] generateSouthToWestPaths() {
+                double[][] startPoints = { { 343, 460 }, { 311, 460 }, { 277, 460 }, { 244, 460 }, { 212, 460 } };
+                double[][] endPoints = { { 170, 281 }, { 170, 314 }, { 170, 348 }, { 170, 381 }, { 170, 415 } };
+
+                // Offset the coordinates.
+                int offset = 20;
+                for (int i = 0; i < startPoints.length; i++) {
+                        startPoints[i][0] += offset;
+                        startPoints[i][1] += offset;
+                        endPoints[i][0] += offset;
+                        endPoints[i][1] += offset;
+                }
+
+                Path[] paths = new Path[startPoints.length];
+
+                for (int i = 0; i < startPoints.length; i++) {
+                        paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
+                                        false, Color.RED);
+                }
+
+                return paths;
+        }
+
+        public Line[] generateSouthToNorth() {
+                double[][] startPoints = { { 343, 460 }, { 311, 460 }, { 277, 460 }, { 244, 460 }, { 212, 460 } };
+                double[][] endPoints = { { 343, 74 }, { 311, 74 }, { 277, 74 }, { 244, 74 }, { 212, 74 } };
+
+                // Offset the coordinates.
+                int offset = 20;
+                for (int i = 0; i < startPoints.length; i++) {
+                        startPoints[i][0] += offset;
+                        startPoints[i][1] += offset;
+                        endPoints[i][0] += offset;
+                        endPoints[i][1] += offset;
+                }
+
+                Line[] paths = new Line[startPoints.length];
+
+                for (int i = 0; i < startPoints.length; i++) {
+                        paths[i] = createStraight(startPoints[i][0], startPoints[i][1], endPoints[i][0],
+                                        endPoints[i][1]);
+                }
+
+                return paths;
+        }
+
+        public Path[] generateSouthToEastPaths() {
+                double[][] startPoints = { { 343, 460 }, { 311, 460 }, { 277, 460 }, { 244, 460 }, { 212, 460 } };
+                double[][] endPoints = { { 555, 247 }, { 555, 215 }, { 555, 181 }, { 555, 148 }, { 555, 116 } };
+
+                // Offset the coordinates.
+                int offset = 20;
+                for (int i = 0; i < startPoints.length; i++) {
+                        startPoints[i][0] += offset;
+                        startPoints[i][1] += offset;
+                        endPoints[i][0] += offset;
+                        endPoints[i][1] += offset;
+                }
+
+                Path[] paths = new Path[startPoints.length];
+
+                for (int i = 0; i < startPoints.length; i++) {
+                        paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
+                                        true, Color.GREEN);
+                }
+
+                return paths;
+        }
+
         /*
          * ========== END OF FUNCTIONS TO GENERATE PATHS ==========
          */
@@ -322,6 +392,9 @@ public class AnimationHandler {
                 Path[] paths7 = generateEastToSouthPaths();
                 Line[] paths8 = generateEastToWestPaths();
                 Path[] paths9 = generateEastToNorthPaths();
+                Path[] paths10 = generateSouthToWestPaths();
+                Line[] paths11 = generateSouthToNorth();
+                Path[] paths12 = generateSouthToEastPaths();
 
                 for (Path path : paths) {
                         pane.getChildren().add(path);
@@ -351,12 +424,21 @@ public class AnimationHandler {
                 for (Path path : paths9) {
                         pane.getChildren().add(path);
                 }
+                for (Path path : paths10) {
+                        pane.getChildren().add(path);
+                }
+                for (Line path : paths11) {
+                        pane.getChildren().add(path);
+                }
+                for (Path path : paths12) {
+                        pane.getChildren().add(path);
+                }
 
                 // --- end of filler code. ---
                 ImageView car = createImage(170, 247);
                 pane.getChildren().add(car);
 
-                animateCarAlongPath(paths[0], car);
+                animateCarAlongPath(paths3[0], car);
         }
 
 }
