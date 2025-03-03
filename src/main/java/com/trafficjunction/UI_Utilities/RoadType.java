@@ -48,4 +48,13 @@ public class RoadType {
     public String getImagePath() {
         return imagePath;
     }
+    public String getAsChars(){
+        StringBuilder sb = new StringBuilder();
+
+        if(this.getLeft()) sb.append("L");
+        if(this.getStraight()) sb.append("F");
+        if(this.getRight()) sb.append("R");
+
+        return sb.toString();
+    }
 }
