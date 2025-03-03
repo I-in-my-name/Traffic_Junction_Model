@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -77,8 +78,9 @@ public class PrimaryController {
     private CareTaker careTaker = new CareTaker();
     private JunctionConfiguration configuration = new JunctionConfiguration();
 
+    // Anchor that all junction components are contained within.
     @FXML
-    private ImageView carImage;
+    private AnchorPane junctionAnchor;
 
     AnimationHandler animationHandler = new AnimationHandler();
 
@@ -227,7 +229,7 @@ public class PrimaryController {
 
         // ######################### Trialling animation ###################//
 
-        animationHandler.createAnimation(3, 0, 2, 0, carImage);
+        animationHandler.addToAnchorPane(junctionAnchor);
 
         // ######################### Saving and Memento's section ###################//
 
@@ -253,8 +255,6 @@ public class PrimaryController {
             } catch (Exception e) {
             }
         });
-
-        System.out.println("End position is " + carImage.localToScene(carImage.getBoundsInLocal()));
 
     }
 

@@ -169,7 +169,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <AnchorPane prefHeight="576.0" prefWidth="768.0">
+                  <AnchorPane fx:id="junctionAnchor" prefHeight="576.0" prefWidth="768.0">
                      <children>
                         <ImageView fitHeight="576.0" fitWidth="576.0" layoutX="96.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -303,11 +303,6 @@
                         <ImageView fx:id="trafficLightButton" fitHeight="105.0" fitWidth="38.0" layoutX="34.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../assets/trafficLight.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="carImage" fitHeight="46.0" fitWidth="46.0" layoutX="170.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
-                           <image>
-                              <Image url="@../../assets/car.png" />
                            </image>
                         </ImageView>
                      </children>

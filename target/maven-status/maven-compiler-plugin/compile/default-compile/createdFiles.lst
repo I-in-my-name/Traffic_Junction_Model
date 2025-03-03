@@ -5,7 +5,6 @@ module-info.class
 com\trafficjunction\UI_Utilities\AnimationHandler.class
 com\trafficjunction\JunctionConfiguration.class
 com\trafficjunction\View_and_Controller\PrimaryController.class
-com\trafficjunction\UI_Utilities\Coordinates.class
 com\trafficjunction\UI_Utilities\DataSanitisation.class
 com\trafficjunction\View_and_Controller\App.class
 com\trafficjunction\View_and_Controller\TrafficLightController.class
