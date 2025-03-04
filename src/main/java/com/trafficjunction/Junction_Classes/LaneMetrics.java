@@ -36,13 +36,11 @@ public class LaneMetrics {
     }
 
     // assumes all vehicles have exited and have had calculateTotalWaitTime called
-    public void calculateMetrics() {
+    public void calculateMetrics(float timestamp) {
         averageWaitTime = 0.f;
         maxWaitTime = 0.f;
         for (VehicleMetrics metric : vehicleMetrics) {
-            System.out.println("Vehicle metric:");
-            System.out.println(metric.getTotalWaitTime());
-            System.out.println();
+            metric.calculateTotalWaitTime(timestamp);
             averageWaitTime += metric.getTotalWaitTime() / vehicleMetrics.size();
 
             if (metric.getTotalWaitTime() > maxWaitTime)
@@ -55,7 +53,15 @@ public class LaneMetrics {
      * accurate recording of queue lengths
      */
     public void updateQueueSize(float timestamp, int currentQueueLength) {
-        queueLengths.add(new Pair<Float, Integer>(timestamp, currentQueueLength));
+        // only add new value if there are currently no values or it is a different
+        // queue length to before
+        if (queueLengths.isEmpty()) {
+            queueLengths.add(new Pair<>(timestamp, currentQueueLength));
+            return;
+        }
+        int lastQueueLength = queueLengths.getLast().getRight();
+        if (currentQueueLength != lastQueueLength)
+            queueLengths.add(new Pair<>(timestamp, currentQueueLength));
     }
 
     public int getMaxQueueLength() {
@@ -74,6 +80,10 @@ public class LaneMetrics {
 
     public float getMaxWaitTime() {
         return maxWaitTime;
+    }
+
+    public int getSize() {
+        return vehicleMetrics.size();
     }
 
     public String getMetrics() {

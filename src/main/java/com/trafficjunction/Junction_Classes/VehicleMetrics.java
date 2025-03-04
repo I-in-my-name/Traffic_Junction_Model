@@ -63,7 +63,13 @@ class VehicleMetrics {
     // Test written for
     // calculates total wait time once vehicle removed from simulation, ensures all waiting periods are summed prior to deletion
     public void calculateTotalWaitTime(float exitTimestamp) {
+        System.out.println("Calculate total wait time");
+        System.out.println(isMoving);
+        System.out.println(totalWaitTime);
+        System.out.println(exitTimestamp);
+        System.out.println();
         if (!isMoving && !stopTimes.isEmpty()) {
+            System.out.println("Not moving");
             // If not moving, then the last stop time is the final stop time
             // add it to the total wait time as it has previously been subtracted from the wait time
             // Essentially the time spent waiting doesn't care about the last stop time
@@ -71,6 +77,8 @@ class VehicleMetrics {
             totalWaitTime += stopTimes.get(stopTimes.size() - 1); 
             //totalWaitTime += (exitTimestamp - stopTimes.get(stopTimes.size() - 1));
         }
+        System.out.println(totalWaitTime);
+        System.out.println();
     }
 /*
     // Don't need test for

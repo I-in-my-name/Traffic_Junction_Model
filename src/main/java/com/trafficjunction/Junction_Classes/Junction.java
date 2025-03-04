@@ -34,18 +34,18 @@ public class Junction {
         // Set vehicle rate to be 0 for all directions
         /* Changing vehicle rates to be non zero in every direction for simulation testing */
         vehicle_rate = new HashMap<>();
-        vehicle_rate.put("nte", 20);
-        vehicle_rate.put("nts", 20);
-        vehicle_rate.put("ntw", 20);
-        vehicle_rate.put("ets", 20);
-        vehicle_rate.put("etw", 20);
-        vehicle_rate.put("etn", 20);
-        vehicle_rate.put("ste", 20);
-        vehicle_rate.put("stn", 20);
-        vehicle_rate.put("stw", 20);
-        vehicle_rate.put("wts",20);
-        vehicle_rate.put("wte", 20);
-        vehicle_rate.put("wtn", 20);
+        vehicle_rate.put("nte", 200);
+        vehicle_rate.put("nts", 200);
+        vehicle_rate.put("ntw", 200);
+        vehicle_rate.put("ets", 200);
+        vehicle_rate.put("etw", 200);
+        vehicle_rate.put("etn", 200);
+        vehicle_rate.put("ste", 200);
+        vehicle_rate.put("stn", 200);
+        vehicle_rate.put("stw", 200);
+        vehicle_rate.put("wts", 200);
+        vehicle_rate.put("wte", 200);
+        vehicle_rate.put("wtn", 200);
 
         vehicle_backlogs = new HashMap<>();
         
@@ -181,10 +181,11 @@ public class Junction {
         for (Lane lane : entry_lanes.get(side)) {
             totalNumberOfVehicles += lane.getTotalVehicleNum();
             totalWaitTime += lane.getAverageWaitTime() * lane.getTotalVehicleNum();
-            System.out.println("Average wait times:");
-            System.out.println(lane.getTotalVehicleNum());
-            System.out.println(lane.getAverageWaitTime());
         }
+        System.out.println("Average wait times");
+        System.out.println(totalWaitTime);
+        System.out.println(totalNumberOfVehicles);
+        System.out.println();
         return totalWaitTime / totalNumberOfVehicles;
     }
 
@@ -712,7 +713,6 @@ public class Junction {
                 succesfull = false;
                 routes_index = 0;
                 while (!succesfull && routes_index < routes.size()) {
-                    System.out.println("Adding a vehicle");
                     succesfull = routes.get(routes_index).get(0).addVehicle(new_car);
                     routes_index++;
                 }
@@ -724,10 +724,10 @@ public class Junction {
         }    
     }
 
-    public void calculateMetrics() {
+    public void calculateMetrics(float timestamp) {
         for (List<Lane> lanes : entry_lanes) {
             for (Lane lane : lanes) {
-                lane.calculateMetrics();
+                lane.calculateMetrics(timestamp);
             }
         }
     }

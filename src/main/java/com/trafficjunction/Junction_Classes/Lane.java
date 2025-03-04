@@ -162,12 +162,37 @@ public class Lane {
         if (isFull()) {
             return false;
         }
+
+        vehicleTotalNum++;
+        final float gap = 1.f; // fixed spacing between vehicles
+        float newPosition;
+        if (vehicles.isEmpty()) {
+            // For an empty lane, place the vehicle at the back of the lane.
+            newPosition = this.length;
+        } else {
+            // Get the last (back-most) vehicle and compute the new vehicle's starting position.
+            Pair<Float, Vehicle> lastPair = vehicles.get(vehicles.size() - 1);
+            float lastPosition = lastPair.getLeft();
+            float lastVehicleLength = lastPair.getRight().getLength();
+            newPosition = lastPosition + lastVehicleLength + gap;
+        }
+        // Safety check: newPosition should not exceed lane length.
+        if (newPosition > this.length) {
+            return false;
+        }
+        
+        vehicles.add(new Pair<>(newPosition, vehicle));
+        metrics.addVehicleMetric(vehicle.getMetrics());
+        return true;
+
+        /*
         vehicleTotalNum += 1;
         // Instead of adding vehicles at position length,
         // add them to position of last vehicle + constant 
         //vehicles.add(new Pair<>(length, vehicle)); // Add to the back of the lane
         if (vehicles.isEmpty()) {
             vehicles.add(new Pair<>(0.f, vehicle));
+            metrics.addVehicleMetric(vehicle.getMetrics());
             return true;
         }
         float maxPosition = 0.f;
@@ -176,11 +201,12 @@ public class Lane {
             if (position > maxPosition)
                 maxPosition = position;
         }
-        float constantSpacing = 2.f; // TODO: What is distance between cars?
+        float constantSpacing = 1.f; // TODO: What is distance between cars?
         float newPosition = maxPosition + constantSpacing;
         vehicles.add(new Pair<>(newPosition, vehicle)); // Add to back of lane's list of cars
         metrics.addVehicleMetric(vehicle.getMetrics());
         return true;
+        */
     }
 
     // Number of total unique vehicles that have gone through this lane
@@ -199,12 +225,25 @@ public class Lane {
     }
 
     // Written test TODO: Fix tests
+
+    // Rewrite of isFull(): 04/03/25
     public boolean isFull() {
         if (vehicles.isEmpty()) {
             return false;
         }
-
-        return false;
+        // Define the fixed gap between vehicles.
+        final float gap = 1.f;
+        Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1);
+        float lastVehiclePos = lastVehicle.getLeft();
+        float vehicleLength = lastVehicle.getRight().getLength();
+        // There is enough space if the gap from the last vehicle to the end of the lane
+        // is at least the length of a vehicle plus the fixed gap.
+        return (length - lastVehiclePos) < (vehicleLength + gap); // check if the space left in the lane is less than the space required for adding a new vehicle
+        /*
+        With this change, if the lane is empty the check returns false. 
+        If there’s at least one vehicle, a new vehicle can only be added if there is enough space 
+        (i.e. the remaining space from the last vehicle’s current position to the end of the lane is at least one vehicle length plus the gap).
+        */
         // Lane's should never be full?
         //Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1);
         //float backmostVehiclePos = lastVehicle.getLeft(); // get pos
@@ -251,8 +290,11 @@ public class Lane {
         return metrics.getMaxQueueLength();
     }
 
-    public void calculateMetrics() {
-        metrics.calculateMetrics();
+    public void calculateMetrics(float timestamp) {
+        System.out.println("Metric size");
+        System.out.println(metrics.getSize());
+        System.out.println();
+        metrics.calculateMetrics(timestamp);
     }
 
 
@@ -276,8 +318,9 @@ public class Lane {
             
             // vehicle is considered to be waiting, i.e. in a queue,
             // if its speed = 0. TODO: Does this make sense?
-            if (vehicle.getSpeed() == 0)
+            if (vehicle.getSpeed() == 0) {
                 currentQueueLength++;
+            }
 
             // Prevents concurrent modification exception
             // As vehicles removed themselves during this loop,

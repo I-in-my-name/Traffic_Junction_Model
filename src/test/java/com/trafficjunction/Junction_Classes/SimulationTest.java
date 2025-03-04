@@ -21,6 +21,9 @@ public class SimulationTest {
         junction.addExitLane(3);
 
         junction.connectJunction();
+
+        TrafficLight
+        junction.setLaneTrafficLight(0, 0, null)
     }
 
     @Test
@@ -36,9 +39,9 @@ public class SimulationTest {
             //System.out.println(junction);
         }
 
-        junction.calculateMetrics();
+        junction.calculateMetrics(time);
 
-        /*System.out.println(junction.getAverageWaitTime(0));
+        System.out.println(junction.getAverageWaitTime(0));
         System.out.println(junction.getAverageWaitTime(1));
         System.out.println(junction.getAverageWaitTime(2));
         System.out.println(junction.getAverageWaitTime(3));
@@ -51,7 +54,7 @@ public class SimulationTest {
         System.out.println(junction.getMaxQueueLength(0));
         System.out.println(junction.getMaxQueueLength(1));
         System.out.println(junction.getMaxQueueLength(2));
-        System.out.println(junction.getMaxQueueLength(3));*/
+        System.out.println(junction.getMaxQueueLength(3));
     }
 
 }

@@ -170,7 +170,7 @@ public class LaneTests {
          float vehicleLength = 1.f;
 
         // Since vehicle length of 1.f, and lane length of 10, the lane should
-        // be full at 10 vehicles.
+        // be full at 5 vehicles as there is also a 1.f. space after each vehicle
 
         // should be empty still
         result = emptyLane.isFull();
@@ -185,20 +185,11 @@ public class LaneTests {
          emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
          emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
          emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         // should still not be full. At 5 vehicles right now
+         // should still not be full. At 4 vehicles right now
          result = emptyLane.isFull();
          assertEquals(false, result);
 
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         // should still not be full. At 9 vehicles right now
-         result = emptyLane.isFull();
-         assertEquals(false, result);
-
-        // 10th vehicle. Should be full after this.
+        // 5th vehicle. Should be full after this.
          emptyLane.addVehicle(new Vehicle(vehicleLength, vehicleLength, vehicleLength));
          result = emptyLane.isFull();
          assertEquals(true, result);
