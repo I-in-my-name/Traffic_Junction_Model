@@ -4,9 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import com.trafficjunction.JunctionConfiguration;
-import com.trafficjunction.UI_Utilities.DataSanitisation;
-import com.trafficjunction.UI_Utilities.UILane;
 import com.trafficjunction.UI_Utilities.AnimationHandler;
+import com.trafficjunction.UI_Utilities.DataSanitisation;
+import com.trafficjunction.UI_Utilities.RoadType;
+import com.trafficjunction.UI_Utilities.UILane;
 import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
 import com.trafficjunction.View_and_Controller.Saving_Utils.ConfigurationSnapshot;
 
@@ -287,86 +288,199 @@ public class PrimaryController {
         // TODO call simulation
 
     }
+    private boolean verifyLane(String[] lanetypes, boolean oneLightMode){
+
+        //idea to follow: L LF RF R AND there is maximum ONE LF and ONE RF
+        // CANNOT HAVE LF AND M OR RF AND M but can have lf and rf. for onelane
+
+        int[] features = laneVerificationFeatures(lanetypes);
+        int leftIndex = features[0];
+        int leftForwardIndex = features[1];
+        int rightForwardIndex = features[2];
+        int rightIndex = features[3];
+
+
+        if(oneLightMode){
+            String holdem;
+            for (int i = 0; i < lanetypes.length; i++) {
+                holdem = lanetypes[i];
+                //If we have two Left forward turns it is invalid
+                if(holdem.contains("LF") && leftForwardIndex != i) return false;
+                //If we have two right forward turns it is invalid
+                if(holdem.contains("FR") && rightForwardIndex != i) return false;
+                //If we have a multilane and either a leftforward or righforward lane it is invalid.
+                if(holdem.contains("LFR") && (rightForwardIndex != -100 || leftForwardIndex != 100)) return false;
+            }
+        }
+
+                //the idea here is that we need to follow the format:       L LF RF R
+        if (leftIndex < rightIndex || leftIndex < rightForwardIndex || rightIndex > leftForwardIndex) return false;
+        if (rightIndex > rightForwardIndex && rightForwardIndex != -100 || (leftIndex < leftForwardIndex && leftForwardIndex != 100)) return false;
+        if (rightForwardIndex > leftForwardIndex) return false;
+
+        return true;
+    }
+    private int[] laneVerificationFeatures(String[] lanetypes){
+        //approach: find the leftmost right turn and the rightmost left turn for both L/R and LF/RF,
+        // verify that all forward roads are between L/R and any LFR are between LF/RF
+        //left is at index 5 and right at index 0
+        int leftIndex = 100; //rightmost,
+        int rightIndex = -100; //lefttmost,
+        int leftForwardIndex = 100; //rightmost,
+        int rightForwardIndex = -100; //leftmost,
+
+        String holdem;
+        for (int i = 0; i < lanetypes.length; i++) {
+            holdem = lanetypes[i];
+            if(holdem.contains("LF") && leftForwardIndex == 100) leftForwardIndex = i;
+            if(holdem.contains("L") && !holdem.contains("LF") && leftIndex == 100) leftIndex = i;
+
+
+            if(holdem.contains("FR") && rightForwardIndex < i) rightForwardIndex = i;
+            if(holdem.contains("R") && !holdem.contains("FR") && rightIndex < i ) rightIndex = i;
+        }
+        int[] toReturn = {leftIndex, leftForwardIndex,rightForwardIndex, rightIndex}; 
+        return toReturn;
+    }
 
     private void updateLanes(UILane lane, UILane[] laneArr, int laneNum) {
-        // Change the image of the current lane.
+
+        for (int i = 0; i < laneNum; i++) {
+            laneArr[i].sortAllowedRoads();
+            laneArr[i].update();
+        }
+        StringBuilder sb = new StringBuilder();
+        String[] roadTypeArray = new String[5];
+
 
         lane.changeImage();
+        for (int i = 0; i < lane.allAllowedRoads.size(); i++) {
+            System.out.println(lane.allAllowedRoads.get(i).getAsChars());
+        }
+        System.out.println("RoadType = " + lane.getRoadType().getAsChars());
+        System.out.println("counter = " + lane.currentRoadCounter);
+        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
+        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
+        lane.update();
 
-        /*
-         * Now, go through every lane in this road.
-         * If the lane is a left-turn lane. Allow lane to the right of it to turn left.
-         * If the lane is a right-turn lane, allow lane to the left of it to turn left.
-         * Do not change lanes that are disabled.
-         */
+        for (int i = 0; i < laneArr.length; i++) {
+            if(laneArr[i].getRoadType().getLeft()) sb.append("L");
+            if(laneArr[i].getRoadType().getStraight()) sb.append("F");
+            if(laneArr[i].getRoadType().getRight()) sb.append("R");
+
+            roadTypeArray[i] = sb.toString();
+            System.out.println(sb.toString());
+
+            sb.setLength(0);
+        }
+        int[] features = laneVerificationFeatures(roadTypeArray);
+        int leftIndex = features[0];
+        int leftForwardIndex = features[1];
+        int rightForwardIndex = features[2];
+        int rightIndex = features[3];
+
+
+
+        //to simplify the loop, find out exactly where all things should be able to turn right and left
+        int rightUpTo;
+        if(rightForwardIndex == -100){
+            rightUpTo = rightIndex;
+        }else{
+            rightUpTo = rightForwardIndex;
+        }
+        int leftUpTo;
+        if(leftForwardIndex == 100){
+            leftUpTo = leftIndex;
+        }else{
+            leftUpTo = leftForwardIndex;
+        }
+        System.out.println("RoadType = " + lane.getRoadType().getAsChars());
+        System.out.println("counter = " + lane.currentRoadCounter);
+        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
+        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
+        //remember index 0 equlas rightmost and 5 = leftmost
         for (int i = 0; i < laneNum; i++) {
-            System.out.println("On lane " + i);
-            // Check for left turns.
-            if (laneArr[i].getRoadType().getLeft()) {
-                if (i > 0) {
-                    laneArr[i - 1].addLeftTurns();
+            //sort exactly right turns for all lanes
+            laneArr[i].addForward();
+
+            laneArr[i].removeRightTurns();
+            if (i <= rightUpTo){
+                laneArr[i].addRightTurn();
+                laneArr[i].removeForward();
+                if(i == rightUpTo){
+                    System.out.println("lane " + i);
+                    laneArr[i].addRightTurns();
+                }
+            }
+            
+
+            //sort exactly left turns for all lanes
+            laneArr[i].removeLeftTurns();
+            if (i >= leftUpTo){
+                laneArr[i].addLeftTurn();   
+                laneArr[i].removeForward();
+                if(i == leftUpTo){
+                    laneArr[i].addLeftTurns();
                 }
             }
 
-            // Do the same for right turns.
-            if (laneArr[i].getRoadType().getRight()) {
-                if (i < laneArr.length - 1) {
-                    laneArr[i + 1].addRightTurns();
-                }
-            }
-
-            // If the road is a straight road, make sure the lanes to the left and right
-            // are not left or right turn lanes. UNLESS they are the end roads.
-            if (!laneArr[i].getRoadType().getLeft() && !laneArr[i].getRoadType().getRight()) {
-                if (i > 0) {
-                    laneArr[i - 1].removeLeftTurns();
-                }
-                if (i < laneArr.length - 1) {
-                    laneArr[i + 1].removeRightTurns();
-                }
-            }
-
-            // Update any lanes that may not have been affected in case.
+            laneArr[i].sortAllowedRoads();
             laneArr[i].update();
         }
+        System.out.println("RUT: " + rightUpTo);
+        System.out.println("RoadType = " + lane.getRoadType().getAsChars());
+        System.out.println("counter = " + lane.currentRoadCounter);
+        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
+        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
 
-        for (int i = laneNum - 1; i >= 0; i--) {
-            System.out.println("On lane " + i);
-
-            // Check for left turns.
-            if (laneArr[i].getRoadType().getLeft()) {
-                if (i > 0) {
-                    laneArr[i - 1].addLeftTurns();
-                }
+        if(rightForwardIndex != rightUpTo) {
+            if(rightUpTo < laneNum - 1){
+                //next lane can turn right
+                laneArr[rightUpTo + 1].addRightTurn();
+            }
+        }
+        System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
+        if(leftForwardIndex != leftUpTo) {
+            if(leftUpTo > 0){
+                //next lane can turn left
+                laneArr[leftUpTo - 1].addLeftTurn();
             }
 
-            // Do the same for right turns.
-            if (laneArr[i].getRoadType().getRight()) {
-                if (i < laneArr.length - 1) {
-                    laneArr[i + 1].addRightTurns();
-                }
-            }
-
-            // If the road is a straight road, make sure the lanes to the left and right
-            // are not left or right turn lanes. UNLESS they are the end roads.
-            if (!laneArr[i].getRoadType().getLeft() && !laneArr[i].getRoadType().getRight()) {
-                if (i > 0) {
-                    laneArr[i - 1].removeLeftTurns();
-                }
-                if (i < laneArr.length - 1) {
-                    laneArr[i + 1].removeRightTurns();
-                }
-            }
-
-            // Update any lanes that may not have been affected in case.
-            laneArr[i].update();
         }
 
-        // Re-updating the end lanes in case they were changed.
-        laneArr[laneNum - 1].addLeftTurns();
-        laneArr[0].addRightTurns();
+        System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
 
-    }
+        //need to check for any LFR and if none then all straight roads CAN become LFR IF no FR or LF
+        if(rightForwardIndex == 100 && leftForwardIndex == -100){
+            for (int i = 0; i < laneNum; i++) {
+                RoadType roadType = laneArr[i].getRoadType(); 
+                if(roadType.getStraight() && (roadType.getLeft() || !roadType.getRight())){
+                    laneArr[i].addMultiRoad(); 
+                    laneArr[i].update();  
+                }
+            }
+        }else{
+            //make sure no one can be LFR
+            for (int i = 0; i < laneNum; i++) {
+                laneArr[i].removeMultiRoad();
+                laneArr[i].update();
+            }
+        }
+        boolean mixedLane = false;
+        for (int i = 0; i < laneNum; i++) {
+            if(laneArr[i].getRoadType().getAsChars().equals("LFR")) mixedLane = true;
+        } 
+        if (!mixedLane){
+            if(leftUpTo != 100) laneArr[leftUpTo].addForward();
+            if(rightUpTo != -100)laneArr[rightUpTo].addForward();
+        }
+         // The leftmost and rightmost lanes should have left and right turns
+        // respectively.
+        System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
+        laneArr[laneNum - 1].addLeftTurn();
+        laneArr[0].addRightTurn();
+        }
+        // Change the image of the current lane.
 
     /*
      * Function to apply button hover effects to required buttons. Call in the
