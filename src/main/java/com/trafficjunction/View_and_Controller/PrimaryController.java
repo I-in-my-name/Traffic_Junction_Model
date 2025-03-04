@@ -120,62 +120,62 @@ public class PrimaryController {
 
         // Initialize UILane objects
         northRoadAllLanes = new UILane[] {
-                new UILane(nLane0, 0),
-                new UILane(nLane1, 1),
-                new UILane(nLane2, 2),
-                new UILane(nLane3, 3),
-                new UILane(nLane4, 4)
+                new UILane(nLane0),
+                new UILane(nLane1),
+                new UILane(nLane2),
+                new UILane(nLane3),
+                new UILane(nLane4)
         };
 
         eastRoadAllLanes = new UILane[] {
-                new UILane(eLane0, 0),
-                new UILane(eLane1, 1),
-                new UILane(eLane2, 2),
-                new UILane(eLane3, 3),
-                new UILane(eLane4, 4)
+                new UILane(eLane0),
+                new UILane(eLane1),
+                new UILane(eLane2),
+                new UILane(eLane3),
+                new UILane(eLane4)
         };
 
         southRoadAllLanes = new UILane[] {
-                new UILane(sLane0, 0),
-                new UILane(sLane1, 1),
-                new UILane(sLane2, 2),
-                new UILane(sLane3, 3),
-                new UILane(sLane4, 4)
+                new UILane(sLane0),
+                new UILane(sLane1),
+                new UILane(sLane2),
+                new UILane(sLane3),
+                new UILane(sLane4)
         };
 
         westRoadAllLanes = new UILane[] {
-                new UILane(wLane0, 0),
-                new UILane(wLane1, 1),
-                new UILane(wLane2, 2),
-                new UILane(wLane3, 3),
-                new UILane(wLane4, 4)
+                new UILane(wLane0),
+                new UILane(wLane1),
+                new UILane(wLane2),
+                new UILane(wLane3),
+                new UILane(wLane4)
         };
 
         // Assign change image function to all lanes.
         for (UILane lane : northRoadAllLanes) {
-            lane.getLane().setOnMouseClicked(event -> updateImage(lane, northRoadAllLanes));
+            lane.getLane().setOnMouseClicked(event -> updateLanes(lane, northRoadAllLanes, northLaneNum));
         }
         for (UILane lane : eastRoadAllLanes) {
-            lane.getLane().setOnMouseClicked(event -> updateImage(lane, eastRoadAllLanes));
+            lane.getLane().setOnMouseClicked(event -> updateLanes(lane, eastRoadAllLanes, eastLaneNum));
         }
         for (UILane lane : southRoadAllLanes) {
-            lane.getLane().setOnMouseClicked(event -> updateImage(lane, southRoadAllLanes));
+            lane.getLane().setOnMouseClicked(event -> updateLanes(lane, southRoadAllLanes, southLaneNum));
         }
         for (UILane lane : westRoadAllLanes) {
-            lane.getLane().setOnMouseClicked(event -> updateImage(lane, westRoadAllLanes));
+            lane.getLane().setOnMouseClicked(event -> updateLanes(lane, westRoadAllLanes, westLaneNum));
         }
 
         // Allow right turns on the rightmost lane.
-        northRoadAllLanes[0].enableRight();
-        eastRoadAllLanes[0].enableRight();
-        southRoadAllLanes[0].enableRight();
-        westRoadAllLanes[0].enableRight();
+        northRoadAllLanes[0].addRightTurns();
+        eastRoadAllLanes[0].addRightTurns();
+        southRoadAllLanes[0].addRightTurns();
+        westRoadAllLanes[0].addRightTurns();
 
         // Allow left turns on the leftmost lane.
-        northRoadAllLanes[4].enableLeft();
-        eastRoadAllLanes[4].enableLeft();
-        southRoadAllLanes[4].enableLeft();
-        westRoadAllLanes[4].enableLeft();
+        northRoadAllLanes[4].addLeftTurns();
+        eastRoadAllLanes[4].addLeftTurns();
+        southRoadAllLanes[4].addLeftTurns();
+        westRoadAllLanes[4].addLeftTurns();
 
         // Assign the correct functions to each button.
         northLaneAdd.setOnAction(event -> {
@@ -259,43 +259,25 @@ public class PrimaryController {
 
     }
 
-    /*
-     * Function to disable lanes.
-     * 
-     * @param lanes - The array of UILane objects to disable. Enables left turns for
-     * the left-most lane.
-     * 
-     * @param laneNum - The current number of lanes that should be ENABLED.
-     */
     @FXML
     private void subtractLane(UILane[] lanes, int laneNum) {
+        System.out.println("Subtracting lane");
         for (int i = laneNum; i < 5; i++) {
             lanes[i].disableLane();
+            lanes[i].update();
         }
-
-        // Allow left turns on the highest lane number.
-        lanes[laneNum - 1].enableLeft();
-
+        lanes[laneNum - 1].addLeftTurns();
     }
 
-    /*
-     * Function to enable another lane. Also enables left turns for the left-most
-     * lane.
-     * 
-     * @param lanes - The array of UILane objects to enable.
-     * 
-     * @param laneNum - The current number of lanes that should be ENABLED.
-     */
     @FXML
     private void addLane(UILane[] lanes, int laneNum) {
+        System.out.println("Adding lane");
         for (int i = 0; i < laneNum; i++) {
             lanes[i].enableLane();
+            lanes[i].update();
         }
-
-        // Allow left turns on the highest lane number.
-        lanes[laneNum - 1].enableLeft();
-        // Disable left turns from the previous highest lane number.
-        lanes[laneNum - 2].disableLeft();
+        lanes[laneNum - 1].addLeftTurns();
+        lanes[laneNum - 2].removeLeftTurns();
     }
 
     @FXML
@@ -306,29 +288,84 @@ public class PrimaryController {
 
     }
 
-    private void updateImage(UILane lane, UILane[] laneArr) {
+    private void updateLanes(UILane lane, UILane[] laneArr, int laneNum) {
+        // Change the image of the current lane.
+
         lane.changeImage();
 
-        // Update the surrounding lanes based on the current lane's type.
-        if (lane.getPosition() > 0) {
-            if (lane.isLeft()) {
-                System.out.println("Enabling left for lane " + laneArr[lane.getPosition() - 1].getPosition());
-                laneArr[lane.getPosition() - 1].enableLeft();
-            } else {
-                System.out.println("Disabling left for lane " + laneArr[lane.getPosition() - 1].getPosition());
-                laneArr[lane.getPosition() - 1].disableLeft();
+        /*
+         * Now, go through every lane in this road.
+         * If the lane is a left-turn lane. Allow lane to the right of it to turn left.
+         * If the lane is a right-turn lane, allow lane to the left of it to turn left.
+         * Do not change lanes that are disabled.
+         */
+        for (int i = 0; i < laneNum; i++) {
+            System.out.println("On lane " + i);
+            // Check for left turns.
+            if (laneArr[i].getRoadType().getLeft()) {
+                if (i > 0) {
+                    laneArr[i - 1].addLeftTurns();
+                }
             }
+
+            // Do the same for right turns.
+            if (laneArr[i].getRoadType().getRight()) {
+                if (i < laneArr.length - 1) {
+                    laneArr[i + 1].addRightTurns();
+                }
+            }
+
+            // If the road is a straight road, make sure the lanes to the left and right
+            // are not left or right turn lanes. UNLESS they are the end roads.
+            if (!laneArr[i].getRoadType().getLeft() && !laneArr[i].getRoadType().getRight()) {
+                if (i > 0) {
+                    laneArr[i - 1].removeLeftTurns();
+                }
+                if (i < laneArr.length - 1) {
+                    laneArr[i + 1].removeRightTurns();
+                }
+            }
+
+            // Update any lanes that may not have been affected in case.
+            laneArr[i].update();
         }
 
-        if (lane.getPosition() < laneArr.length - 1) {
-            if (lane.isRight()) {
-                System.out.println("Enabling right for lane " + laneArr[lane.getPosition() + 1].getPosition());
-                laneArr[lane.getPosition() + 1].enableRight();
-            } else {
-                System.out.println("Disabling right for lane " + laneArr[lane.getPosition() + 1].getPosition());
-                laneArr[lane.getPosition() + 1].disableRight();
+        for (int i = laneNum - 1; i >= 0; i--) {
+            System.out.println("On lane " + i);
+
+            // Check for left turns.
+            if (laneArr[i].getRoadType().getLeft()) {
+                if (i > 0) {
+                    laneArr[i - 1].addLeftTurns();
+                }
             }
+
+            // Do the same for right turns.
+            if (laneArr[i].getRoadType().getRight()) {
+                if (i < laneArr.length - 1) {
+                    laneArr[i + 1].addRightTurns();
+                }
+            }
+
+            // If the road is a straight road, make sure the lanes to the left and right
+            // are not left or right turn lanes. UNLESS they are the end roads.
+            if (!laneArr[i].getRoadType().getLeft() && !laneArr[i].getRoadType().getRight()) {
+                if (i > 0) {
+                    laneArr[i - 1].removeLeftTurns();
+                }
+                if (i < laneArr.length - 1) {
+                    laneArr[i + 1].removeRightTurns();
+                }
+            }
+
+            // Update any lanes that may not have been affected in case.
+            laneArr[i].update();
         }
+
+        // Re-updating the end lanes in case they were changed.
+        laneArr[laneNum - 1].addLeftTurns();
+        laneArr[0].addRightTurns();
+
     }
 
     /*
