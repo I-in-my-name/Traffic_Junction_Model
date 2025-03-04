@@ -19,6 +19,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -31,7 +33,7 @@ public class PrimaryController {
 
     // FXML elements
     @FXML
-    private GridPane vehicleNumGrid;
+    private TabPane vehicleTabs;
     @FXML
     private ImageView nLane0, nLane1, nLane2, nLane3, nLane4;
     @FXML
@@ -86,11 +88,12 @@ public class PrimaryController {
     @FXML
     private void initialize() {
         // Input validation against words.
-        for (Node node : vehicleNumGrid.getChildren()) {
-            if (node instanceof TextField) {
-                DataSanitisation.applyNumericRestriction((TextField) node);
-            }
-        }
+        // for (Tab tab : vehicleTabs.getTabs()) {
+        // for (Node node : tab.)
+        // if (node instanceof TextField) {
+        // DataSanitisation.applyNumericRestriction((TextField) node);
+        // }
+        // }
 
         AnimationHandler animationHandler = new AnimationHandler(junctionAnchor);
 
@@ -235,28 +238,31 @@ public class PrimaryController {
 
         // ######################### Saving and Memento's section ###################//
 
-        fileChooser.setTitle("value");
-        loadMenuItem.setOnAction((ActionEvent event) -> {
-            File chosenFile = fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
-            try {
-                JunctionConfiguration loadedConfiguration = JunctionConfiguration.loadObject(chosenFile);
-                configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
-                careTaker.addSnap(new ConfigurationSnapshot(configuration));
-                System.out.println("SNAPSHOT ADDED");
-                populateFieldsWithData(configuration);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        // fileChooser.setTitle("value");
+        // loadMenuItem.setOnAction((ActionEvent event) -> {
+        // File chosenFile = fileChooser.showOpenDialog((Stage)
+        // vehicleNumGrid.getScene().getWindow());
+        // try {
+        // JunctionConfiguration loadedConfiguration =
+        // JunctionConfiguration.loadObject(chosenFile);
+        // configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
+        // careTaker.addSnap(new ConfigurationSnapshot(configuration));
+        // System.out.println("SNAPSHOT ADDED");
+        // populateFieldsWithData(configuration);
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
+        // });
 
-        saveMenuItem.setOnAction((ActionEvent event) -> {
-            File chosenFile = fileChooser.showSaveDialog((Stage) vehicleNumGrid.getScene().getWindow());
-            try {
-                // move into program
-                gatherUserData().saveObject(chosenFile);
-            } catch (Exception e) {
-            }
-        });
+        // saveMenuItem.setOnAction((ActionEvent event) -> {
+        // File chosenFile = fileChooser.showSaveDialog((Stage)
+        // vehicleNumGrid.getScene().getWindow());
+        // try {
+        // // move into program
+        // gatherUserData().saveObject(chosenFile);
+        // } catch (Exception e) {
+        // }
+        // });
 
     }
 
@@ -283,14 +289,16 @@ public class PrimaryController {
 
     @FXML
     private void runSimulationButtonPress() {
-        JunctionConfiguration userData = gatherUserData();
+        // JunctionConfiguration userData = gatherUserData();
 
         // TODO call simulation
+        return;
 
     }
-    private boolean verifyLane(String[] lanetypes, boolean oneLightMode){
 
-        //idea to follow: L LF RF R AND there is maximum ONE LF and ONE RF
+    private boolean verifyLane(String[] lanetypes, boolean oneLightMode) {
+
+        // idea to follow: L LF RF R AND there is maximum ONE LF and ONE RF
         // CANNOT HAVE LF AND M OR RF AND M but can have lf and rf. for onelane
 
         int[] features = laneVerificationFeatures(lanetypes);
@@ -299,47 +307,59 @@ public class PrimaryController {
         int rightForwardIndex = features[2];
         int rightIndex = features[3];
 
-
-        if(oneLightMode){
+        if (oneLightMode) {
             String holdem;
             for (int i = 0; i < lanetypes.length; i++) {
                 holdem = lanetypes[i];
-                //If we have two Left forward turns it is invalid
-                if(holdem.contains("LF") && leftForwardIndex != i) return false;
-                //If we have two right forward turns it is invalid
-                if(holdem.contains("FR") && rightForwardIndex != i) return false;
-                //If we have a multilane and either a leftforward or righforward lane it is invalid.
-                if(holdem.contains("LFR") && (rightForwardIndex != -100 || leftForwardIndex != 100)) return false;
+                // If we have two Left forward turns it is invalid
+                if (holdem.contains("LF") && leftForwardIndex != i)
+                    return false;
+                // If we have two right forward turns it is invalid
+                if (holdem.contains("FR") && rightForwardIndex != i)
+                    return false;
+                // If we have a multilane and either a leftforward or righforward lane it is
+                // invalid.
+                if (holdem.contains("LFR") && (rightForwardIndex != -100 || leftForwardIndex != 100))
+                    return false;
             }
         }
 
-                //the idea here is that we need to follow the format:       L LF RF R
-        if (leftIndex < rightIndex || leftIndex < rightForwardIndex || rightIndex > leftForwardIndex) return false;
-        if (rightIndex > rightForwardIndex && rightForwardIndex != -100 || (leftIndex < leftForwardIndex && leftForwardIndex != 100)) return false;
-        if (rightForwardIndex > leftForwardIndex) return false;
+        // the idea here is that we need to follow the format: L LF RF R
+        if (leftIndex < rightIndex || leftIndex < rightForwardIndex || rightIndex > leftForwardIndex)
+            return false;
+        if (rightIndex > rightForwardIndex && rightForwardIndex != -100
+                || (leftIndex < leftForwardIndex && leftForwardIndex != 100))
+            return false;
+        if (rightForwardIndex > leftForwardIndex)
+            return false;
 
         return true;
     }
-    private int[] laneVerificationFeatures(String[] lanetypes){
-        //approach: find the leftmost right turn and the rightmost left turn for both L/R and LF/RF,
+
+    private int[] laneVerificationFeatures(String[] lanetypes) {
+        // approach: find the leftmost right turn and the rightmost left turn for both
+        // L/R and LF/RF,
         // verify that all forward roads are between L/R and any LFR are between LF/RF
-        //left is at index 5 and right at index 0
-        int leftIndex = 100; //rightmost,
-        int rightIndex = -100; //lefttmost,
-        int leftForwardIndex = 100; //rightmost,
-        int rightForwardIndex = -100; //leftmost,
+        // left is at index 5 and right at index 0
+        int leftIndex = 100; // rightmost,
+        int rightIndex = -100; // lefttmost,
+        int leftForwardIndex = 100; // rightmost,
+        int rightForwardIndex = -100; // leftmost,
 
         String holdem;
         for (int i = 0; i < lanetypes.length; i++) {
             holdem = lanetypes[i];
-            if(holdem.contains("LF") && leftForwardIndex == 100) leftForwardIndex = i;
-            if(holdem.contains("L") && !holdem.contains("LF") && leftIndex == 100) leftIndex = i;
+            if (holdem.contains("LF") && leftForwardIndex == 100)
+                leftForwardIndex = i;
+            if (holdem.contains("L") && !holdem.contains("LF") && leftIndex == 100)
+                leftIndex = i;
 
-
-            if(holdem.contains("FR") && rightForwardIndex < i) rightForwardIndex = i;
-            if(holdem.contains("R") && !holdem.contains("FR") && rightIndex < i ) rightIndex = i;
+            if (holdem.contains("FR") && rightForwardIndex < i)
+                rightForwardIndex = i;
+            if (holdem.contains("R") && !holdem.contains("FR") && rightIndex < i)
+                rightIndex = i;
         }
-        int[] toReturn = {leftIndex, leftForwardIndex,rightForwardIndex, rightIndex}; 
+        int[] toReturn = { leftIndex, leftForwardIndex, rightForwardIndex, rightIndex };
         return toReturn;
     }
 
@@ -352,7 +372,6 @@ public class PrimaryController {
         StringBuilder sb = new StringBuilder();
         String[] roadTypeArray = new String[5];
 
-
         lane.changeImage();
         for (int i = 0; i < lane.allAllowedRoads.size(); i++) {
             System.out.println(lane.allAllowedRoads.get(i).getAsChars());
@@ -364,9 +383,12 @@ public class PrimaryController {
         lane.update();
 
         for (int i = 0; i < laneArr.length; i++) {
-            if(laneArr[i].getRoadType().getLeft()) sb.append("L");
-            if(laneArr[i].getRoadType().getStraight()) sb.append("F");
-            if(laneArr[i].getRoadType().getRight()) sb.append("R");
+            if (laneArr[i].getRoadType().getLeft())
+                sb.append("L");
+            if (laneArr[i].getRoadType().getStraight())
+                sb.append("F");
+            if (laneArr[i].getRoadType().getRight())
+                sb.append("R");
 
             roadTypeArray[i] = sb.toString();
             System.out.println(sb.toString());
@@ -379,47 +401,45 @@ public class PrimaryController {
         int rightForwardIndex = features[2];
         int rightIndex = features[3];
 
-
-
-        //to simplify the loop, find out exactly where all things should be able to turn right and left
+        // to simplify the loop, find out exactly where all things should be able to
+        // turn right and left
         int rightUpTo;
-        if(rightForwardIndex == -100){
+        if (rightForwardIndex == -100) {
             rightUpTo = rightIndex;
-        }else{
+        } else {
             rightUpTo = rightForwardIndex;
         }
         int leftUpTo;
-        if(leftForwardIndex == 100){
+        if (leftForwardIndex == 100) {
             leftUpTo = leftIndex;
-        }else{
+        } else {
             leftUpTo = leftForwardIndex;
         }
         System.out.println("RoadType = " + lane.getRoadType().getAsChars());
         System.out.println("counter = " + lane.currentRoadCounter);
         System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
         System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
-        //remember index 0 equlas rightmost and 5 = leftmost
+        // remember index 0 equlas rightmost and 5 = leftmost
         for (int i = 0; i < laneNum; i++) {
-            //sort exactly right turns for all lanes
+            // sort exactly right turns for all lanes
             laneArr[i].addForward();
 
             laneArr[i].removeRightTurns();
-            if (i <= rightUpTo){
+            if (i <= rightUpTo) {
                 laneArr[i].addRightTurn();
                 laneArr[i].removeForward();
-                if(i == rightUpTo){
+                if (i == rightUpTo) {
                     System.out.println("lane " + i);
                     laneArr[i].addRightTurns();
                 }
             }
-            
 
-            //sort exactly left turns for all lanes
+            // sort exactly left turns for all lanes
             laneArr[i].removeLeftTurns();
-            if (i >= leftUpTo){
-                laneArr[i].addLeftTurn();   
+            if (i >= leftUpTo) {
+                laneArr[i].addLeftTurn();
                 laneArr[i].removeForward();
-                if(i == leftUpTo){
+                if (i == leftUpTo) {
                     laneArr[i].addLeftTurns();
                 }
             }
@@ -433,16 +453,16 @@ public class PrimaryController {
         System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
         System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
 
-        if(rightForwardIndex != rightUpTo) {
-            if(rightUpTo < laneNum - 1){
-                //next lane can turn right
+        if (rightForwardIndex != rightUpTo) {
+            if (rightUpTo < laneNum - 1) {
+                // next lane can turn right
                 laneArr[rightUpTo + 1].addRightTurn();
             }
         }
         System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
-        if(leftForwardIndex != leftUpTo) {
-            if(leftUpTo > 0){
-                //next lane can turn left
+        if (leftForwardIndex != leftUpTo) {
+            if (leftUpTo > 0) {
+                // next lane can turn left
                 laneArr[leftUpTo - 1].addLeftTurn();
             }
 
@@ -450,17 +470,18 @@ public class PrimaryController {
 
         System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
 
-        //need to check for any LFR and if none then all straight roads CAN become LFR IF no FR or LF
-        if(rightForwardIndex == 100 && leftForwardIndex == -100){
+        // need to check for any LFR and if none then all straight roads CAN become LFR
+        // IF no FR or LF
+        if (rightForwardIndex == 100 && leftForwardIndex == -100) {
             for (int i = 0; i < laneNum; i++) {
-                RoadType roadType = laneArr[i].getRoadType(); 
-                if(roadType.getStraight() && (roadType.getLeft() || !roadType.getRight())){
-                    laneArr[i].addMultiRoad(); 
-                    laneArr[i].update();  
+                RoadType roadType = laneArr[i].getRoadType();
+                if (roadType.getStraight() && (roadType.getLeft() || !roadType.getRight())) {
+                    laneArr[i].addMultiRoad();
+                    laneArr[i].update();
                 }
             }
-        }else{
-            //make sure no one can be LFR
+        } else {
+            // make sure no one can be LFR
             for (int i = 0; i < laneNum; i++) {
                 laneArr[i].removeMultiRoad();
                 laneArr[i].update();
@@ -468,19 +489,22 @@ public class PrimaryController {
         }
         boolean mixedLane = false;
         for (int i = 0; i < laneNum; i++) {
-            if(laneArr[i].getRoadType().getAsChars().equals("LFR")) mixedLane = true;
-        } 
-        if (!mixedLane){
-            if(leftUpTo != 100) laneArr[leftUpTo].addForward();
-            if(rightUpTo != -100)laneArr[rightUpTo].addForward();
+            if (laneArr[i].getRoadType().getAsChars().equals("LFR"))
+                mixedLane = true;
         }
-         // The leftmost and rightmost lanes should have left and right turns
+        if (!mixedLane) {
+            if (leftUpTo != 100)
+                laneArr[leftUpTo].addForward();
+            if (rightUpTo != -100)
+                laneArr[rightUpTo].addForward();
+        }
+        // The leftmost and rightmost lanes should have left and right turns
         // respectively.
         System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
         laneArr[laneNum - 1].addLeftTurn();
         laneArr[0].addRightTurn();
-        }
-        // Change the image of the current lane.
+    }
+    // Change the image of the current lane.
 
     /*
      * Function to apply button hover effects to required buttons. Call in the
@@ -505,53 +529,53 @@ public class PrimaryController {
      * Both of the next two functions must be added to whenever new data is decided
      * to be relevant
      */
-    private JunctionConfiguration gatherUserData() {
-        // This is notably in order.
-        int[] sequentialList = new int[12];
-        int index = 0;
-        for (Node child : vehicleNumGrid.getChildren()) {
-            try {
-                TextField field = (TextField) child;
-                String text = field.getText(); // replaces invisible/non-printable characters
-                int number = 0;
+    // private JunctionConfiguration gatherUserData() {
+    // // This is notably in order.
+    // int[] sequentialList = new int[12];
+    // int index = 0;
+    // for (Node child : vehicleNumGrid.getChildren()) {
+    // try {
+    // TextField field = (TextField) child;
+    // String text = field.getText(); // replaces invisible/non-printable characters
+    // int number = 0;
 
-                if (!text.isEmpty()) {
-                    number = Integer.parseInt(text);
-                }
-                sequentialList[index] = number;
-                index++;
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
-            }
-        }
-        JunctionConfiguration data = new JunctionConfiguration();
-        if (data.setDirectionInfo(sequentialList))
-            return data;
+    // if (!text.isEmpty()) {
+    // number = Integer.parseInt(text);
+    // }
+    // sequentialList[index] = number;
+    // index++;
+    // } catch (Exception ignored) {
+    // ignored.printStackTrace();
+    // }
+    // }
+    // JunctionConfiguration data = new JunctionConfiguration();
+    // if (data.setDirectionInfo(sequentialList))
+    // return data;
 
-        // TODO ERROR HANDLING, needs to be handled elsewhere to appropriately show
-        // error message.
-        return null;
-    }
+    // // TODO ERROR HANDLING, needs to be handled elsewhere to appropriately show
+    // // error message.
+    // return null;
+    // }
 
-    private boolean populateFieldsWithData(JunctionConfiguration configuration) {
-        int[] directionalThroughput = configuration.getDirectionInfo();
-        int index = 0;
-        for (Node child : vehicleNumGrid.getChildren()) {
-            try {
-                TextField field = (TextField) child;
-                field.setText(String.valueOf(directionalThroughput[index]));
-                index++;
-            } catch (Exception ignored) {
-            }
-        }
-        return true;
-    }
+    // private boolean populateFieldsWithData(JunctionConfiguration configuration) {
+    // int[] directionalThroughput = configuration.getDirectionInfo();
+    // int index = 0;
+    // for (Node child : vehicleNumGrid.getChildren()) {
+    // try {
+    // TextField field = (TextField) child;
+    // field.setText(String.valueOf(directionalThroughput[index]));
+    // index++;
+    // } catch (Exception ignored) {
+    // }
+    // }
+    // return true;
+    // }
 
     @FXML
     private void undo() {
         System.out.println("undo pressed");
         careTaker.undo();
-        populateFieldsWithData(configuration);
+        // populateFieldsWithData(configuration);
 
     }
 
@@ -559,6 +583,6 @@ public class PrimaryController {
     private void redo() {
         System.out.println("undo pressed");
         careTaker.redo();
-        populateFieldsWithData(configuration);
+        // populateFieldsWithData(configuration);
     }
 }
