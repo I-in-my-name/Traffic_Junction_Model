@@ -11,6 +11,12 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-junit</artifactId>
+            <version>4.0.1-alpha</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>13</version>
@@ -38,6 +44,7 @@
             <version>1.9.2</version> <!-- or the latest version -->
             <scope>test</scope>
         </dependency>
+        
     </dependencies>
     <build>
         <plugins>
