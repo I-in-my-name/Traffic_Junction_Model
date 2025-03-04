@@ -1,11 +1,15 @@
+com\trafficjunction\View_and_Controller\Saving_Utils\ConfigurationSnapshot.class
+com\trafficjunction\JunctionMetrics.class
+com\trafficjunction\View_and_Controller\Saving_Utils\CareTaker.class
 module-info.class
 com\trafficjunction\UI_Utilities\RoadType.class
 com\trafficjunction\UserInputData.class
+com\trafficjunction\UI_Utilities\AnimationHandler.class
+com\trafficjunction\JunctionConfiguration.class
 com\trafficjunction\View_and_Controller\PrimaryController.class
-com\trafficjunction\InputData.class
 com\trafficjunction\UI_Utilities\DataSanitisation.class
 com\trafficjunction\View_and_Controller\App.class
 com\trafficjunction\View_and_Controller\TrafficLightController.class
-com\trafficjunction\OutputData.class
+com\trafficjunction\JunctionConfiguration$directions.class
 com\trafficjunction\UI_Utilities\UILane.class
 com\trafficjunction\Example.class
