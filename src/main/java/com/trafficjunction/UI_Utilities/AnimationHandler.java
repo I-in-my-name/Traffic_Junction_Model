@@ -1,5 +1,6 @@
 package com.trafficjunction.UI_Utilities;
 
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
 import javafx.animation.PathTransition.OrientationType;
@@ -15,6 +16,49 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 public class AnimationHandler {
+
+        private Path[] westToNorthPaths;
+        private Line[] westToEastPaths;
+        private Path[] westToSouthPaths;
+
+        private Path[] northToEastPaths;
+        private Line[] northToSouthPaths;
+        private Path[] northToWestPaths;
+
+        private Path[] eastToSouthPaths;
+        private Line[] eastToWestPaths;
+        private Path[] eastToNorthPaths;
+
+        private Path[] southToWestPaths;
+        private Line[] southToNorthPaths;
+        private Path[] southToEastPaths;
+
+        private AnchorPane pane;
+
+        public AnimationHandler(AnchorPane pane) {
+                this.pane = pane;
+                addToAnchorPane(); // Generate all the paths and add them to the anchor pane.
+        }
+
+        /*
+         * Function to create an arc path.
+         * 
+         * @param startX - The x-coordinate of the start of the path.
+         * 
+         * @param startY - The y-coordinate of the start of the path.
+         * 
+         * @param endX - The x-coordinate of the end of the path.
+         * 
+         * @param endY - The y-coordinate of the end of the path.
+         * 
+         * @param sweep - A boolean value dictating whether the arc has a sweep flag or
+         * not (inversed direction of curve.)
+         * 
+         * @param colour - The colour of the arc to be created. TODO: WILL BE REMOVED
+         * LATER AS PATHS SHOULD BE INVISIBLE.
+         * 
+         * @return Path - The created path.
+         */
         public static Path createArc(double startX, double startY, double endX, double endY,
                         boolean sweep, Paint colour) {
                 Path path = new Path();
@@ -40,6 +84,20 @@ public class AnimationHandler {
                 return path;
         }
 
+        /*
+         * Function to create straight lines for when cars carry on straight in the
+         * simulator.
+         * 
+         * @param startX - The x-coordinate of the start of the path.
+         * 
+         * @param startY - The y-coordinate of the start of the path.
+         * 
+         * @param endX - The x-coordinate of the end of the path.
+         * 
+         * @param endY - The y-coordinate of the end of the path
+         * 
+         * @return Line - The created line.
+         */
         public static Line createStraight(double startX, double startY, double endX, double endY) {
                 Path path = new Path();
                 path.getElements().add(new MoveTo(startX, startY));
@@ -345,6 +403,17 @@ public class AnimationHandler {
          * ========== END OF FUNCTIONS TO GENERATE PATHS ==========
          */
 
+        /*
+         * Function to animate an image along the given path by creating a path
+         * transition. One of two functions using polymorphism due to PathTransitions
+         * being created from both Paths and Lines in JavaFX.
+         * 
+         * @param path - The path for the image to travel along.
+         * 
+         * @param car - The imageview to travel along the path.
+         * 
+         * @return PathTransition - The created PathTransition AKA the animation.
+         */
         public PathTransition animateCarAlongPath(Path path, ImageView car) {
                 PathTransition pathTransition = new PathTransition();
                 pathTransition.setNode(car);
@@ -357,6 +426,17 @@ public class AnimationHandler {
                 return pathTransition;
         }
 
+        /*
+         * Function to animate an image along the given line by creating a path
+         * transition. One of two functions using polymorphism due to PathTransitions
+         * being created from both Paths and Lines in JavaFX.
+         * 
+         * @param line - The line for the image to travel along.
+         * 
+         * @param car - The imageview to travel along the line.
+         * 
+         * @return PathTransition - The created PathTransition AKA the animation.
+         */
         public PathTransition animateCarAlongPath(Line line, ImageView car) {
                 PathTransition pathTransition = new PathTransition();
                 pathTransition.setNode(car);
@@ -369,76 +449,153 @@ public class AnimationHandler {
                 return pathTransition;
         }
 
-        public ImageView createImage(double x, double y) {
+        /*
+         * Function to "spawn" a car ImageView within the FXML file.
+         * 
+         * @return ImageView - The ImageView object of the car that has been generated.
+         */
+        public ImageView createCar() {
                 Image carImage = new Image(getClass().getResourceAsStream("/assets/car.png"));
                 ImageView car = new ImageView(carImage);
 
                 car.setFitWidth(46);
                 car.setFitHeight(46);
                 car.setRotate(180);
-                // AnchorPane.setLeftAnchor(car, x);
-                // AnchorPane.setTopAnchor(car, y);
 
                 return car;
         }
 
-        public void addToAnchorPane(AnchorPane pane) {
-                Path[] paths = generateWestToNorthPaths();
-                Line[] paths2 = generateWestToEastPaths();
-                Path[] paths3 = generateWestToSouthPaths();
-                Path[] paths4 = generateNorthToEastPaths();
-                Line[] paths5 = generateNorthToSouthPaths();
-                Path[] paths6 = generateNorthToWestPaths();
-                Path[] paths7 = generateEastToSouthPaths();
-                Line[] paths8 = generateEastToWestPaths();
-                Path[] paths9 = generateEastToNorthPaths();
-                Path[] paths10 = generateSouthToWestPaths();
-                Line[] paths11 = generateSouthToNorth();
-                Path[] paths12 = generateSouthToEastPaths();
+        /*
+         * Function to add all the paths to the FXML file. Takes the anchor pane as the
+         * root that all the paths are being added to.
+         * 
+         * @param pane - The parent anchor pane to add all the paths inside of.
+         */
+        public void addToAnchorPane() {
+                this.westToNorthPaths = generateWestToNorthPaths();
+                this.westToEastPaths = generateWestToEastPaths();
+                this.westToSouthPaths = generateWestToSouthPaths();
+                this.northToEastPaths = generateNorthToEastPaths();
+                this.northToSouthPaths = generateNorthToSouthPaths();
+                this.northToWestPaths = generateNorthToWestPaths();
+                this.eastToSouthPaths = generateEastToSouthPaths();
+                this.eastToWestPaths = generateEastToWestPaths();
+                this.eastToNorthPaths = generateEastToNorthPaths();
+                this.southToWestPaths = generateSouthToWestPaths();
+                this.southToNorthPaths = generateSouthToNorth();
+                this.southToEastPaths = generateSouthToEastPaths();
 
-                for (Path path : paths) {
-                        pane.getChildren().add(path);
-                }
-                // ----- FILLER CODE FOR DEBUGGING ------
-                for (Line path : paths2) {
-                        pane.getChildren().add(path);
-                }
-                for (Path path : paths3) {
-                        pane.getChildren().add(path);
-                }
-                for (Path path : paths4) {
-                        pane.getChildren().add(path);
-                }
-                for (Line path : paths5) {
-                        pane.getChildren().add(path);
-                }
-                for (Path path : paths6) {
-                        pane.getChildren().add(path);
-                }
-                for (Path path : paths7) {
-                        pane.getChildren().add(path);
-                }
-                for (Line path : paths8) {
-                        pane.getChildren().add(path);
-                }
-                for (Path path : paths9) {
-                        pane.getChildren().add(path);
-                }
-                for (Path path : paths10) {
-                        pane.getChildren().add(path);
-                }
-                for (Line path : paths11) {
-                        pane.getChildren().add(path);
-                }
-                for (Path path : paths12) {
-                        pane.getChildren().add(path);
+                Path[][] allArcs = { westToNorthPaths, westToSouthPaths, northToEastPaths, northToWestPaths,
+                                eastToSouthPaths, eastToNorthPaths, southToWestPaths, southToEastPaths };
+                Line[][] allLines = { westToEastPaths, northToSouthPaths, eastToWestPaths, southToNorthPaths };
+
+                for (int i = 0; i < allArcs.length; i++) {
+                        for (int j = 0; j < allArcs[i].length; j++) {
+                                this.pane.getChildren().add(allArcs[i][j]);
+                        }
                 }
 
-                // --- end of filler code. ---
-                ImageView car = createImage(170, 247);
-                pane.getChildren().add(car);
-
-                animateCarAlongPath(paths3[0], car);
+                for (int i = 0; i < allLines.length; i++) {
+                        for (int j = 0; j < allArcs[i].length; j++) {
+                                this.pane.getChildren().add(allLines[i][j]);
+                        }
+                }
         }
 
+        /*
+         * The main function to run an animation of a car going through the junction.
+         * 
+         * @param entry - The char defining which road the car enters from - must be of
+         * 'N', 'E', 'S', 'W'.
+         * 
+         * @param exit - The char defining which road the car exits to - must be of 'N',
+         * 'E', 'S', 'W'.
+         * 
+         * @param lane - The lane number the car will travel along. - Must be between 0
+         * and 4.
+         */
+        public void chooseAnimation(char entry, char exit, int lane) {
+
+                if (0 > lane || lane > 4) {
+                        System.out.println("Invalid lane number. Must be between 0 and 4 inclusive.");
+                        return;
+                }
+
+                ImageView car = createCar();
+                pane.getChildren().add(car);
+                switch (entry) {
+                        case 'N':
+                                switch (exit) {
+                                        case 'E':
+                                                animateCarAlongPath(this.northToEastPaths[lane], car);
+                                                break;
+                                        case 'S':
+                                                animateCarAlongPath(this.northToSouthPaths[lane], car);
+                                                break;
+                                        case 'W':
+                                                animateCarAlongPath(this.northToWestPaths[lane], car);
+                                                break;
+                                        default:
+                                                System.out.println("Invalid character exit");
+                                                break;
+                                }
+                                break;
+
+                        case 'E':
+                                switch (exit) {
+                                        case 'S':
+                                                animateCarAlongPath(this.eastToSouthPaths[lane], car);
+                                                break;
+                                        case 'W':
+                                                animateCarAlongPath(this.eastToWestPaths[lane], car);
+                                                break;
+                                        case 'N':
+                                                animateCarAlongPath(this.eastToNorthPaths[lane], car);
+                                                break;
+                                        default:
+                                                System.out.println("Invalid character exit");
+                                                break;
+                                }
+                                break;
+
+                        case 'S':
+                                switch (exit) {
+                                        case 'W':
+                                                animateCarAlongPath(this.southToWestPaths[lane], car);
+                                                break;
+                                        case 'N':
+                                                animateCarAlongPath(this.southToNorthPaths[lane], car);
+                                                break;
+                                        case 'E':
+                                                animateCarAlongPath(this.southToEastPaths[lane], car);
+                                                break;
+                                        default:
+                                                System.out.println("Invalid character exit");
+                                                break;
+                                }
+                                break;
+
+                        case 'W':
+                                switch (exit) {
+                                        case 'N':
+                                                animateCarAlongPath(this.westToNorthPaths[lane], car);
+                                                break;
+                                        case 'E':
+                                                animateCarAlongPath(this.westToEastPaths[lane], car);
+                                                break;
+                                        case 'S':
+                                                animateCarAlongPath(this.westToSouthPaths[lane], car);
+                                                break;
+                                        default:
+                                                System.out.println("Invalid character exit");
+                                                break;
+                                }
+                                break;
+                        default:
+                                System.out.println("Invalid character entry");
+                                break;
+                }
+
+                System.out.println("Animation function finished.");
+        }
 }

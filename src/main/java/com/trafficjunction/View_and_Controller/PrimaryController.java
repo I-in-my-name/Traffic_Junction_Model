@@ -82,8 +82,6 @@ public class PrimaryController {
     @FXML
     private AnchorPane junctionAnchor;
 
-    AnimationHandler animationHandler = new AnimationHandler();
-
     @FXML
     private void initialize() {
         // Input validation against words.
@@ -92,6 +90,8 @@ public class PrimaryController {
                 DataSanitisation.applyNumericRestriction((TextField) node);
             }
         }
+
+        AnimationHandler animationHandler = new AnimationHandler(junctionAnchor);
 
         // Add button press to traffic light to open the window.
         trafficLightButton.setOnMouseClicked(event -> {
@@ -229,7 +229,8 @@ public class PrimaryController {
 
         // ######################### Trialling animation ###################//
 
-        animationHandler.addToAnchorPane(junctionAnchor);
+        // animationHandler.addToAnchorPane();
+        animationHandler.chooseAnimation('W', 'N', 3);
 
         // ######################### Saving and Memento's section ###################//
 
