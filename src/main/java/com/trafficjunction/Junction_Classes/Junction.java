@@ -182,10 +182,6 @@ public class Junction {
             totalNumberOfVehicles += lane.getTotalVehicleNum();
             totalWaitTime += lane.getAverageWaitTime() * lane.getTotalVehicleNum();
         }
-        System.out.println("Average wait times");
-        System.out.println(totalWaitTime);
-        System.out.println(totalNumberOfVehicles);
-        System.out.println();
         return totalWaitTime / totalNumberOfVehicles;
     }
 

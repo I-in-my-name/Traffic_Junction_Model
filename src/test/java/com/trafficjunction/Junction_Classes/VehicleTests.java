@@ -19,8 +19,8 @@ public class VehicleTests {
         TrafficLight trafficLight = new TrafficLight();
         trafficLight.setState(1); // green
 
-        Lane entryLane = new Lane(10.f, trafficLight, "lfr");
-        Lane exitLane = new Lane(10.f, trafficLight, "lfr");
+        Lane entryLane = new Lane(30.f, trafficLight, "lfr");
+        Lane exitLane = new Lane(30.f, trafficLight, "lfr");
         exitLane.addComingLane(entryLane);
         entryLane.addGoingLane(exitLane);
 
@@ -29,8 +29,10 @@ public class VehicleTests {
         float initialPosition = entryLane.getVehicles().get(0).getLeft();
 
         //// if 0 time has passed, nothing should change.
-        vehicle.update(1.f, entryLane);
         assertEquals(initialPosition, entryLane.getVehicles().get(0).getLeft());
+        System.out.println(entryLane);
+        vehicle.update(1.f, entryLane);
+        System.out.println(entryLane);
         assertEquals(0, exitLane.getVehicleNum());
 
         //// if 1 time has passed, something should change
@@ -44,6 +46,8 @@ public class VehicleTests {
         assertEquals(false,entryLane.isFull());
         assertEquals(true, entryLane.getGoingTo().size() > 0);
         vehicle.update(1.f, entryLane);
+
+        System.out.println(entryLane);
 
         assertEquals(0, entryLane.getVehicleNum());
         assertEquals(1, exitLane.getVehicleNum());

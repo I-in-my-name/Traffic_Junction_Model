@@ -24,7 +24,6 @@ public class Vehicle {
     }
     public Vehicle(float time, float max_speed, float length, List<Lane> route) {
         
-        
         this.speed = max_speed;
         this.max_speed = max_speed;
         this.length = length;
@@ -153,7 +152,7 @@ public class Vehicle {
             // changed this from above to below as position > traversable position,
             // part of change described above
             float traversable_distance = position - traversable_position;
-            float distance = Math.min(traversable_distance, max_traversable_distance);
+            float distance = Math.max(traversable_distance, max_traversable_distance);
             // position - distance is new position
             // closer to 0 is closer to end of lane so position gets smaller as distance travelled grows
             this_pair.setLeft(position - distance);
@@ -206,6 +205,9 @@ public class Vehicle {
         return time_taken;
     }
     public float calculateDistanceFromTime(float time_to_travel) {
+        if (time_to_travel==0) {
+            return 0;
+        }
         float distance = max_speed / time_to_travel;
         return distance;
     }

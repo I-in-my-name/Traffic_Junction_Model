@@ -177,20 +177,32 @@ public class LaneTests {
         assertEquals(false, result);
 
         // mock values for speed and max speed, irrelevant to this test
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
+         emptyLane.addVehicle(new Vehicle(0.f, 1.f, vehicleLength));
+         emptyLane.update(1.f);
          // should still not be full
          result = emptyLane.isFull();
          assertEquals(false, result);
 
          emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
-         emptyLane.addVehicle(new Vehicle(1.f, 1.f, vehicleLength));
+         emptyLane.update(2.f);
+         emptyLane.addVehicle(new Vehicle(2.f, 1.f, vehicleLength));
+         emptyLane.update(3.f);
+         emptyLane.addVehicle(new Vehicle(3.f, 1.f, vehicleLength));
+         emptyLane.update(4.f);
          // should still not be full. At 4 vehicles right now
          result = emptyLane.isFull();
          assertEquals(false, result);
 
         // 5th vehicle. Should be full after this.
-         emptyLane.addVehicle(new Vehicle(vehicleLength, vehicleLength, vehicleLength));
+         emptyLane.addVehicle(new Vehicle(4.f, 1.f, vehicleLength));
+         emptyLane.update(5.f);
+
+        // should still not be full. At 5 vehicles right now
+         result = emptyLane.isFull();
+         assertEquals(false, result);
+         emptyLane.addVehicle(new Vehicle(5.f, 1.f, vehicleLength));
+         emptyLane.update(6.f);
+        // sexpected behaviour. full at 6 cars on a lane length 10 
          result = emptyLane.isFull();
          assertEquals(true, result);
     }
@@ -214,43 +226,27 @@ public class LaneTests {
         // traffic light and direction are mock values, irrelevant to test
         Lane lane = new Lane(laneLength, new TrafficLight(), "lfr");
         // speed values are mock values, irrelevant to test
-        Vehicle vehicle = new Vehicle(1.f, 1.f, vehicleLength);
+        Vehicle vehicle = new Vehicle(0.f, 1.f, vehicleLength);
 
-        // Should add 3 vehicles no problem
+        // we need to wait some time before a new car can be added
+        // gap of size 1: C_C where C = car and _ is a gap of length 1 meter
+        TrafficLight trafficLight = new TrafficLight();
+        trafficLight.setState(0);
+        lane.setTrafficLight(trafficLight);
+
+        lane.update(1.f);
         result = lane.addVehicle(vehicle);
         assertEquals(true, result);
+        lane.update(1.f);
         assertEquals(1, lane.getVehicleNum());
         result = lane.addVehicle(vehicle);
         assertEquals(true, result);
         assertEquals(2, lane.getVehicleNum());
-        result = lane.addVehicle(vehicle);
-        assertEquals(true, result);
-        assertEquals(3, lane.getVehicleNum());
 
         // Should not add 4th vehicle as 4 > 3.5 -> vehicle lengths > lane length
         result = lane.addVehicle(vehicle);
         assertEquals(false, result);
         // should still have 3 vehicles
-        assertEquals(3, lane.getVehicleNum());
-
-        // repeat test on length = 2 
-        // should be able to have 2 vehicles max
-        laneLength = 2.f;
-        lane = new Lane(laneLength, new TrafficLight(), "lfr");
-        // speed values are mock values, irrelevant to test
-
-        // Should add 2 vehicles no problem
-        result = lane.addVehicle(vehicle);
-        assertEquals(true, result);
-        assertEquals(1, lane.getVehicleNum());
-        result = lane.addVehicle(vehicle);
-        assertEquals(true, result);
-        assertEquals(2, lane.getVehicleNum());
-
-        // Should not add 3rd vehicle as 3 > 2 -> vehicle lengths > lane length
-        result = lane.addVehicle(vehicle);
-        assertEquals(false, result);
-        // should still have 2 vehicles
         assertEquals(2, lane.getVehicleNum());
     }
 

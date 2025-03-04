@@ -238,7 +238,7 @@ public class Lane {
         float vehicleLength = lastVehicle.getRight().getLength();
         // There is enough space if the gap from the last vehicle to the end of the lane
         // is at least the length of a vehicle plus the fixed gap.
-        return (length - lastVehiclePos) < (vehicleLength + gap); // check if the space left in the lane is less than the space required for adding a new vehicle
+        return (length - lastVehiclePos - vehicleLength) < (gap); // check if the space left in the lane is less than the space required for adding a new vehicle
         /*
         With this change, if the lane is empty the check returns false. 
         If there’s at least one vehicle, a new vehicle can only be added if there is enough space 
@@ -291,9 +291,6 @@ public class Lane {
     }
 
     public void calculateMetrics(float timestamp) {
-        System.out.println("Metric size");
-        System.out.println(metrics.getSize());
-        System.out.println();
         metrics.calculateMetrics(timestamp);
     }
 
@@ -336,7 +333,7 @@ public class Lane {
             }
         }
 
-        metrics.updateQueueSize(time, currentQueueLength);
+        metrics.updateQueueSize(currentQueueLength);
     }
 
     // Useful for testing

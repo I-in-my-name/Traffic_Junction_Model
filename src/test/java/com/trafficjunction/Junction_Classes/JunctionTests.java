@@ -626,6 +626,7 @@ public class JunctionTests {
         junction.addExitLane(2);
         junction.addExitLane(2);
         junction.addExitLane(3);
+        junction.addExitLane(3);
 
         junction.connectJunction();
 

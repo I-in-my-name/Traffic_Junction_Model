@@ -14,7 +14,9 @@ public class LaneMetrics {
     // Float is timestamp, integer is size of queue
     // Storing time with sie could be used for more
     // complex data analytics later
-    private List<Pair<Float, Integer>> queueLengths;
+    private List<Integer> queueLengths;
+    private int lastQueueLength;
+
 
     private List<Float> AverageWaitTimes;
     private List<Float> maxWaitTimes;
@@ -25,6 +27,7 @@ public class LaneMetrics {
     public LaneMetrics() {
         vehicleMetrics = new ArrayList<>();
         queueLengths = new ArrayList<>();
+        lastQueueLength = 0;
     }
 
     public void addVehicleMetric(VehicleMetrics vehicleMetric) {
@@ -52,24 +55,22 @@ public class LaneMetrics {
      * Lane must call this method every update method to maintain
      * accurate recording of queue lengths
      */
-    public void updateQueueSize(float timestamp, int currentQueueLength) {
+    public void updateQueueSize(int currentQueueLength) {
         // only add new value if there are currently no values or it is a different
         // queue length to before
-        if (queueLengths.isEmpty()) {
-            queueLengths.add(new Pair<>(timestamp, currentQueueLength));
-            return;
+        if (lastQueueLength < currentQueueLength) {
+            lastQueueLength = currentQueueLength;
+        } else if (lastQueueLength > currentQueueLength) {
+            queueLengths.add(lastQueueLength);
+            lastQueueLength = currentQueueLength;
         }
-        int lastQueueLength = queueLengths.getLast().getRight();
-        if (currentQueueLength != lastQueueLength)
-            queueLengths.add(new Pair<>(timestamp, currentQueueLength));
     }
 
     public int getMaxQueueLength() {
-        maxQueueLength = -1;
-        for (Pair<Float, Integer> queueLengthAtTime : queueLengths) {
-            int queueLength = queueLengthAtTime.getRight();
-            if(queueLength > maxQueueLength)
-                maxQueueLength = queueLength;
+        maxQueueLength = 0;
+        for (Integer queue : queueLengths) {
+            if(queue > maxQueueLength)
+                maxQueueLength = queue;
         }
         return maxQueueLength;
     }

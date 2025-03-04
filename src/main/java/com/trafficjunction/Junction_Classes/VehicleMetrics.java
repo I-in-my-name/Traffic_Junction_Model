@@ -24,14 +24,21 @@ class VehicleMetrics {
     // car could be moving immediately, in which case start_stop_times[0] = startExistingTime
     // may not thoguh
     // total_wait = start_stop_times[i] - start_stop_times[i - 1] for every odd i + (start_stop_times[0] - startExistingTime) 
-    private float totalWaitTime = 0; // total time spent waiting
-    private List<Float> stopTimes; // stores timestamps for when vehicle stops
-    private boolean isMoving; // if vehicle is currently moving
+    private float lastWaitTime;    // total time spent waiting
+    private float lastStopTime;   // last timestamp the vehicle has stopped
+    private float totalWaitTime;
+    private List<Float> waitTimes;
+    //private List<Float> stopTimes;     // stores timestamps for when vehicle stops // REMOVE
+    private boolean isMoving;   // if vehicle is currently moving
 
     // @param startExistingTime is when the vehicle first appears in the simulation
     public VehicleMetrics(float startExistingTime) {
+        this.lastWaitTime = 0.f;
+        this.lastStopTime = 0.f;
+        this.totalWaitTime = 0.f;
+        this.waitTimes = new ArrayList<>();
         this.startExistingTime = startExistingTime;
-        this.stopTimes = new ArrayList<>();
+        //this.stopTimes = new ArrayList<>(); // REMOVE
         this.isMoving = true; // assuming vehicles starts moving
     }
 
@@ -46,7 +53,13 @@ class VehicleMetrics {
     public void startMoving(float timestamp) {
         if (!isMoving) { // prevent consecutive startMoving calls
             isMoving = true;
-            totalWaitTime += timestamp;
+            lastWaitTime = timestamp - lastStopTime;    // Calculate new last wait time
+            waitTimes.add(lastWaitTime);                // Add last wait time to list
+            //System.out.print("Last wait time: ");
+            //System.out.println(lastWaitTime);
+            //System.out.print("Wait times: ");
+            //System.out.println(waitTimes);
+
         }
     }
 
@@ -55,30 +68,32 @@ class VehicleMetrics {
     public void stopMoving(float timestamp) {
         if (isMoving) { // Prevent consecutive stopMoving calls
             isMoving = false;
-            stopTimes.add(timestamp);
-            totalWaitTime -= timestamp;
+            lastStopTime = timestamp;
         }
     }
 
     // Test written for
     // calculates total wait time once vehicle removed from simulation, ensures all waiting periods are summed prior to deletion
     public void calculateTotalWaitTime(float exitTimestamp) {
-        System.out.println("Calculate total wait time");
-        System.out.println(isMoving);
-        System.out.println(totalWaitTime);
-        System.out.println(exitTimestamp);
-        System.out.println();
-        if (!isMoving && !stopTimes.isEmpty()) {
-            System.out.println("Not moving");
+        totalWaitTime = 0.f;
+        //System.out.print("Wait times: ");
+        //System.out.println(waitTimes);
+        for (float time : waitTimes) {
+            totalWaitTime += time;
+        }
+        //System.out.print("Total: ");
+        //System.out.println(totalWaitTime);
+        if (!isMoving && !waitTimes.isEmpty()) {
             // If not moving, then the last stop time is the final stop time
             // add it to the total wait time as it has previously been subtracted from the wait time
             // Essentially the time spent waiting doesn't care about the last stop time
             // as it doesn't start moving again, so that time isn't relevant to waiting time
-            totalWaitTime += stopTimes.get(stopTimes.size() - 1); 
+            if (!isMoving) {
+                totalWaitTime += exitTimestamp - lastStopTime;
+            }
+            
             //totalWaitTime += (exitTimestamp - stopTimes.get(stopTimes.size() - 1));
         }
-        System.out.println(totalWaitTime);
-        System.out.println();
     }
 /*
     // Don't need test for

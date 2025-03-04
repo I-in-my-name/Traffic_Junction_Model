@@ -12,15 +12,16 @@ public class LaneMetricsTests {
         // Simple typical test case
         // Record different sized queues at different times
         // Output should be the highest queue given, which will be 50
-        laneMetrics.updateQueueSize(1.f, 2);
-        laneMetrics.updateQueueSize(2.f, 23);
-        laneMetrics.updateQueueSize(3.f, 49);
-        laneMetrics.updateQueueSize(4.f, 0);
-        laneMetrics.updateQueueSize(5.f, 23);
-        laneMetrics.updateQueueSize(6.f, 50); // 50 is biggest queue
-        laneMetrics.updateQueueSize(7.f, 45);
-        laneMetrics.updateQueueSize(8.f, 10);
-        laneMetrics.updateQueueSize(9.f, 3);
+        
+        laneMetrics.updateQueueSize(2);
+        laneMetrics.updateQueueSize(23);
+        laneMetrics.updateQueueSize(49);
+        laneMetrics.updateQueueSize(0);
+        laneMetrics.updateQueueSize(23);
+        laneMetrics.updateQueueSize(50); // 50 is biggest queue
+        laneMetrics.updateQueueSize(45);
+        laneMetrics.updateQueueSize(10);
+        laneMetrics.updateQueueSize(3);
 
         int expectedQueueLength = 50;
         int actualQueueLength = laneMetrics.getMaxQueueLength();
@@ -51,6 +52,8 @@ public class LaneMetricsTests {
         vehicleOne.stopMoving(100.f);
         vehicleOne.calculateTotalWaitTime(100.f);
 
+        assertEquals(43.f, vehicleOne.getTotalWaitTime());
+
         // wait time = total time - time spent moving
         // = (100 - 5) - (40 - 5) - (100 - 60)
         // = 95 - 35 - 40 = 20
@@ -58,6 +61,8 @@ public class LaneMetricsTests {
         vehicleTwo.startMoving(60.f);
         vehicleTwo.stopMoving(100.f);
         vehicleTwo.calculateTotalWaitTime(100.f);
+
+        assertEquals(20.f, vehicleTwo.getTotalWaitTime());
 
         // wait time = total time - time spent moving
         // = 10 - (10 - 10) = 0
@@ -71,7 +76,7 @@ public class LaneMetricsTests {
         float expectedAverageWaitTime = (0.f + 20.f + 43.f) / 3.f;
         float expectedMaxWaitTime = 43.f;
 
-        laneMetrics.calculateMetrics();
+        laneMetrics.calculateMetrics(100.f); //?? what should the value be
 
         assertEquals(expectedAverageWaitTime, laneMetrics.getAverageWaitTime());
         assertEquals(expectedMaxWaitTime, laneMetrics.getMaxWaitTime());

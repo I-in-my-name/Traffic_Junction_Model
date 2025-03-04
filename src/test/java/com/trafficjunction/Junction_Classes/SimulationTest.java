@@ -1,6 +1,5 @@
 package com.trafficjunction.Junction_Classes;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +21,8 @@ public class SimulationTest {
 
         junction.connectJunction();
 
-        TrafficLight
-        junction.setLaneTrafficLight(0, 0, null)
+        //TrafficLight
+        junction.setLaneTrafficLight(0, 0, null);
     }
 
     @Test

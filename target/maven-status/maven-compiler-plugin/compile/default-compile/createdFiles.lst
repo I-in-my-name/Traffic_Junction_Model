@@ -4,6 +4,7 @@ com\trafficjunction\Junction_Classes\Bus.class
 com\trafficjunction\UserInputData.class
 com\trafficjunction\View_and_Controller\PrimaryController.class
 com\trafficjunction\InputData.class
+com\trafficjunction\Junction_Classes\LaneMetrics.class
 com\trafficjunction\Junction_Classes\VehicleMetrics.class
 com\trafficjunction\Junction_Classes\Car.class
 com\trafficjunction\View_and_Controller\SecondaryController.class
