@@ -1,5 +1,7 @@
 package com.trafficjunction.UI_Utilities;
 
+import java.util.Objects;
+
 /*
  * Class implementing different road types. Each one is associated with a different image and has different
  * turning properties.
@@ -7,9 +9,9 @@ package com.trafficjunction.UI_Utilities;
 
 public class RoadType {
     String imagePath; // The path to the image of the road.
-    boolean straight; // Whether the road allows going straight.
-    boolean left; // Whether the road allows turning left.
-    boolean right; // Whether the road allows turning right.
+    boolean straight; // Whether the road is going straight.
+    boolean left; // Whether the road is a left turn.
+    boolean right; // Whether the road is a right turn.
 
     /*
      * Constructor method for the RoadType class.
@@ -56,5 +58,34 @@ public class RoadType {
         if(this.getRight()) sb.append("R");
 
         return sb.toString();
+    }
+
+    /*
+     * Method to compare roadtype objects.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof RoadType)) {
+            return false;
+        }
+
+        RoadType roadType = (RoadType) o;
+
+        return roadType.getImagePath().equals(this.imagePath) &&
+                roadType.getStraight() == this.straight &&
+                roadType.getLeft() == this.left &&
+                roadType.getRight() == this.right;
+    }
+
+    /*
+     * Method to generate a hashcode for the roadtype object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.imagePath, this.straight, this.left, this.right);
     }
 }

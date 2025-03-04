@@ -197,12 +197,23 @@ public class PrimaryController {
 
     @FXML
     private void subtractLane(UILane[] lanes, int laneNum) {
-        // TODO
+        System.out.println("Subtracting lane");
+        for (int i = laneNum; i < 5; i++) {
+            lanes[i].disableLane();
+            lanes[i].update();
+        }
+        lanes[laneNum - 1].addLeftTurns();
     }
 
     @FXML
     private void addLane(UILane[] lanes, int laneNum) {
-        // TODO
+        System.out.println("Adding lane");
+        for (int i = 0; i < laneNum; i++) {
+            lanes[i].enableLane();
+            lanes[i].update();
+        }
+        lanes[laneNum - 1].addLeftTurns();
+        lanes[laneNum - 2].removeLeftTurns();
     }
 
     @FXML
