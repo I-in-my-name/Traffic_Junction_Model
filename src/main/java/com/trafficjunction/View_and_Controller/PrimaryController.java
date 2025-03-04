@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.UILane;
+import com.trafficjunction.UI_Utilities.AnimationHandler;
 import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
 import com.trafficjunction.View_and_Controller.Saving_Utils.ConfigurationSnapshot;
 
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -57,24 +59,28 @@ public class PrimaryController {
     private UILane[] southRoadAllLanes;
     private UILane[] westRoadAllLanes;
 
-    //File system FXML Links:
+    // File system FXML Links:
     @FXML
     private MenuItem saveMenuItem;
     @FXML
     private MenuItem loadMenuItem;
 
-    //File system Java resources:
+    // File system Java resources:
     public FileChooser fileChooser = new FileChooser();
-    
-    //Undo Redo FXML Links:
+
+    // Undo Redo FXML Links:
     @FXML
     private Button undoButton;
     @FXML
     private Button redoButton;
 
-    //Undo Redo Java resources:
+    // Undo Redo Java resources:
     private CareTaker careTaker = new CareTaker();
     private JunctionConfiguration configuration = new JunctionConfiguration();
+
+    // Anchor that all junction components are contained within.
+    @FXML
+    private AnchorPane junctionAnchor;
 
     @FXML
     private void initialize() {
@@ -84,6 +90,8 @@ public class PrimaryController {
                 DataSanitisation.applyNumericRestriction((TextField) node);
             }
         }
+
+        AnimationHandler animationHandler = new AnimationHandler(junctionAnchor);
 
         // Add button press to traffic light to open the window.
         trafficLightButton.setOnMouseClicked(event -> {
@@ -219,32 +227,35 @@ public class PrimaryController {
             }
         });
 
+        // ######################### Trialling animation ###################//
 
+        // animationHandler.addToAnchorPane();
+        animationHandler.chooseAnimation('W', 'N', 3);
 
-        //######################### Saving and Memento's section ###################//
+        // ######################### Saving and Memento's section ###################//
 
         fileChooser.setTitle("value");
         loadMenuItem.setOnAction((ActionEvent event) -> {
             File chosenFile = fileChooser.showOpenDialog((Stage) vehicleNumGrid.getScene().getWindow());
-            try{
+            try {
                 JunctionConfiguration loadedConfiguration = JunctionConfiguration.loadObject(chosenFile);
                 configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
                 careTaker.addSnap(new ConfigurationSnapshot(configuration));
                 System.out.println("SNAPSHOT ADDED");
                 populateFieldsWithData(configuration);
-            } catch (Exception e) { e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
-        
+
         saveMenuItem.setOnAction((ActionEvent event) -> {
             File chosenFile = fileChooser.showSaveDialog((Stage) vehicleNumGrid.getScene().getWindow());
             try {
-                //move into program
+                // move into program
                 gatherUserData().saveObject(chosenFile);
             } catch (Exception e) {
             }
         });
-        
 
     }
 
@@ -290,9 +301,9 @@ public class PrimaryController {
     @FXML
     private void runSimulationButtonPress() {
         JunctionConfiguration userData = gatherUserData();
-        
-        //TODO call simulation
-        
+
+        // TODO call simulation
+
     }
 
     private void updateImage(UILane lane, UILane[] laneArr) {
@@ -340,10 +351,11 @@ public class PrimaryController {
     }
 
     /*
-     * Both of the next two functions must be added to whenever new data is decided to be relevant
+     * Both of the next two functions must be added to whenever new data is decided
+     * to be relevant
      */
-    private JunctionConfiguration gatherUserData(){
-        //This is notably in order.
+    private JunctionConfiguration gatherUserData() {
+        // This is notably in order.
         int[] sequentialList = new int[12];
         int index = 0;
         for (Node child : vehicleNumGrid.getChildren()) {
@@ -352,40 +364,48 @@ public class PrimaryController {
                 String text = field.getText(); // replaces invisible/non-printable characters
                 int number = 0;
 
-                if (!text.isEmpty()){
-                    number = Integer.parseInt(text); 
+                if (!text.isEmpty()) {
+                    number = Integer.parseInt(text);
                 }
                 sequentialList[index] = number;
                 index++;
-            } catch (Exception ignored) {ignored.printStackTrace();}
+            } catch (Exception ignored) {
+                ignored.printStackTrace();
+            }
         }
         JunctionConfiguration data = new JunctionConfiguration();
-        if (data.setDirectionInfo(sequentialList)) return data;
+        if (data.setDirectionInfo(sequentialList))
+            return data;
 
-        //TODO ERROR HANDLING, needs to be handled elsewhere to appropriately show error message.
+        // TODO ERROR HANDLING, needs to be handled elsewhere to appropriately show
+        // error message.
         return null;
     }
-    private boolean populateFieldsWithData(JunctionConfiguration configuration){
+
+    private boolean populateFieldsWithData(JunctionConfiguration configuration) {
         int[] directionalThroughput = configuration.getDirectionInfo();
         int index = 0;
         for (Node child : vehicleNumGrid.getChildren()) {
             try {
                 TextField field = (TextField) child;
-                field.setText(String.valueOf(directionalThroughput[index])); 
+                field.setText(String.valueOf(directionalThroughput[index]));
                 index++;
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return true;
     }
+
     @FXML
-    private void undo(){
+    private void undo() {
         System.out.println("undo pressed");
         careTaker.undo();
         populateFieldsWithData(configuration);
-        
+
     }
+
     @FXML
-    private void redo(){
+    private void redo() {
         System.out.println("undo pressed");
         careTaker.redo();
         populateFieldsWithData(configuration);
