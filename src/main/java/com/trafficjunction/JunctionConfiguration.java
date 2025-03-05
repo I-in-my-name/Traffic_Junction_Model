@@ -21,6 +21,9 @@ public class JunctionConfiguration implements Serializable{
 
         wtn,wte,wts,
     }
+    private boolean animation; 
+    // private float time;
+
     /*
      * Of Note:
      * the ordering here follows a NESW system and a clockwise sub system, i.e 
@@ -29,6 +32,19 @@ public class JunctionConfiguration implements Serializable{
      * E to N is last in the list e:... because going clockwise from East, South is next.directionalThroughput
      */
     private Map<directions, Integer> directionalThroughput = new HashMap<>();
+
+    private void setAnimation(boolean bool){
+        animation = bool;
+    }
+    private boolean  getAnimation(){
+        return animation;
+    }
+
+    public JunctionConfiguration(){
+        int[] arr = {0,0,0,0,0,0,0,0,0,0,0,0,0};
+        this.setDirectionInfo(arr);
+    }
+    
 
     //Logic: Partial configurations must be valid for the save features to work, so no constructor inputs.
     public boolean setDirectionInfo(int[] input) {
@@ -73,7 +89,6 @@ public class JunctionConfiguration implements Serializable{
     public Integer getOneDirection(directions direction) {
         return directionalThroughput.get(direction);
     }
-
 
     public boolean saveObject(File objectFile){
         try(

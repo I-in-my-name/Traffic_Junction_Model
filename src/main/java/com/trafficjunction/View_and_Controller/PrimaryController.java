@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.UI_Utilities.AnimationHandler;
-import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.RoadType;
 import com.trafficjunction.UI_Utilities.UILane;
 import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
@@ -14,17 +13,16 @@ import com.trafficjunction.View_and_Controller.Saving_Utils.ConfigurationSnapsho
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -62,6 +60,35 @@ public class PrimaryController {
     private UILane[] southRoadAllLanes;
     private UILane[] westRoadAllLanes;
 
+    //Configuration FXML Links:
+    @FXML
+    private TextField NTE;
+    @FXML
+    private TextField NTS;
+    @FXML
+    private TextField NTW;
+    
+    @FXML
+    private TextField ETS;
+    @FXML
+    private TextField ETW;
+    @FXML
+    private TextField ETN;
+
+    @FXML
+    private TextField STW;
+    @FXML
+    private TextField STN;
+    @FXML
+    private TextField STE;
+
+    @FXML
+    private TextField WTN;
+    @FXML
+    private TextField WTE;
+    @FXML
+    private TextField WTS;
+
     // File system FXML Links:
     @FXML
     private MenuItem saveMenuItem;
@@ -87,6 +114,7 @@ public class PrimaryController {
 
     @FXML
     private void initialize() {
+        careTaker.addSnap(new ConfigurationSnapshot(configuration));
         // Input validation against words.
         // for (Tab tab : vehicleTabs.getTabs()) {
         // for (Node node : tab.)
@@ -238,32 +266,36 @@ public class PrimaryController {
 
         // ######################### Saving and Memento's section ###################//
 
-        // fileChooser.setTitle("value");
-        // loadMenuItem.setOnAction((ActionEvent event) -> {
-        // File chosenFile = fileChooser.showOpenDialog((Stage)
-        // vehicleNumGrid.getScene().getWindow());
-        // try {
-        // JunctionConfiguration loadedConfiguration =
-        // JunctionConfiguration.loadObject(chosenFile);
-        // configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
-        // careTaker.addSnap(new ConfigurationSnapshot(configuration));
-        // System.out.println("SNAPSHOT ADDED");
-        // populateFieldsWithData(configuration);
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
-        // });
+        fileChooser.setTitle("value");
+        loadMenuItem.setOnAction((ActionEvent event) -> {
+        File chosenFile = fileChooser.showOpenDialog((Stage)
+        NTE.getScene().getWindow());
+        if (chosenFile.canRead()) {
+            try {
+                JunctionConfiguration loadedConfiguration =
+                JunctionConfiguration.loadObject(chosenFile);
+                configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
+                careTaker.addSnap(new ConfigurationSnapshot(configuration));
+                populateFieldsWithData(configuration);
+            }catch(NullPointerException nullPointerException){
+                //Exited out of file chooser so ignore
+                Alert errorAlert = new Alert(AlertType.ERROR);
+                errorAlert.setHeaderText("Wrong Filetype");
+                errorAlert.setContentText("The File you are trying to access is of the wrong filetype. Please ensure you have selected the correct file.");
+                errorAlert.showAndWait();
+            }
+            }   
+        });
 
-        // saveMenuItem.setOnAction((ActionEvent event) -> {
-        // File chosenFile = fileChooser.showSaveDialog((Stage)
-        // vehicleNumGrid.getScene().getWindow());
-        // try {
-        // // move into program
-        // gatherUserData().saveObject(chosenFile);
-        // } catch (Exception e) {
-        // }
-        // });
-
+        saveMenuItem.setOnAction((ActionEvent event) -> {
+        File chosenFile = fileChooser.showSaveDialog((Stage)
+        NTE.getScene().getWindow());
+        try {
+            // move into program
+            gatherUserData().saveObject(chosenFile);
+        } catch (Exception e) {
+        }
+        });
     }
 
     @FXML
@@ -294,46 +326,6 @@ public class PrimaryController {
         // TODO call simulation
         return;
 
-    }
-
-    private boolean verifyLane(String[] lanetypes, boolean oneLightMode) {
-
-        // idea to follow: L LF RF R AND there is maximum ONE LF and ONE RF
-        // CANNOT HAVE LF AND M OR RF AND M but can have lf and rf. for onelane
-
-        int[] features = laneVerificationFeatures(lanetypes);
-        int leftIndex = features[0];
-        int leftForwardIndex = features[1];
-        int rightForwardIndex = features[2];
-        int rightIndex = features[3];
-
-        if (oneLightMode) {
-            String holdem;
-            for (int i = 0; i < lanetypes.length; i++) {
-                holdem = lanetypes[i];
-                // If we have two Left forward turns it is invalid
-                if (holdem.contains("LF") && leftForwardIndex != i)
-                    return false;
-                // If we have two right forward turns it is invalid
-                if (holdem.contains("FR") && rightForwardIndex != i)
-                    return false;
-                // If we have a multilane and either a leftforward or righforward lane it is
-                // invalid.
-                if (holdem.contains("LFR") && (rightForwardIndex != -100 || leftForwardIndex != 100))
-                    return false;
-            }
-        }
-
-        // the idea here is that we need to follow the format: L LF RF R
-        if (leftIndex < rightIndex || leftIndex < rightForwardIndex || rightIndex > leftForwardIndex)
-            return false;
-        if (rightIndex > rightForwardIndex && rightForwardIndex != -100
-                || (leftIndex < leftForwardIndex && leftForwardIndex != 100))
-            return false;
-        if (rightForwardIndex > leftForwardIndex)
-            return false;
-
-        return true;
     }
 
     private int[] laneVerificationFeatures(String[] lanetypes) {
@@ -465,7 +457,6 @@ public class PrimaryController {
                 // next lane can turn left
                 laneArr[leftUpTo - 1].addLeftTurn();
             }
-
         }
 
         System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
@@ -529,60 +520,60 @@ public class PrimaryController {
      * Both of the next two functions must be added to whenever new data is decided
      * to be relevant
      */
-    // private JunctionConfiguration gatherUserData() {
-    // // This is notably in order.
-    // int[] sequentialList = new int[12];
-    // int index = 0;
-    // for (Node child : vehicleNumGrid.getChildren()) {
-    // try {
-    // TextField field = (TextField) child;
-    // String text = field.getText(); // replaces invisible/non-printable characters
-    // int number = 0;
+    private JunctionConfiguration gatherUserData() {
+    // This is notably in order.
+    int[] sequentialList = new int[12];
 
-    // if (!text.isEmpty()) {
-    // number = Integer.parseInt(text);
-    // }
-    // sequentialList[index] = number;
-    // index++;
-    // } catch (Exception ignored) {
-    // ignored.printStackTrace();
-    // }
-    // }
-    // JunctionConfiguration data = new JunctionConfiguration();
-    // if (data.setDirectionInfo(sequentialList))
-    // return data;
+    TextField[] directionalFields = 
+    {
+        NTE, NTS, NTW,
+        ETS, ETW, ETN,
+        STW, STN, STE,
+        WTN, WTE, WTS
+    };
 
-    // // TODO ERROR HANDLING, needs to be handled elsewhere to appropriately show
-    // // error message.
-    // return null;
-    // }
+    for (int i = 0; i < directionalFields.length; i++) {
+        String text = directionalFields[i].getText(); // replaces invisible/non-printable characters
+        int number = 0;
+        if (!text.isEmpty()) {
+            number = Integer.parseInt(text);
+        }
+        sequentialList[i] = number;
+    }
+    JunctionConfiguration data = new JunctionConfiguration();
+    data.setDirectionInfo(sequentialList);
+    return data;
+    }
 
-    // private boolean populateFieldsWithData(JunctionConfiguration configuration) {
-    // int[] directionalThroughput = configuration.getDirectionInfo();
-    // int index = 0;
-    // for (Node child : vehicleNumGrid.getChildren()) {
-    // try {
-    // TextField field = (TextField) child;
-    // field.setText(String.valueOf(directionalThroughput[index]));
-    // index++;
-    // } catch (Exception ignored) {
-    // }
-    // }
-    // return true;
-    // }
+    private boolean populateFieldsWithData(JunctionConfiguration configuration) {
+        int[] directionalThroughput = configuration.getDirectionInfo();
+
+        TextField[] directionalFields = 
+        {
+            NTE, NTS, NTW,
+            ETS, ETW, ETN,
+            STW, STN, STE,
+            WTN, WTE, WTS
+        };
+
+        for (int i = 0; i < directionalFields.length; i++) {
+            directionalFields[i].setText(Integer.toString(directionalThroughput[i]));
+        }
+        return true;
+    }
 
     @FXML
     private void undo() {
         System.out.println("undo pressed");
         careTaker.undo();
-        // populateFieldsWithData(configuration);
+        populateFieldsWithData(configuration);
 
     }
 
     @FXML
     private void redo() {
-        System.out.println("undo pressed");
+        System.out.println("red pressed");
         careTaker.redo();
-        // populateFieldsWithData(configuration);
+        populateFieldsWithData(configuration);
     }
 }

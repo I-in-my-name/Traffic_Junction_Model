@@ -1,13 +1,14 @@
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\UI_Utilities\RoadType.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\JunctionMetrics.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\UI_Utilities\AnimationHandler.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\View_and_Controller\TrafficLightController.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\View_and_Controller\Saving_Utils\ConfigurationSnapshot.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\View_and_Controller\App.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\Example.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\UI_Utilities\DataSanitisation.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\View_and_Controller\PrimaryController.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\UI_Utilities\UILane.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\module-info.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\View_and_Controller\Saving_Utils\CareTaker.java
-C:\Users\TanLi\OneDrive\Documents\University Work\Year 2\CS261 Project\Project\Traffic_Junction_Model\src\main\java\com\trafficjunction\JunctionConfiguration.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/JunctionConfiguration.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/SharedUtils.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/JunctionMetrics.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/Saving_Utils/CareTaker.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/UI_Utilities/UILane.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/PrimaryController.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/Example.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/Saving_Utils/ConfigurationSnapshot.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/UI_Utilities/RoadType.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/module-info.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/TrafficLightController.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/App.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/UI_Utilities/DataSanitisation.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/UI_Utilities/AnimationHandler.java
