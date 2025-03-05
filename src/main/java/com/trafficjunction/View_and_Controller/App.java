@@ -1,5 +1,7 @@
 package com.trafficjunction.View_and_Controller;
 
+import com.trafficjunction.observer.*;
+
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -12,12 +14,14 @@ import javafx.stage.Stage;
 /**
  * JavaFX App
  */
-public class App extends Application {
+public class App extends Application implements Observer {
 
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
+        Subject.registerObserver(this);
+
         scene = new Scene(loadFXML("primary"));
         stage.setTitle("Traffic Junction Simulator");
         Image icon = new Image(getClass().getResourceAsStream("/assets/trafficCone.png"));
@@ -34,6 +38,9 @@ public class App extends Application {
         System.out.println("com/trafficjunction/" + fxml + ".fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/trafficjunction/primary.fxml"));
         return fxmlLoader.load();
+    }
+
+    public void notify(Event event) {
     }
 
     public static void main(String[] args) {

@@ -62,6 +62,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M7</version> <!-- Ensure this is JUnit 5 compatible -->
                 <configuration>
+                    <printSummary>true</printSummary>
+                    <reportFormat>plain</reportFormat>
+                    <showSuccessfulResults>true</showSuccessfulResults>
                     <useJUnitPlatform>true</useJUnitPlatform> <!-- Enable JUnit 5 -->
                 </configuration>
             </plugin>
