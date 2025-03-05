@@ -177,7 +177,7 @@ public class LaneTests {
         assertEquals(false, result);
 
         // mock values for speed and max speed, irrelevant to this test
-         emptyLane.addVehicle(new Vehicle(0.f, 1.f, vehicleLength));
+         emptyLane.addVehicle(new Vehicle(0.f, 60.f, vehicleLength));
          emptyLane.update(1.f);
          // should still not be full
          result = emptyLane.isFull();
@@ -226,7 +226,8 @@ public class LaneTests {
         // traffic light and direction are mock values, irrelevant to test
         Lane lane = new Lane(laneLength, new TrafficLight(), "lfr");
         // speed values are mock values, irrelevant to test
-        Vehicle vehicle = new Vehicle(0.f, 1.f, vehicleLength);
+        float vSpeed = laneLength * 3.6f;
+        Vehicle vehicle = new Vehicle(0.f, vSpeed, vehicleLength);
 
         // we need to wait some time before a new car can be added
         // gap of size 1: C_C where C = car and _ is a gap of length 1 meter
