@@ -47,6 +47,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="North:" wrappingWidth="87.638671875">
@@ -73,6 +74,12 @@
                         <TextField fx:id="eastRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="southRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="westRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All Red:" wrappingWidth="87.638671875" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="westRoadDuration1" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                   <Button fx:id="confirmDurationButton" mnemonicParsing="false" onAction="#confirmLightDurations" prefHeight="82.0" prefWidth="160.0" text="Submit">

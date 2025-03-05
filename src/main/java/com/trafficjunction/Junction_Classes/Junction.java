@@ -1,4 +1,5 @@
 package com.trafficjunction.Junction_Classes;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,27 +22,27 @@ public class Junction {
     private static final float weightMax = 0.3f;
     private static final float weightQueue = 0.2f;
 
-
-    private List<List<Lane>> entry_lanes = new ArrayList<>();   // Entry lanes
-    private List<List<Lane>> exit_lanes = new ArrayList<>();    // Exit lanes
+    private List<List<Lane>> entry_lanes = new ArrayList<>(); // Entry lanes
+    private List<List<Lane>> exit_lanes = new ArrayList<>(); // Exit lanes
 
     private List<Lane> between_lanes = new ArrayList<>();
-    /** 
+    /**
      * Indexes for directions
      * 0 - North
      * 1 - East
      * 2 - South
      * 3 - West
      */
-    
-    private Map<String, Integer> vehicle_rate;  // Rate of vehicles coming into the junction for each direction
-    private Map<String, List<List<Lane>>> vehicle_routes;  // Valid routes for vehicles needing to go from one direction to another
+
+    private Map<String, Integer> vehicle_rate; // Rate of vehicles coming into the junction for each direction
+    private Map<String, List<List<Lane>>> vehicle_routes; // Valid routes for vehicles needing to go from one direction
+                                                          // to another
     private Map<String, Integer> vehicle_backlogs;
 
-    private List<TrafficLight> traffic_lights;  // List of all traffic lights
-    private TrafficLightConfig tl_config;       // The configuration for the traffic lights
+    private List<TrafficLight> traffic_lights; // List of all traffic lights
+    private TrafficLightConfig tl_config; // The configuration for the traffic lights
 
-    private float timer;                // How much time has passed since the start of the simulation
+    private float timer; // How much time has passed since the start of the simulation
 
     private List<Vehicle> animateVehicles;
 
@@ -49,9 +50,12 @@ public class Junction {
         // Initialise
         vehicle_routes = new HashMap<>();
         animateVehicles = new ArrayList<>();
-        
+
         // Set vehicle rate to be 0 for all directions
-        /* Changing vehicle rates to be non zero in every direction for simulation testing */
+        /*
+         * Changing vehicle rates to be non zero in every direction for simulation
+         * testing
+         */
         vehicle_rate = new HashMap<>();
         vehicle_rate.put("nte", 0);
         vehicle_rate.put("nts", 0);
@@ -67,7 +71,7 @@ public class Junction {
         vehicle_rate.put("wtn", 0);
 
         vehicle_backlogs = new HashMap<>();
-        
+
         // Set vehicle rate to be 0 for all directions
         vehicle_backlogs = new HashMap<>();
         vehicle_backlogs.put("nte", 0);
@@ -84,11 +88,11 @@ public class Junction {
         vehicle_backlogs.put("wtn", 0);
 
         // Add a lane to each direction
-        for (int routes_index = 0; routes_index<4; routes_index++) {
+        for (int routes_index = 0; routes_index < 4; routes_index++) {
             entry_lanes.add(new ArrayList<>());
             exit_lanes.add(new ArrayList<>());
         }
-        
+
         // Create one trafficlight per road
         traffic_lights = new ArrayList<>();
         for (int routes_index = 0; routes_index < 4; routes_index++) {
@@ -106,44 +110,46 @@ public class Junction {
         for (int i = 0; i <= 5; i++) {
             states = new ArrayList<>();
             for (int j = 0; j < 4; j++) {
-                if (i==j) {
+                if (i == j) {
                     states.add(1);
                 } else {
                     states.add(0);
                 }
-                tl_config.addState(10.f, new ArrayList<>(states));  // Passes in a copy, not the actual arraylist
+                tl_config.addState(10.f, new ArrayList<>(states)); // Passes in a copy, not the actual arraylist
             }
         }
     }
 
-    /** 
+    /**
      * Accesses and returns the entry lanes of the junction
+     * 
      * @return - List<lanes> entry_lanes
      */
     public List<List<Lane>> getEntryLanes() {
         return entry_lanes;
     }
 
-
-    /** 
+    /**
      * Accesses and returns the exitt lanes of the junction
+     * 
      * @return - List<lanes> exit_lanes
      */
     public List<List<Lane>> getexitLanes() {
         return exit_lanes;
     }
 
-
-    /** 
+    /**
      * Accesses and returns the traffic lights of the junction
+     * 
      * @return - List<TrafficLights> traffic_lights
      */
     public List<TrafficLight> getTrafficLights() {
         return traffic_lights;
     }
 
-    /** 
+    /**
      * Accesses and returns the rate of vehicles coming into the junction
+     * 
      * @return - List<TrafficLights> traffic_lights
      */
     public Map<String, Integer> getVehicle_rate() {
@@ -153,47 +159,45 @@ public class Junction {
     public boolean setVehicleRate(String direction, int rate) {
         if (rate < 0)
             return false;
-        if(!vehicle_rate.containsKey(direction))
+        if (!vehicle_rate.containsKey(direction))
             return false;
         vehicle_rate.put(direction, rate);
         return true;
     }
-    
 
-    ///////getVehicleBacklog////////// notr sure how to implement yet
+    /////// getVehicleBacklog////////// notr sure how to implement yet
 
-
-    /** 
+    /**
      * Accesses and returns the traffic lights configuration for junction
+     * 
      * @return - TrafficLightsConfig tl_config
      */
     public TrafficLightConfig getTLConfig() {
         return tl_config;
     }
 
-
-
-    /** 
+    /**
      * Accesses and returns the timer for the simulation
+     * 
      * @return - float timer
      */
     public float getTimer() {
         return timer;
     }
 
-
-    /** 
+    /**
      * Accesses and returns the metrics of the junction
-     * @return 
+     * 
+     * @return
      */
-    //public JunctionMetrics getJunctionMetric() {
-    //    return metrics;
-    //}
+    // public JunctionMetrics getJunctionMetric() {
+    // return metrics;
+    // }
 
     public float getMaxWaitTime(int side) {
         float maxWaitTime = -1;
         for (Lane lane : entry_lanes.get(side)) {
-            if(maxWaitTime < lane.getMaxWaitTime())
+            if (maxWaitTime < lane.getMaxWaitTime())
                 maxWaitTime = lane.getMaxWaitTime();
         }
         return maxWaitTime;
@@ -215,7 +219,7 @@ public class Junction {
     public int getMaxQueueLength(int side) {
         int maxQueueLength = -1;
         for (Lane lane : entry_lanes.get(side)) {
-            if(maxQueueLength < lane.getMaxQueueLength())
+            if (maxQueueLength < lane.getMaxQueueLength())
                 maxQueueLength = lane.getMaxQueueLength();
         }
         return maxQueueLength;
@@ -234,6 +238,7 @@ public class Junction {
     /**
      * Add Entry Lane method
      * Parameters - the side which we want to add a lane in.
+     * 
      * @return - If the lane was added.
      */
     public boolean addEntryLane(int side) {
@@ -248,7 +253,8 @@ public class Junction {
         }
         // Add a default lane to the road
         // TODO DEFAULT ENTRY LANE?
-        /**Currently:
+        /**
+         * Currently:
          * Length of 30
          * Traffic light is shared across road
          * 
@@ -262,6 +268,7 @@ public class Junction {
     /**
      * Remove Entry Lane method
      * Parameters - the side which we want to remove a lane in.
+     * 
      * @return - If the lane was removed.
      */
     public boolean removeEntryLane(int side) {
@@ -283,6 +290,7 @@ public class Junction {
     /**
      * Add Exit Lane method
      * Parameters - the side which we want to add a lane in.
+     * 
      * @return - If the lane was added.
      */
     public boolean addExitLane(int side) {
@@ -305,6 +313,7 @@ public class Junction {
     /**
      * Remove Exit Lane method
      * Parameters - the side which we want to remove a lane in.
+     * 
      * @return - If the lane was removed.
      */
     public boolean removeExitLane(int side) {
@@ -323,29 +332,29 @@ public class Junction {
         return true;
     }
 
-
     // Written test for
-    /** 
+    /**
      * Set the number of entry lanes in a specified direction
      * Parameters - the side of the junction and the number of lanes wanted
+     * 
      * @return - List<lanes> entry_lanes
      */
     public boolean setNumLanesEntry(int side, int number) {
-        
-        //Checks to see if a reasonable amount of lanes has been chosen
-        //And that the value for 'sides' is valid
-        if ((number < 0 || number > 5) || (side < 0 || side > 3)){
+
+        // Checks to see if a reasonable amount of lanes has been chosen
+        // And that the value for 'sides' is valid
+        if ((number < 0 || number > 5) || (side < 0 || side > 3)) {
             // If not do not add any lanes and retun false
             return false;
         }
         List<Lane> road = entry_lanes.get(side);
         int to_add = number - road.size();
-        if (to_add > 0) {       // If we need to add lanes
-            for (int routes_index = 0; routes_index < to_add; routes_index++) {  // Adds number of lanes needed
+        if (to_add > 0) { // If we need to add lanes
+            for (int routes_index = 0; routes_index < to_add; routes_index++) { // Adds number of lanes needed
                 this.addEntryLane(side);
             }
-        } else if (to_add < 0) {    // If we need to remove lanes
-            for (int routes_index = 0; routes_index > to_add; routes_index--) {  // Removes number of lanes needed
+        } else if (to_add < 0) { // If we need to remove lanes
+            for (int routes_index = 0; routes_index > to_add; routes_index--) { // Removes number of lanes needed
                 this.removeEntryLane(side);
             }
         } // If to_add is 0 then nothing needs to happen
@@ -353,8 +362,8 @@ public class Junction {
     }
 
     public boolean setNumLanesExit(int side, int number) {
-        //Checks to see if a reasonable amount of lanes has been chosen
-        if (number < 0 || number > 5){
+        // Checks to see if a reasonable amount of lanes has been chosen
+        if (number < 0 || number > 5) {
             // If not do not add any lanes and retun false
             return false;
         } else {
@@ -374,11 +383,12 @@ public class Junction {
     // Written test for
     public boolean setLaneDirections(int side, int index, String direction) {
         // Check the validity of the direction string
-            // Check size
+        // Check size
         if (direction.length() > 3) {
-            return false;   // If direction string is longer than 3 characters, then it is definitely invalid
+            return false; // If direction string is longer than 3 characters, then it is definitely
+                          // invalid
         }
-        
+
         // Check that a valid side and index has been given
         if ((side >= 0 && index >= 0) && (entry_lanes.size() >= side) && (entry_lanes.get(side).size() >= index)) {
             // If it is valid set direction
@@ -390,7 +400,7 @@ public class Junction {
         }
     }
 
-    // Written test for 
+    // Written test for
     public boolean setLaneBus(int side, int index, boolean type) {
         // Check that a valid side and index has been given
         if ((side >= 0 && index >= 0) && (entry_lanes.size() > side) && (entry_lanes.get(side).size() > index)) {
@@ -408,10 +418,11 @@ public class Junction {
     // Written test for
     // valid junction:
     // - 4 entry lanes
-    // - each entry lane has valid direction (string containing max one of each char 'R', 'L', 'F')
+    // - each entry lane has valid direction (string containing max one of each char
+    // 'R', 'L', 'F')
     /**
      * Returns true if this junction is valid.
-     * A valid junction is defined by its entry lanes. If it has 4 valid entry lanes 
+     * A valid junction is defined by its entry lanes. If it has 4 valid entry lanes
      * (meaning 4 lists of lanes as entryLanes attribute) then it is valid.
      * A valid lane is one with a valid direction.
      */
@@ -426,12 +437,12 @@ public class Junction {
                 // currently repeating this logic in different ways in different functions
                 // ideally should not do that
                 int length = lane.getDirection().toUpperCase().length();
-                if ( length <= 3 && length > 0) {
+                if (length <= 3 && length > 0) {
                     for (char c : lane.getDirection().toUpperCase().toCharArray()) {
                         if (c != 'L' && c != 'R' && c != 'F')
                             return false;
                     }
-                }else{
+                } else {
                     return false;
                 }
             }
@@ -439,65 +450,68 @@ public class Junction {
         return true;
     }
 
-    /** 
+    /**
      * Connects two lanes
      * Creates an 'inbetween lane' and connects the entry/exit lanes to it
      * Parameters - takes the entry and exit lanes that need to be connected
+     * 
      * @return - Returns whether the method succesfully managed to connect the lanes
      */
     public void connectLanes(Lane entry, Lane exit) {
         Lane between = new Lane(10.f, null, null);
         between_lanes.add(between);
-        
+
         entry.addGoingLane(between);
         exit.addComingLane(between);
 
-        // Also attach between 
+        // Also attach between
         between.addGoingLane(exit);
         between.addComingLane(entry);
     }
 
-    /** 
+    /**
      * Connects all the lanes in the junction
      * 
      * Description...
      * 
-     * @return - Returns wether the method succesfully managed to connect all the lanes in the junction
+     * @return - Returns wether the method succesfully managed to connect all the
+     *         lanes in the junction
      */
     public boolean connectJunction() {
-        if (!this.verifyJunction()) {   // Verify that the junction is valid before 'building' it.
+        if (!this.verifyJunction()) { // Verify that the junction is valid before 'building' it.
             return false;
         }
         /**
          * Loop through each direction
          * 0-North, 1-East, 2-South, 3-West
-         * List<List<Lane>> entry_lanes = new ArrayList<>();   // Entry lanes
-         * List<List<Lane>> exit_lanes = new ArrayList<>();    // Exit lanes
+         * List<List<Lane>> entry_lanes = new ArrayList<>(); // Entry lanes
+         * List<List<Lane>> exit_lanes = new ArrayList<>(); // Exit lanes
          * 
          */
-        for (int routes_index = 0; routes_index < 4; routes_index++) {   // For each road 
+        for (int routes_index = 0; routes_index < 4; routes_index++) { // For each road
             List<Lane> entry_road = entry_lanes.get(routes_index);
-            //List<String> directions = new ArrayList<>();    // Store directions for present lanes
-            for (int j = 0; j < entry_road.size(); j++) {   // For each lane 
-                Lane entry_lane = entry_road.get(j);          // Gets a lane
+            // List<String> directions = new ArrayList<>(); // Store directions for present
+            // lanes
+            for (int j = 0; j < entry_road.size(); j++) { // For each lane
+                Lane entry_lane = entry_road.get(j); // Gets a lane
                 String direction = entry_lane.getDirection(); // Gets the lane's direction
-                for (char c : direction.toCharArray()) {    // For every char/direction the lane is connected in
+                for (char c : direction.toCharArray()) { // For every char/direction the lane is connected in
                     // Initialise variables
-                    int exit_i;     // Index to get the side of the exit lanes
+                    int exit_i; // Index to get the side of the exit lanes
                     Lane exit_lane; // The exit lane that needs to be connected to
                     switch (c) {
-                        case 'L':   // Left
-                            exit_i = (routes_index+1) % 4; // The index on the left of side (routes_index)
+                        case 'L': // Left
+                            exit_i = (routes_index + 1) % 4; // The index on the left of side (routes_index)
                             exit_lane = exit_lanes.get(exit_i).get(j);
                             connectLanes(entry_lane, exit_lane);
                             break;
-                        case 'F':   // Forward
-                            exit_i = (routes_index+2) % 4; // Gets the opposing index
+                        case 'F': // Forward
+                            exit_i = (routes_index + 2) % 4; // Gets the opposing index
                             exit_lane = exit_lanes.get(exit_i).get(j);
                             connectLanes(entry_lane, exit_lane);
                             break;
-                        case 'R':   // Right
-                            exit_i = (routes_index+3) % 4; // The index on the left of side (routes_index)
+                        case 'R': // Right
+                            exit_i = (routes_index + 3) % 4; // The index on the left of side (routes_index)
                             exit_lane = exit_lanes.get(exit_i).get(j);
                             connectLanes(entry_lane, exit_lane);
                             break;
@@ -521,17 +535,18 @@ public class Junction {
 
     // TODO: Is this a simple setter or any validation required?
     public void setTrafficLightConfig(TrafficLightConfig config) {
-        
+
     }
 
-    
     /**
      * Method to get all valid routes that go from the entry side to the exit side
      * 
-     * This method has an optimization so it does not need to recalculate the same thing twice, by storing the result in a hashmap.
+     * This method has an optimization so it does not need to recalculate the same
+     * thing twice, by storing the result in a hashmap.
      * 
      * @param - indexes for start and end
-     * @return List<List<Lane>> - valid routes to go from entry_ind direction to exit_ind direction
+     * @return List<List<Lane>> - valid routes to go from entry_ind direction to
+     *         exit_ind direction
      */
     public List<List<Lane>> findRoute(int entry_ind, int exit_ind) {
         // side 1 (chooses lane) -> middle lane -> side 2 (chooses lane)
@@ -540,44 +555,44 @@ public class Junction {
         // Initialise the variable to return:
         List<List<Lane>> valid_routes;
 
-
-        String key = String.valueOf(entry_ind) + String.valueOf(exit_ind);  // key for storing the routes in a hashmap
+        String key = String.valueOf(entry_ind) + String.valueOf(exit_ind); // key for storing the routes in a hashmap
         valid_routes = vehicle_routes.get(key);
-        if (valid_routes != null) { // If the hashmap has already got the routes stored then it does not need to execute the rest of the function.
+        if (valid_routes != null) { // If the hashmap has already got the routes stored then it does not need to
+                                    // execute the rest of the function.
             return valid_routes;
         }
 
-        int turn_num    = ((exit_ind - entry_ind + 4) % 4);
-        String turn_char  = switch(turn_num) { // Rule switch statement
+        int turn_num = ((exit_ind - entry_ind + 4) % 4);
+        String turn_char = switch (turn_num) { // Rule switch statement
             case 1 -> "L";
             case 2 -> "F";
             case 3 -> "R";
             default -> " "; // 0 or any other int won't be accepted and return an empty list
         };
 
-        List<Lane> valid_entry_lanes    = new ArrayList<>();
-        List<Lane> possible_between_lanes   = new ArrayList<>();
-        valid_routes    = new ArrayList<>();
+        List<Lane> valid_entry_lanes = new ArrayList<>();
+        List<Lane> possible_between_lanes = new ArrayList<>();
+        valid_routes = new ArrayList<>();
         // Get valid entry lanes that go in the desired direction:
         for (Lane entry_lane : entry_lanes.get(entry_ind)) {
             String direction = entry_lane.getDirection();
-            if (direction.contains(turn_char)) {    // Lane goes in the direction we want
-                valid_entry_lanes.add(entry_lane);    // Add to possible entry lanes
+            if (direction.contains(turn_char)) { // Lane goes in the direction we want
+                valid_entry_lanes.add(entry_lane); // Add to possible entry lanes
             }
         }
         // Get all the between lanes that lead to the desired exit lanes
         for (Lane exit_lane : exit_lanes.get(exit_ind)) {
             List<Lane> betweens = exit_lane.getComesFrom();
             possible_between_lanes.addAll(betweens);
-            //for (Lane between : betweens) {
-            //    possible_between_lanes.add(between);
-            //}
+            // for (Lane between : betweens) {
+            // possible_between_lanes.add(between);
+            // }
         }
         // Loop through all the entry lanes, for each valid between lane, add the route:
         List<Lane> route;
         for (Lane entry_lane : valid_entry_lanes) {
-            //String direction = entry_lane.getGoingTo();
-            for (Lane between: entry_lane.getGoingTo()) {
+            // String direction = entry_lane.getGoingTo();
+            for (Lane between : entry_lane.getGoingTo()) {
                 if (possible_between_lanes.contains(between)) {
                     route = new ArrayList<>();
                     route.add(entry_lane);
@@ -587,30 +602,35 @@ public class Junction {
                 }
             }
         }
-        
-        vehicle_routes.put(key, valid_routes);  // Adds the routes to a map so they do not need to be recalculated
+
+        vehicle_routes.put(key, valid_routes); // Adds the routes to a map so they do not need to be recalculated
         return valid_routes;
     }
 
-    /* Calls everything to update: looks through all exiting lanes, updates all 
-    for loop through all the exiting lanes and call the update lane function, then move to middle and starting lanes
-    - need to create an attribute that stores the middle lanes - done, use (between_lanes)
-    - purpose of this method is to move things by the time interval
-
-    */
+    /*
+     * Calls everything to update: looks through all exiting lanes, updates all
+     * for loop through all the exiting lanes and call the update lane function,
+     * then move to middle and starting lanes
+     * - need to create an attribute that stores the middle lanes - done, use
+     * (between_lanes)
+     * - purpose of this method is to move things by the time interval
+     * 
+     */
     public void update(float time) {
-        this.timer += time;     // Add time increment
-        this.updateLights();    // Update traffic lights
+        this.timer += time; // Add time increment
+        this.updateLights(); // Update traffic lights
         this.createVehicles(time);
         // update vehicles from exit lanes -> middle lanes -> starting lanes
-        // use 3 for loops for each lane type 
-        for (List<Lane> exitLaneList : exit_lanes) { // double for loop due to nested list for class attribute: outermost list stores list of lanes + then dir
+        // use 3 for loops for each lane type
+        for (List<Lane> exitLaneList : exit_lanes) { // double for loop due to nested list for class attribute:
+                                                     // outermost list stores list of lanes + then dir
             for (Lane lane : exitLaneList) {
                 lane.update(timer);
             }
         }
         for (Lane lane : between_lanes) {
-            lane.update(timer); // only one list of middle lanes because only going through them once in simulation
+            lane.update(timer); // only one list of middle lanes because only going through them once in
+                                // simulation
         }
         for (List<Lane> entryLaneList : entry_lanes) {
             for (Lane lane : entryLaneList) {
@@ -624,11 +644,10 @@ public class Junction {
         List<Integer> state_list = tl_config.getStates(this.timer);
         // Loop through this list to update the lights
         for (int routes_index = 0; routes_index < state_list.size(); routes_index++) {
-            int state = state_list.get(routes_index);  // Get the desired state for the trafficlight
+            int state = state_list.get(routes_index); // Get the desired state for the trafficlight
             this.traffic_lights.get(routes_index).setState(state); // Update the traffic light
         }
     }
-
 
     /**
      * Generates a new vehicle and the path it will take
@@ -645,10 +664,10 @@ public class Junction {
         // spv = seconds per 1 vehicle = 1/vps
         // lowest multiple of spv < (current clock time - dt)
         // while (multiple < current clock time)
-            // add spv to multiple
-            // create vehicle if still less than clock time
+        // add spv to multiple
+        // create vehicle if still less than clock time
 
-        // List<Lane> routes =  findRoute(int entry_ind, int exit_ind)
+        // List<Lane> routes = findRoute(int entry_ind, int exit_ind)
         // route = idnex 0 of routes
         // entry lane = index 0 of route
         // new_vehicle = new Car(float time, float max_speed, List<Lane> route)
@@ -657,42 +676,41 @@ public class Junction {
          * Example 1:
          * spv = 0.6
          * clock| mult >= clock - dt ... mult < clock | created vehicles
-         * 0.5  | 0     | 1
-         * 1.0  | 0.6   | 1
-         * 1.5  | 1.2   | 1
+         * 0.5 | 0 | 1
+         * 1.0 | 0.6 | 1
+         * 1.5 | 1.2 | 1
          * 
          * Example 2:
          * spv = 0.2
          * clock| mult >= clock - dt ... mult < clock | created vehicles
-         * 0.5  | 0, 0.2, 0.4   |   3
-         * 1.0  | 0.6, 0.8      |   2
-         * 1.5  | 1, 1.2, 1.4   |   3
+         * 0.5 | 0, 0.2, 0.4 | 3
+         * 1.0 | 0.6, 0.8 | 2
+         * 1.5 | 1, 1.2, 1.4 | 3
          */
 
         String direction_string = "nesw";
         // use direction_string.indexOf(character);
-        
-        
+
         double current_time = this.timer; // this.timer used for time (seconds) since simulation start
 
-        double past_time    = this.timer - dt; // dt is time difference
+        double past_time = this.timer - dt; // dt is time difference
 
-
-        // Loop over every direction by side to side direction, e.g. north to south 50 vehicles per hour
+        // Loop over every direction by side to side direction, e.g. north to south 50
+        // vehicles per hour
         // string is direction
-        for (Map.Entry<String, Integer> rate_entry : vehicle_rate.entrySet()) { 
+        for (Map.Entry<String, Integer> rate_entry : vehicle_rate.entrySet()) {
             String key = rate_entry.getKey(); // e.g. ets
             int rate = rate_entry.getValue(); // vehicles per hour for this movement
 
-            if (rate == 0) {    // skips if rate is 0
+            if (rate == 0) { // skips if rate is 0
                 continue;
             }
 
-            double vps = (rate/3600.0); // vehicles per second
-            double spv = 1/vps;         // seconds per vehicle (1 vehicle gets created every _x_ seconds)
+            double vps = (rate / 3600.0); // vehicles per second
+            double spv = 1 / vps; // seconds per vehicle (1 vehicle gets created every _x_ seconds)
 
-            //backlog stuff
-            //early initialise variables for cycling through each route
+            // backlog stuff
+            // early initialise variables for cycling through each route
             List<Lane> route;
             Car new_car;
             boolean succesfull;
@@ -702,21 +720,21 @@ public class Junction {
             if (backlog_number > 0) {
                 // Backlog section for findRoute
                 int entry_ind_backlog = direction_string.indexOf(key.charAt(0));
-                int exit_ind_backlog = direction_string.indexOf(key.charAt(2));    
+                int exit_ind_backlog = direction_string.indexOf(key.charAt(2));
                 List<List<Lane>> routes_backlog = findRoute(entry_ind_backlog, exit_ind_backlog);
 
                 // TODO: revise logic
-                for(int k = 0; k < backlog_number; k++){
+                for (int k = 0; k < backlog_number; k++) {
                     route = routes_backlog.get(0);
                     new_car = new Car(this.timer, route, key);
                     new_car.popRoute();
                     succesfull = false;
                     routes_index = 0;
-                    while(!succesfull && routes_index < routes_backlog.size()){
+                    while (!succesfull && routes_index < routes_backlog.size()) {
                         succesfull = routes_backlog.get(routes_index).get(0).addVehicle(new_car);
                         routes_index++;
                     }
-                    if (succesfull){
+                    if (succesfull) {
                         vehicle_backlogs.put(key, vehicle_backlogs.get(key) - 1);
                     }
                 }
@@ -724,37 +742,37 @@ public class Junction {
 
             // Gets the index direction for the entry
             int entry_ind = direction_string.indexOf(key.charAt(0));
-            
+
             // Gets the index direction for the exit
             int exit_ind = direction_string.indexOf(key.charAt(2));
-            
+
             // Gets the routes that vehicles can travel
             List<List<Lane>> routes = findRoute(entry_ind, exit_ind);
 
             // highest multiple lower or equal to past time
             double multiple = Math.floor(past_time / spv) * spv;
-            if (multiple != past_time) {    // lowest multiple above or equal to past time
+            if (multiple != past_time) { // lowest multiple above or equal to past time
                 multiple += spv;
             }
-
 
             while (multiple < current_time) {
                 // create a vehicle
                 route = routes.get(0);
-                new_car = new Car(this.timer, route, key);   // creates the vehicle
-                new_car.popRoute();     // pop route so that the next lane that the lane wants to go in is the correct one
+                new_car = new Car(this.timer, route, key); // creates the vehicle
+                new_car.popRoute(); // pop route so that the next lane that the lane wants to go in is the correct
+                                    // one
                 succesfull = false;
                 routes_index = 0;
                 while (!succesfull && routes_index < routes.size()) {
                     succesfull = routes.get(routes_index).get(0).addVehicle(new_car);
                     routes_index++;
                 }
-                if (!succesfull) {  // Car was not succesfully added
-                    vehicle_backlogs.put(key,(vehicle_backlogs.get(key)) + 1);
+                if (!succesfull) { // Car was not succesfully added
+                    vehicle_backlogs.put(key, (vehicle_backlogs.get(key)) + 1);
                 }
-                multiple += spv;    // move to next time increment
+                multiple += spv; // move to next time increment
             }
-        }    
+        }
     }
 
     public void calculateMetrics(float timestamp) {
@@ -764,7 +782,6 @@ public class Junction {
             }
         }
     }
-
 
     // Ranking calculation methods below
 
@@ -786,17 +803,16 @@ public class Junction {
         }
     }
 
-    public float computeOverallScore(float currentTime) {
+    public float computeOverallScore() {
         // Update all lane metrics first
-        updateAllMetrics(currentTime);
+        updateAllMetrics(this.timer);
 
         float totalScore = 0.0f;
         // Loop through all 4 directions (0: North, 1: East, 2: South, 3: West)
         for (int side = 0; side < 4; side++) {
-            float avgWait = getAverageWaitTime(side);    // already computed from lane metrics
-            float maxWait = getMaxWaitTime(side);          // already computed from lane metrics
-            int maxQueue  = getMaxQueueLength(side);       // maximum queue length among lanes in this direction    
-    
+            float avgWait = getAverageWaitTime(side); // already computed from lane metrics
+            float maxWait = getMaxWaitTime(side); // already computed from lane metrics
+            int maxQueue = getMaxQueueLength(side); // maximum queue length among lanes in this direction
 
             // Normalise each metric
             float normAvg = normalise(avgWait, optimalAvgWaitTime, worstAvgWaitTime);
@@ -810,18 +826,18 @@ public class Junction {
         // Average over 4 directions and scale to 1000
         float avgScore = totalScore / 4.0f;
         return avgScore * 1000.0f;
-    }    
+    }
 
     public List<Triple<String, String, Integer>> getVehiclesToAnimate() {
         List<Triple<String, String, Integer>> return_data = new ArrayList<>();
         for (List<Lane> entryLaneList : entry_lanes) {
-            int index = 0;
+            Integer index = 0;
             for (Lane lane : entryLaneList) {
                 List<Vehicle> vehicles = lane.getVehiclesRemovedThisTurn();
                 for (Vehicle vehicle : vehicles) {
                     String direction = vehicle.getDirection();
-                    String entryCharacter = direction.substring(0,1).toUpperCase();
-                    String exitCharacter = direction.substring(0,1).toUpperCase();
+                    String entryCharacter = direction.substring(0, 1).toUpperCase();
+                    String exitCharacter = direction.substring(0, 1).toUpperCase();
                     Triple triple = new Triple(entryCharacter, exitCharacter, index);
                     return_data.add(triple);
                 }
@@ -831,7 +847,8 @@ public class Junction {
         return return_data;
     }
 
-    // want to be able to save all a junction's features into a text file (e.g. csv or JSON)
+    // want to be able to save all a junction's features into a text file (e.g. csv
+    // or JSON)
     // this method is not needed any more
     public String convertToText() {
         return null;
@@ -843,6 +860,80 @@ public class Junction {
 
     }
 
+    public Map<String, String> getMetrics() {
+        Map<String, String> metrics = new HashMap<>();
+        List<List<LaneMetrics>> raw_metrics = new ArrayList<>();
+        for (List<Lane> entryLaneList : entry_lanes) {
+            raw_metrics.add(new ArrayList<>());
+            int i = 0;
+            for (Lane lane : entryLaneList) {
+                raw_metrics.get(i).add(lane.getMetrics());
+                i++;
+            }
+        }
+        String[] directions = { "North", "East", "South", "West" };
+        float overallAverageWaitTime = 0.f;
+        float overallMaximumWaitTime = 0.f;
+        float overallAverageQueueLength = 0.f;
+        int overallMaximumQueueLength = 0;
+        for (int index = 0; index < 4; index++) {
+            float averageWaitTime = 0;
+            int count = 0;
+            float maxWaitTime = 0;
+            float averageQueueLength = 0.f;
+            int maxQueueLength = 0;
+
+            // Merge metrics of lanes in the same direction:
+            for (LaneMetrics laneMetric : raw_metrics.get(index)) {
+                // Add averages:
+                averageWaitTime += laneMetric.getAverageWaitTime();
+                averageQueueLength += laneMetric.getAverageQueueLength();
+                // Get new maximums:
+                float newMaxWaitTime = laneMetric.getMaxWaitTime();
+                int newMaxQueueLength = laneMetric.getMaxQueueLength();
+                // Update maximum values if needed:
+                if (maxWaitTime < newMaxWaitTime) {
+                    maxWaitTime = newMaxWaitTime;
+                }
+                if (maxQueueLength < newMaxQueueLength) {
+                    maxQueueLength = newMaxQueueLength;
+                }
+                count++;
+            }
+            // Divide averages to get correct values:
+            averageWaitTime = averageWaitTime / count;
+            averageQueueLength = averageQueueLength / count;
+
+            String key = directions[index];
+            metrics.put(key + " Average Wait Time", Float.toString(averageWaitTime));
+            metrics.put(key + " Max Wait Time", Float.toString(maxWaitTime));
+            metrics.put(key + " Average Queue Length", Float.toString(averageQueueLength));
+            metrics.put(key + " Max Queue Length", Float.toString(maxQueueLength));
+
+            // Overall metrics section:
+            overallAverageWaitTime += averageWaitTime;
+            overallAverageQueueLength += averageQueueLength;
+            // Update maximum values if needed:
+            if (overallMaximumWaitTime < maxWaitTime) {
+                overallMaximumWaitTime = maxWaitTime;
+            }
+            if (overallMaximumQueueLength < maxQueueLength) {
+                overallMaximumQueueLength = maxQueueLength;
+            }
+        }
+        overallAverageWaitTime = overallAverageWaitTime / 4;
+        overallAverageQueueLength = overallAverageQueueLength / 4;
+
+        metrics.put("Overall Average Wait Time", Float.toString(overallAverageWaitTime));
+        metrics.put("Overall Max Wait Time", Float.toString(overallMaximumWaitTime));
+        metrics.put("Overall Average Queue Length", Float.toString(overallAverageQueueLength));
+        metrics.put("Overall Max Queue Length", Integer.toString(overallMaximumQueueLength));
+
+        metrics.put("Overall Score", Float.toString(this.computeOverallScore()));
+
+        return metrics;
+    }
+
     /**
      * Print/ String representation fo the junction.
      * 
@@ -852,7 +943,7 @@ public class Junction {
     public String toString() {
         StringBuilder text = new StringBuilder();
         text.append("JUNCTION:");
-        String[] directions = {"North","East","South","West"};
+        String[] directions = { "North", "East", "South", "West" };
         text.append("\n Entry Lanes:");
         for (int routes_index = 0; routes_index < 4; routes_index++) {
             text.append("\n\t");
@@ -864,5 +955,5 @@ public class Junction {
         }
         return text.toString();
     }
-    
+
 }

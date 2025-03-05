@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 import com.trafficjunction.JunctionConfiguration;
+import com.trafficjunction.JunctionMetrics;
 import com.trafficjunction.UI_Utilities.AnimationHandler;
+import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.RoadType;
 import com.trafficjunction.UI_Utilities.UILane;
 import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
@@ -29,6 +31,7 @@ import javafx.stage.Stage;
 
 import com.trafficjunction.Junction_Classes.Junction;
 import com.trafficjunction.Junction_Classes.Triple;
+import java.util.Map;
 
 public class PrimaryController {
 
@@ -63,14 +66,14 @@ public class PrimaryController {
     private UILane[] southRoadAllLanes;
     private UILane[] westRoadAllLanes;
 
-    //Configuration FXML Links:
+    // Configuration FXML Links:
     @FXML
     private TextField NTE;
     @FXML
     private TextField NTS;
     @FXML
     private TextField NTW;
-    
+
     @FXML
     private TextField ETS;
     @FXML
@@ -92,6 +95,8 @@ public class PrimaryController {
     @FXML
     private TextField WTS;
 
+    TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
+
     // File system FXML Links:
     @FXML
     private MenuItem saveMenuItem;
@@ -111,6 +116,11 @@ public class PrimaryController {
     private CareTaker careTaker = new CareTaker();
     private JunctionConfiguration configuration = new JunctionConfiguration();
 
+    // Value to decide whether the simulation is currently running.
+    private boolean isRunningSimulation = false;
+
+    private JunctionMetrics junctionMetrics;
+
     // Anchor that all junction components are contained within.
     @FXML
     private AnchorPane junctionAnchor;
@@ -118,13 +128,11 @@ public class PrimaryController {
     @FXML
     private void initialize() {
         careTaker.addSnap(new ConfigurationSnapshot(configuration));
+
         // Input validation against words.
-        // for (Tab tab : vehicleTabs.getTabs()) {
-        // for (Node node : tab.)
-        // if (node instanceof TextField) {
-        // DataSanitisation.applyNumericRestriction((TextField) node);
-        // }
-        // }
+        for (TextField node : allTextFields) {
+            DataSanitisation.applyNumericRestriction(node);
+        }
 
         AnimationHandler animationHandler = new AnimationHandler(junctionAnchor);
 
@@ -271,33 +279,31 @@ public class PrimaryController {
 
         fileChooser.setTitle("value");
         loadMenuItem.setOnAction((ActionEvent event) -> {
-        File chosenFile = fileChooser.showOpenDialog((Stage)
-        NTE.getScene().getWindow());
-        if (chosenFile.canRead()) {
-            try {
-                JunctionConfiguration loadedConfiguration =
-                JunctionConfiguration.loadObject(chosenFile);
-                configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
-                careTaker.addSnap(new ConfigurationSnapshot(configuration));
-                populateFieldsWithData(configuration);
-            }catch(NullPointerException nullPointerException){
-                //Exited out of file chooser so ignore
-                Alert errorAlert = new Alert(AlertType.ERROR);
-                errorAlert.setHeaderText("Wrong Filetype");
-                errorAlert.setContentText("The File you are trying to access is of the wrong filetype. Please ensure you have selected the correct file.");
-                errorAlert.showAndWait();
+            File chosenFile = fileChooser.showOpenDialog((Stage) NTE.getScene().getWindow());
+            if (chosenFile.canRead()) {
+                try {
+                    JunctionConfiguration loadedConfiguration = JunctionConfiguration.loadObject(chosenFile);
+                    configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
+                    careTaker.addSnap(new ConfigurationSnapshot(configuration));
+                    populateFieldsWithData(configuration);
+                } catch (NullPointerException nullPointerException) {
+                    // Exited out of file chooser so ignore
+                    Alert errorAlert = new Alert(AlertType.ERROR);
+                    errorAlert.setHeaderText("Wrong Filetype");
+                    errorAlert.setContentText(
+                            "The File you are trying to access is of the wrong filetype. Please ensure you have selected the correct file.");
+                    errorAlert.showAndWait();
+                }
             }
-            }   
         });
 
         saveMenuItem.setOnAction((ActionEvent event) -> {
-        File chosenFile = fileChooser.showSaveDialog((Stage)
-        NTE.getScene().getWindow());
-        try {
-            // move into program
-            gatherUserData().saveObject(chosenFile);
-        } catch (Exception e) {
-        }
+            File chosenFile = fileChooser.showSaveDialog((Stage) NTE.getScene().getWindow());
+            try {
+                // move into program
+                gatherUserData().saveObject(chosenFile);
+            } catch (Exception e) {
+            }
         });
     }
 
@@ -322,12 +328,103 @@ public class PrimaryController {
         lanes[laneNum - 2].removeLeftTurns();
     }
 
+    /*
+     * Function to count the different road types in a road.
+     * 
+     * @param lanes - The UILane array of lanes we are looking at.
+     * 
+     * @param laneNum - The number of active lanes in this array.
+     * 
+     * @return int[] - Return the number of each type of lane. Stored in an array
+     * with the indexing of {L, LF, F, RF, R}.
+     */
+    private int[] countRoadTypes(UILane[] lanes, int laneNum) {
+        int[] data = { 0, 0, 0, 0, 0 };
+
+        for (int i = 0; i < laneNum; i++) {
+            String laneString = lanes[i].getRoadType().getAsChars();
+            switch (laneString) {
+                case "L":
+                    data[0] += 1;
+                    break;
+                case "LF":
+                    data[1] += 1;
+                    break;
+                case "F":
+                    data[2] += 1;
+                    break;
+                case "FR":
+                    data[3] += 1;
+                    break;
+                case "R":
+                    data[4] += 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return data;
+    }
+
+    /*
+     * Function to populate the DataMetrics object with the user's input data.
+     */
+    private void populateInputDataMetrics() {
+
+        // Get all the vehicle number data and insert into this array.
+        int[] vehicleNums = new int[12];
+        for (int i = 0; i < vehicleNums.length; i++) {
+            vehicleNums[i] = Integer.parseInt(allTextFields[i].getText());
+        }
+
+        // TODO Need to populate this from the light junction config window.
+        int[] trafficDurs = new int[4];
+
+        // Add all data to the junction metrics object.
+        junctionMetrics = new JunctionMetrics(vehicleNums, trafficDurs);
+
+        // Count the number of each type of lane in each road.
+        int[] laneData;
+        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        junctionMetrics.addLane("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        junctionMetrics.addLane("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        junctionMetrics.addLane("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        junctionMetrics.addLane("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+
+    };
+
+    /*
+     * Function to occur when the run simulation button is pressed. Will start the
+     * simulation and the button itself will change to a cancel simulation button.
+     */
     @FXML
     private void runSimulationButtonPress() {
+        // Flag that the simulation is now running.
+        isRunningSimulation = true;
+
+        // Populate the data metrics to be used as parameters. This populates the
+        // junctionMetrics object.
+        populateInputDataMetrics();
+
         // JunctionConfiguration userData = gatherUserData();
+        // TODO get valid junction data and use
         Junction junction = new Junction();
 
-        // TODO call simulation
+        float runTime = 3600.f; // an hour in seconds
+        float timeIncrement = 0.1f; // One tenth of a second
+        float clock = 0;
+        while (clock < runTime) {
+            junction.update(timeIncrement);
+        }
+
+        // Get metrics:
+        Map<String, String> metrics = junction.getMetrics();
+
+        // TODO call animation
         return;
 
     }
@@ -525,39 +622,37 @@ public class PrimaryController {
      * to be relevant
      */
     private JunctionConfiguration gatherUserData() {
-    // This is notably in order.
-    int[] sequentialList = new int[12];
+        // This is notably in order.
+        int[] sequentialList = new int[12];
 
-    TextField[] directionalFields = 
-    {
-        NTE, NTS, NTW,
-        ETS, ETW, ETN,
-        STW, STN, STE,
-        WTN, WTE, WTS
-    };
+        TextField[] directionalFields = {
+                NTE, NTS, NTW,
+                ETS, ETW, ETN,
+                STW, STN, STE,
+                WTN, WTE, WTS
+        };
 
-    for (int i = 0; i < directionalFields.length; i++) {
-        String text = directionalFields[i].getText(); // replaces invisible/non-printable characters
-        int number = 0;
-        if (!text.isEmpty()) {
-            number = Integer.parseInt(text);
+        for (int i = 0; i < directionalFields.length; i++) {
+            String text = directionalFields[i].getText(); // replaces invisible/non-printable characters
+            int number = 0;
+            if (!text.isEmpty()) {
+                number = Integer.parseInt(text);
+            }
+            sequentialList[i] = number;
         }
-        sequentialList[i] = number;
-    }
-    JunctionConfiguration data = new JunctionConfiguration();
-    data.setDirectionInfo(sequentialList);
-    return data;
+        JunctionConfiguration data = new JunctionConfiguration();
+        data.setDirectionInfo(sequentialList);
+        return data;
     }
 
     private boolean populateFieldsWithData(JunctionConfiguration configuration) {
         int[] directionalThroughput = configuration.getDirectionInfo();
 
-        TextField[] directionalFields = 
-        {
-            NTE, NTS, NTW,
-            ETS, ETW, ETN,
-            STW, STN, STE,
-            WTN, WTE, WTS
+        TextField[] directionalFields = {
+                NTE, NTS, NTW,
+                ETS, ETW, ETN,
+                STW, STN, STE,
+                WTN, WTE, WTS
         };
 
         for (int i = 0; i < directionalFields.length; i++) {
