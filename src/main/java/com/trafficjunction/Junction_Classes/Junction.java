@@ -83,19 +83,18 @@ public class Junction {
          * Adding default traffic light config
          * TODO: Should this be done somewhere else?
          */
-        ArrayList<Integer> states = new ArrayList<>();
-        states.add(0);
-        states.add(1);
-        states.add(1);
-        states.add(0);
-        tl_config.addState(10.F, states);
-
-        states = new ArrayList<>();
-        states.add(1);
-        states.add(0);
-        states.add(0);
-        states.add(1);
-        tl_config.addState(10.F, states);
+        ArrayList<Integer> states;
+        for (int i = 0; i <= 5; i++) {
+            states = new ArrayList<>();
+            for (int j = 0; j < 4; j++) {
+                if (i==j) {
+                    states.add(1);
+                } else {
+                    states.add(0);
+                }
+                tl_config.addState(10.f, new ArrayList<>(states));  // Passes in a copy, not the actual arraylist
+            }
+        }
     }
 
     /** 

@@ -63,9 +63,14 @@ public class VehicleTests {
         System.out.print("Exit:\t");System.out.println(exitLane);
         assertEquals(0.f, entryLane.getVehicles().get(0).getLeft());
 
-        trafficLight.setState(1); // red
+        System.out.println("\nTime: 4.f (still stuck in entry lane)");
+        System.out.println(vehicle.update(4.f, entryLane,0));
+        System.out.print("Entry:\t");System.out.println(entryLane);
+        System.out.print("Exit:\t");System.out.println(exitLane);
 
-        System.out.println("\nTime: 4.5f (moved, now in)");
+        trafficLight.setState(1); // Green
+
+        System.out.println("\nTime: 4.5f (moved, now in exit lane)");
         System.out.println(vehicle.update(4.5f, entryLane,0));
         System.out.print("Entry:\t");System.out.println(entryLane);
         System.out.print("Exit:\t");System.out.println(exitLane);

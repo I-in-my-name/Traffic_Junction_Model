@@ -25,7 +25,7 @@ public class SimulationTest {
         junction.setLaneTrafficLight(0, 0, null);
     }
 
-    //@Test
+    @Test
     void simulationRuns() {
         float time = 0.f;
         float timeStep = 1.f;

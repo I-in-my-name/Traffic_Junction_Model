@@ -52,7 +52,7 @@ class VehicleMetrics {
     // Don't need test for
     public void startMoving(float timestamp) {
         if (!isMoving) { // prevent consecutive startMoving calls
-            System.out.println("Add to wait times");
+            //System.out.println("Add to wait times");
             isMoving = true;
             lastWaitTime = timestamp - lastStopTime;    // Calculate new last wait time
             waitTimes.add(lastWaitTime);                // Add last wait time to list

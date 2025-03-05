@@ -164,9 +164,6 @@ public class Vehicle {
             // Calculate time taken:
             float timeTaken = calculateTimeFromDistance(distance);
             currentTime += timeTaken;
-
-            // TODO: Should stop moving here?
-            metrics.stopMoving(currentTime + timeTaken);
             
             // Run function again in case reaching the end of the lane; (current_time) is updated, so it won't run infinitely:
             if (newTime > currentTime) {
@@ -176,7 +173,6 @@ public class Vehicle {
         } else { // The vehicle can not move OR is at 0 and waiting for TrafficLights
             boolean canProceed = lane.canPass();
             if (index == 0 && position == 0.f && canProceed) { // If we are able to go to the next lane
-                metrics.startMoving(currentTime);
                 // TODO: Remember to shift list up if needed
                 Lane nextLane = popRoute();
                 if (nextLane != null && lane.getGoingTo().contains(nextLane)) {
@@ -216,6 +212,7 @@ public class Vehicle {
                         return "unsuccesful in adding to lane";
                     }
                 } else {
+                    this.currentTime = newTime;
                     lane.removeVehicle();   // Remove vehicle from current lane
                     // Vehicle has reached the end of the route
                     // Give vehicle metrics to junction somehow (TODO: Discuss Start and End 'nodes'?)
@@ -224,6 +221,7 @@ public class Vehicle {
                 speed = 0;
                 metrics.stopMoving(this.currentTime); // Saves time to vehicle metrics
             }
+            this.currentTime = newTime;
         }
         return "?";
     }
