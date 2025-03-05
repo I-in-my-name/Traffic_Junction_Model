@@ -28,8 +28,8 @@ public class LaneMetrics {
         maxQueueLength = -1;
         queueLengthRunningTotal = 0;
         queueTotalCount = 0;
-        queueLengths = new ArrayList<>();
-        lastQueueLength = 0;
+        //queueLengths = new ArrayList<>();
+        //lastQueueLength = 0;
     }
 
     public void addVehicleMetric(VehicleMetrics vehicleMetric) {
@@ -59,12 +59,12 @@ public class LaneMetrics {
      */
     public void updateQueueSize(int currentQueueLength) {
         // Update last queue length and queue lengths list:
-        if (lastQueueLength < currentQueueLength) { // If the queue length is increasing
-            lastQueueLength = currentQueueLength;       // Update queue length
-        } else if (lastQueueLength > currentQueueLength) {  // If the queue length is decreasing
-            queueLengths.add(lastQueueLength);      // Add the queue length to the list
-            lastQueueLength = currentQueueLength;
-        }
+        //if (lastQueueLength < currentQueueLength) { // If the queue length is increasing
+        //    lastQueueLength = currentQueueLength;       // Update queue length
+        //} else if (lastQueueLength > currentQueueLength) {  // If the queue length is decreasing
+        //    queueLengths.add(lastQueueLength);      // Add the queue length to the list
+        //    lastQueueLength = currentQueueLength;
+        //}
         // Check if there is a new max queue length:
         if (currentQueueLength > maxQueueLength) {
             maxQueueLength = currentQueueLength;

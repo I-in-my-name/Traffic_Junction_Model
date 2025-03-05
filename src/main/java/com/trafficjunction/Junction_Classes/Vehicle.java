@@ -9,59 +9,118 @@ import com.trafficjunction.observer.*;
 
 public class Vehicle {
 
-    private float speed;
+    // stores the speed of the vehicle
+    private float speed; 
+
+    // stores the maximum speed the vehicle can travel at
     private float maxSpeed;
+
+    // stores the length of the vehicle
     private float length;
-    // May change to queue
+
+    // A queue storing the route the route the given 
+    // vehicle will take
     private Queue<Lane> desiredRoute;
 
+    // An object storing the metrics for the given vehicle
     private VehicleMetrics metrics;
+
+    // A float storing the time at which the vehicle was
+    // first creeated
     private float creationTime;
     private float currentTime;
 
-    // Should vehicle be abstract class only defined by Car and Bus classes?
-    public Vehicle(float time, float maxSpeed, float length) { // Overload method in the case that vehicle route is not specified
+    // stores the direction the vehicle is moving in (eg "nte")
+    private String direction;
+
+
+    /**
+     * Overload method in the case that vehicle route/direction is not specified
+     */
+    public Vehicle(float time, float maxSpeed, float length) {
         // making empty object instead of null
         this(time, maxSpeed, length, new ArrayList<Lane>());
     }
+
     public Vehicle(float time, float maxSpeed, float length, List<Lane> route) {
+        this(time, maxSpeed, length, route, "");
+    }
+
+    /**
+     * Main constucture for the Vehicle class
+     * <p>
+     * Initializes all necessary attributes, 
+     * these include speed route and direction
+     * <p>
+     * @param time Time at which vehicle was created
+     * @param maxSpeed The maximum speed at which the vehicle can travel
+     * @param Length The length of the vehicle
+     * @param route the route that the vehicle will take
+     */
+    public Vehicle(float time, float maxSpeed, float length, List<Lane> route, String direction) {
         
+        // Inittaly sets the speed to the max speed
         this.speed = maxSpeed;
         this.maxSpeed = maxSpeed;
         this.length = length;
         this.metrics = new VehicleMetrics(time);
         
+        // Sets the creation time and current time to 0
         this.creationTime = time;
         this.currentTime = time;
 
+        // Sets the direction the vehicle is traveling in
+        // and the route it will take
         this.desiredRoute = new LinkedList<>(route);
+        this.direction = direction;
     }
 
-/// Methods for VehicleMetrics:
-
+    /**
+     * Gets the metric storing the total wait time for the vehicle
+     */
     public float getWaitTime() {
+        // returns the wait time
         return metrics.getTotalWaitTime();
     }
 
+    /**
+     * Gets the all the metrics for the vehicle
+     */
     public VehicleMetrics getMetrics() {
+        // returns the metrics
         return metrics;
     }
 
-///
-
-    // Don't need test for
+    /**
+     * Pops a lane from the route once it has been visited
+     */
     public Lane popRoute() {
-        return desiredRoute.poll();   // pop method
+        // returns the part of the route that has been complete or null
+        return desiredRoute.poll();   
     }
     
-    // Don't need test for
+    /**
+     * Gets the length of the vehicle
+     */
     public float getLength() {
+        // Returns the length of the vehicle
         return length;
     }
 
-    // method to set the vehicles route
+    /**
+     * Sets the ArrayList storing the route the vehicle will take
+     */
     public void setRoute(List<Lane> route) {
+        // Sets the arrayLis tto store the correct route
         desiredRoute = new LinkedList<>(route);
+    }
+
+    /**
+     * Sets the direction that the vehicle will take
+     */
+    public String getDirection() {
+        //returns the direction the vehicle is traveling in
+        return this.direction;
     }
 
     /**
@@ -93,26 +152,14 @@ public class Vehicle {
     //    }
     //}
 
-///
-
     // TODO: finish test for
     /**
      * Method to update a vehicle's position
-     * 
+     * <p>
      * 
      * Parameters - (time) the time since simulation started, (lane) the lane that the vehicle is currently in
      */
-    public void update(float time, Lane lane) {
-        List<Pair<Float,Vehicle>> vehicles = lane.getVehicles();
-        int index = 0;
-        for (Pair<Float,Vehicle> posVehicle : vehicles) {
-            if (posVehicle.getRight() == this) {
-                break;
-            }
-            index++;
-        }
-        this.update(time, lane, index);
-    }
+    
     // Overload method so we can get the index without searching for the vehicle in the lane
     public String update(float newTime, Lane lane, int index) {
         //TODO: Figure out where metrics.startMoving and metrics.stopMoving calls go

@@ -6,6 +6,22 @@ import java.util.Map;
 
 public class Junction {
 
+    // Junction Ranking Constants:
+    private static final float optimalAvgWaitTime = 10.0f; // traffic lights go green for 10 seconds
+    private static final float worstAvgWaitTime = 40.0f;
+
+    private static final float optimalMaxWaitTime = 40.0f; // one full traffic rotation in seconds
+    private static final float worstMaxWaitTime = 120.0f; // three full traffic rotations in seconds
+
+    private static final float optimalQueueLength = 10.0f;
+    private static final float worstQueueLength = 17.0f; // max # of possible vehicles in lane of 50m length
+
+    // Junction Ranking Weightings:
+    private static final float weightAvg = 0.5f;
+    private static final float weightMax = 0.3f;
+    private static final float weightQueue = 0.2f;
+
+
     private List<List<Lane>> entry_lanes = new ArrayList<>();   // Entry lanes
     private List<List<Lane>> exit_lanes = new ArrayList<>();    // Exit lanes
 
@@ -27,9 +43,12 @@ public class Junction {
 
     private float timer;                // How much time has passed since the start of the simulation
 
+    private List<Vehicle> animateVehicles;
+
     public Junction() {
         // Initialise
         vehicle_routes = new HashMap<>();
+        animateVehicles = new ArrayList<>();
         
         // Set vehicle rate to be 0 for all directions
         /* Changing vehicle rates to be non zero in every direction for simulation testing */
@@ -129,6 +148,15 @@ public class Junction {
      */
     public Map<String, Integer> getVehicle_rate() {
         return vehicle_rate;
+    }
+
+    public boolean setVehicleRate(String direction, int rate) {
+        if (rate < 0)
+            return false;
+        if(!vehicle_rate.containsKey(direction))
+            return false;
+        vehicle_rate.put(direction, rate);
+        return true;
     }
     
 
@@ -680,7 +708,7 @@ public class Junction {
                 // TODO: revise logic
                 for(int k = 0; k < backlog_number; k++){
                     route = routes_backlog.get(0);
-                    new_car = new Car(this.timer, route);
+                    new_car = new Car(this.timer, route, key);
                     new_car.popRoute();
                     succesfull = false;
                     routes_index = 0;
@@ -713,7 +741,7 @@ public class Junction {
             while (multiple < current_time) {
                 // create a vehicle
                 route = routes.get(0);
-                new_car = new Car(this.timer, route);   // creates the vehicle
+                new_car = new Car(this.timer, route, key);   // creates the vehicle
                 new_car.popRoute();     // pop route so that the next lane that the lane wants to go in is the correct one
                 succesfull = false;
                 routes_index = 0;
@@ -735,6 +763,72 @@ public class Junction {
                 lane.calculateMetrics(timestamp);
             }
         }
+    }
+
+
+    // Ranking calculation methods below
+
+    private float normalise(float observed, float optimal, float worst) {
+        if (observed <= optimal) {
+            return 1.0f;
+        }
+        if (observed >= worst) {
+            return 0.0f;
+        }
+        return 1.0f - ((observed - optimal) / (worst - optimal));
+    }
+
+    public void updateAllMetrics(float currentTime) {
+        for (List<Lane> laneGroup : getEntryLanes()) {
+            for (Lane lane : laneGroup) {
+                lane.calculateMetrics(currentTime);
+            }
+        }
+    }
+
+    public float computeOverallScore(float currentTime) {
+        // Update all lane metrics first
+        updateAllMetrics(currentTime);
+
+        float totalScore = 0.0f;
+        // Loop through all 4 directions (0: North, 1: East, 2: South, 3: West)
+        for (int side = 0; side < 4; side++) {
+            float avgWait = getAverageWaitTime(side);    // already computed from lane metrics
+            float maxWait = getMaxWaitTime(side);          // already computed from lane metrics
+            int maxQueue  = getMaxQueueLength(side);       // maximum queue length among lanes in this direction    
+    
+
+            // Normalise each metric
+            float normAvg = normalise(avgWait, optimalAvgWaitTime, worstAvgWaitTime);
+            float normMax = normalise(maxWait, optimalMaxWaitTime, worstMaxWaitTime);
+            float normQueue = normalise((float) maxQueue, optimalQueueLength, worstQueueLength);
+
+            // Compute weighted score for this direction
+            float directionScore = (weightAvg * normAvg) + (weightMax * normMax) + (weightQueue * normQueue);
+            totalScore += directionScore;
+        }
+        // Average over 4 directions and scale to 1000
+        float avgScore = totalScore / 4.0f;
+        return avgScore * 1000.0f;
+    }    
+
+    public List<Triple<String, String, Integer>> getVehiclesToAnimate() {
+        List<Triple<String, String, Integer>> return_data = new ArrayList<>();
+        for (List<Lane> entryLaneList : entry_lanes) {
+            int index = 0;
+            for (Lane lane : entryLaneList) {
+                List<Vehicle> vehicles = lane.getVehiclesRemovedThisTurn();
+                for (Vehicle vehicle : vehicles) {
+                    String direction = vehicle.getDirection();
+                    String entryCharacter = direction.substring(0,1).toUpperCase();
+                    String exitCharacter = direction.substring(0,1).toUpperCase();
+                    Triple triple = new Triple(entryCharacter, exitCharacter, index);
+                    return_data.add(triple);
+                }
+                index++;
+            }
+        }
+        return return_data;
     }
 
     // want to be able to save all a junction's features into a text file (e.g. csv or JSON)

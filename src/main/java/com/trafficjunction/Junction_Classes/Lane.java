@@ -13,7 +13,8 @@ public class Lane {
     private String direction; // N, S, E, W --> can formalise later
     private boolean bus_lane; // if bus lane
 
-    private boolean removedVehicle = false;
+    private boolean removedVehicle;
+    private List<Vehicle> removedVehiclesThisTurn;
 
     private LaneMetrics metrics;
 
@@ -28,9 +29,12 @@ public class Lane {
         this.direction = direction;
         this.bus_lane = false;
 
-        vehicles = new ArrayList<>();
+        this.removedVehicle = false;
+        this.removedVehiclesThisTurn = new ArrayList<>();
 
-        metrics = new LaneMetrics();
+        this.vehicles = new ArrayList<>();
+
+        this.metrics = new LaneMetrics();
     }
 
     // Doesn't need test
@@ -153,6 +157,7 @@ public class Lane {
             return false; // Lane is empty, nothing to remove
         }
         removedVehicle = true;
+        removedVehiclesThisTurn.add(vehicles.get(0).getRight());
         vehicles.remove(0); // Remove the first vehicle in the list (front of the lane)
         return true; // Successfully removed
     }
@@ -306,6 +311,10 @@ public class Lane {
         metrics.calculateMetrics(timestamp);
     }
 
+    public List<Vehicle> getVehiclesRemovedThisTurn() {
+        return this.removedVehiclesThisTurn;
+    }
+
 
     /**
      * Method to update the lane
@@ -318,6 +327,8 @@ public class Lane {
         // TODO: shift stored values in index? Will this cause problems? If so then does the vehicles list need to be cloned?
         // List has a clone method but not for when it stores custom objects.
         int currentQueueLength = 0;
+
+        removedVehiclesThisTurn = new ArrayList<>();
 
         int index = 0;
         for (Pair<Float,Vehicle> pos_vehicle : vehicles) {
