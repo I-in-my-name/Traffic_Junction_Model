@@ -112,11 +112,11 @@ public class Vehicle {
         this.update(time, lane, index);
     }
     // Overload method so we can get the index without searching for the vehicle in the lane
-    public void update(float new_time, Lane lane, int index) {
+    public String update(float new_time, Lane lane, int index) {
         // Get needed variables:
         float time_difference = new_time - this.current_time;			// Gets the time increment increase
-        if (time_difference < 0.f || index >= lane.getVehicles().size() || index < 0) { // If index is out of bounds, or no update is needed
-            return;
+        if (time_difference <= 0.f || index >= lane.getVehicles().size() || index < 0) { // If index is out of bounds, or no update is needed
+            return "no update";
         }
         Pair<Float,Vehicle> this_pair = lane.getVehicles().get(index);	// Gets the pair which stores this vehicle
         float position = this_pair.getLeft();	// Gets the vehicle's current position
@@ -152,7 +152,7 @@ public class Vehicle {
             // changed this from above to below as position > traversable position,
             // part of change described above
             float traversable_distance = position - traversable_position;
-            float distance = Math.max(traversable_distance, max_traversable_distance);
+            float distance = Math.min(traversable_distance, max_traversable_distance);
             // position - distance is new position
             // closer to 0 is closer to end of lane so position gets smaller as distance travelled grows
             this_pair.setLeft(position - distance);
@@ -161,34 +161,46 @@ public class Vehicle {
             this.current_time += time_taken;
             
             // Run function again in case reaching the end of the lane; (current_time) is updated, so it won't run infinitely:
-            this.update(new_time, lane, index);
+            if (new_time > current_time) {
+                return "another update, "+ this.update(new_time, lane, index);
+            }
 
         } else { // The vehicle can not move OR is at 0 and waiting for TrafficLights
             boolean can_proceed = lane.canPass();
             if (index == 0 && position == 0.f && can_proceed) { // If we are able to go to the next lane
-                lane.removeVehicle();                           // Remove vehicle
                 // TODO: Remember to shift list up if needed
                 Lane next_lane = this.popRoute();
                 if (next_lane != null && lane.getGoingTo().contains(next_lane)) {
+                    lane.removeVehicle();                           // Remove vehicle from current lane
                     next_lane.addVehicle(this);
-                    this.update(new_time, next_lane, index);
+                    this.update(new_time, next_lane, next_lane.getVehicleNum()-1);
                 } else if (!lane.getGoingTo().isEmpty()) {  // If there is one or more possible lanes for the vehicle to go in
                     List<Lane> next_lanes = lane.getGoingTo();
                     // Go to the lane with the least number of vehicles:
                     int check_index = 1;
                     int lowest_index = 0;
                     int least_v = next_lanes.get(0).getVehicleNum();    // Initially gets the number of vehicles in the first possible lane
+                    boolean available = !next_lanes.get(0).isFull();
                     while (check_index != next_lanes.size()) {
+                        boolean canGoTo = !next_lanes.get(check_index).isFull();
                         int new_v = next_lanes.get(check_index).getVehicleNum();    // Get number of vehicles in the first lane
-                        if (least_v > new_v) {          // Compares num of vehicles between current lowest and another lane's
+                        if (least_v > new_v && canGoTo) {       // Compares num of vehicles between current lowest and another lane's
                             lowest_index = check_index;
                             least_v = new_v;
+                            available = true;
                         }
                         check_index++;
                     }
                     Lane desiredLane = next_lanes.get(lowest_index);    // Gets the lane
-                    desiredLane.addVehicle(this);                       // Adds vehicle
+                    if (available) {  // If a lane is available
+                        lane.removeVehicle();                           // Remove vehicle from current lane
+                        desiredLane.addVehicle(this);                   // Adds vehicle
+                        return "add to another lane, " + this.update(new_time, desiredLane, desiredLane.getVehicles().size()-1);
+                    } else {
+                        return "unsuccesful in adding to lane";
+                    }
                 } else {
+                    lane.removeVehicle();   // Remove vehicle from current lane
                     // Vehicle has reached the end of the route
                     // Give vehicle metrics to junction somehow (TODO: Discuss Start and End 'nodes'?)
                 }
@@ -197,18 +209,19 @@ public class Vehicle {
                 metrics.stopMoving(this.current_time); // Saves time to vehicle metrics
             }
         }
+        return "?";
     }
 
     // Methods to go from time (s) to distance (m) and vice versa, dependant on speed/max speed of vehicle
     public float calculateTimeFromDistance(float distance_to_travel) {
-        float time_taken = distance_to_travel / max_speed;
+        float time_taken = distance_to_travel / (max_speed / 3.6f);
         return time_taken;
     }
     public float calculateDistanceFromTime(float time_to_travel) {
         if (time_to_travel==0) {
             return 0;
         }
-        float distance = max_speed / time_to_travel;
+        float distance = (max_speed / 3.6f) * time_to_travel;
         return distance;
     }
 

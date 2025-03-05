@@ -24,34 +24,47 @@ public class VehicleTests {
         exitLane.addComingLane(entryLane);
         entryLane.addGoingLane(exitLane);
 
-        Vehicle vehicle = new Vehicle(1.f, 1.f, 1.f);
+        System.out.println(entryLane.getGoingTo());
+
+        float speed = 60.f;
+        Vehicle vehicle = new Vehicle(1.f, speed, 1.f);
         entryLane.addVehicle(vehicle);
         float initialPosition = entryLane.getVehicles().get(0).getLeft();
 
         //// if 0 time has passed, nothing should change.
         assertEquals(initialPosition, entryLane.getVehicles().get(0).getLeft());
-        System.out.println(entryLane);
-        vehicle.update(1.f, entryLane);
-        System.out.println(entryLane);
+        System.out.println("\nTime: 1.f");
+        System.out.print("Entry:\t");System.out.println(entryLane);
+        System.out.print("Exit:\t");System.out.println(exitLane);
+
+        System.out.println("\nTime: 1.f (updated but nothing should change)");
+        System.out.println(vehicle.update(1.f, entryLane, 0));
+        System.out.print("Entry:\t");System.out.println(entryLane);
+        System.out.print("Exit:\t");System.out.println(exitLane);
+        
         assertEquals(0, exitLane.getVehicleNum());
 
         //// if 1 time has passed, something should change
-        //// vehicle should be in next lane
-        //// (as instataneous acceleration so immediately vehicle speed = 1 distance / time unit,
-        //// so in one time unit go 1 distance > distance remaining in lane -> in next lane).
-        vehicle.update(2.f, entryLane);
+        //// vehicle should be in a different position (It will have moved by [speed / 3.6 which] is the conversion from kmph to mps)
+        //vehicle.update(2.f, entryLane);
 
         ////interim tests
-        assertEquals(1,entryLane.getTrafficLight().getState());
-        assertEquals(false,entryLane.isFull());
-        assertEquals(true, entryLane.getGoingTo().size() > 0);
-        vehicle.update(1.f, entryLane);
-
-        System.out.println(entryLane);
-
+        System.out.println("\nTime: 2.f");
+        System.out.println(vehicle.update(2.f, entryLane,0));
+        System.out.print("Entry:\t");System.out.println(entryLane);
+        System.out.print("Exit:\t");System.out.println(exitLane);
+        float newPosition = 30.f - speed / 3.6f;
+        assertEquals(1, entryLane.getTrafficLight().getState());
+        assertEquals(newPosition, entryLane.getVehicles().get(0).getLeft());
+        
+        
+        System.out.println("\nTime: 3.f");
+        System.out.println(vehicle.update(3.f, entryLane,0));
+        System.out.print("Entry:\t");System.out.println(entryLane);
+        System.out.print("Exit:\t");System.out.println(exitLane);
+        newPosition = 60.f - speed / 3.6f * 2.f;
         assertEquals(0, entryLane.getVehicleNum());
-        assertEquals(1, exitLane.getVehicleNum());
-        //// TODO: What is position of vehicle in exit lane? Should be back of lane?
+        assertEquals(Math.round(newPosition), Math.round(exitLane.getVehicles().get(0).getLeft()));
     }
 
 }
