@@ -447,18 +447,23 @@
                         </Text>
                      </children>
                   </HBox>
-                  <VBox prefHeight="576.0" prefWidth="256.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="256.0" spacing="10.0">
                      <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cardinal Metrics" textAlignment="CENTER" underline="true" wrappingWidth="248.498046875">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                            <tabs>
                               <Tab text="North">
                                  <content>
-                                    <HBox fx:id="northVInput1" alignment="CENTER" spacing="15.0">
+                                    <HBox fx:id="northVInput1" alignment="CENTER" spacing="5.0">
                                        <children>
-                                          <GridPane alignment="CENTER" prefHeight="194.0" prefWidth="249.0">
+                                          <GridPane alignment="CENTER" prefHeight="153.0" prefWidth="266.0">
                                              <columnConstraints>
-                                                <ColumnConstraints halignment="LEFT" hgrow="NEVER" maxWidth="134.0" minWidth="10.0" prefWidth="106.0" />
-                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="79.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="134.0" minWidth="10.0" prefWidth="118.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="89.0" />
                                              </columnConstraints>
                                              <rowConstraints>
                                                 <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
@@ -469,9 +474,12 @@
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Wait Time:" textAlignment="CENTER" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="124.775390625" GridPane.rowIndex="2" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
-                                                <TextField disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="northAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="northMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="northAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="northMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
@@ -485,42 +493,32 @@
                                  <content>
                                     <HBox fx:id="eastVInput1" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <GridPane alignment="CENTER" prefHeight="116.0" prefWidth="192.0">
+                                          <GridPane alignment="CENTER" prefHeight="153.0" prefWidth="266.0">
                                              <columnConstraints>
-                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="80.0" minWidth="10.0" prefWidth="40.0" />
-                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="120.0" minWidth="10.0" prefWidth="74.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="101.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="137.0" minWidth="10.0" prefWidth="137.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="82.0" />
                                              </columnConstraints>
                                              <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="93.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To South" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                                <TextField fx:id="ETS1" promptText="0" GridPane.columnIndex="2" />
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To West" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To North" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="ETW1" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextField fx:id="ETN1" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../assets/leftArrow.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
-                                                   <image>
-                                                      <Image url="@../../assets/upArrow.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
-                                                   <image>
-                                                      <Image url="@../../assets/rightArrow.png" />
-                                                   </image>
-                                                </ImageView>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Wait Time:" textAlignment="CENTER" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
+                                                <TextField fx:id="eastAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="eastMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="eastAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="eastMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
                                     </HBox>
                                  </content>
                               </Tab>
@@ -528,42 +526,32 @@
                                  <content>
                                     <HBox fx:id="southVInput1" alignment="CENTER">
                                        <children>
-                                          <GridPane alignment="CENTER" prefHeight="116.0" prefWidth="192.0">
+                                          <GridPane alignment="CENTER" prefHeight="153.0" prefWidth="266.0">
                                              <columnConstraints>
-                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="80.0" minWidth="10.0" prefWidth="40.0" />
-                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="120.0" minWidth="10.0" prefWidth="74.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="101.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="137.0" minWidth="10.0" prefWidth="137.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="82.0" />
                                              </columnConstraints>
                                              <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="93.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To West" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                                <TextField fx:id="STW1" promptText="0" GridPane.columnIndex="2" />
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To North" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To East" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="STN1" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextField fx:id="STE1" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../assets/leftArrow.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
-                                                   <image>
-                                                      <Image url="@../../assets/upArrow.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
-                                                   <image>
-                                                      <Image url="@../../assets/rightArrow.png" />
-                                                   </image>
-                                                </ImageView>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Wait Time:" textAlignment="CENTER" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
+                                                <TextField fx:id="southAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="southMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="southAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="southMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
                                     </HBox>
                                  </content>
                               </Tab>
@@ -571,47 +559,76 @@
                                  <content>
                                     <HBox fx:id="westVInput1" alignment="CENTER">
                                        <children>
-                                          <GridPane alignment="CENTER" prefHeight="116.0" prefWidth="192.0">
+                                          <GridPane alignment="CENTER" prefHeight="153.0" prefWidth="266.0">
                                              <columnConstraints>
-                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="80.0" minWidth="10.0" prefWidth="40.0" />
-                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="120.0" minWidth="10.0" prefWidth="74.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="101.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="137.0" minWidth="10.0" prefWidth="137.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="82.0" />
                                              </columnConstraints>
                                              <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="93.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                              <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To North" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                                <TextField fx:id="WTN1" promptText="0" GridPane.columnIndex="2" />
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To East" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To South" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="WTE1" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextField fx:id="WTS1" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../assets/leftArrow.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
-                                                   <image>
-                                                      <Image url="@../../assets/upArrow.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
-                                                   <image>
-                                                      <Image url="@../../assets/rightArrow.png" />
-                                                   </image>
-                                                </ImageView>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Wait Time:" textAlignment="CENTER" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
+                                                <TextField fx:id="westAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="westMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="westAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="westMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
                                     </HBox>
                                  </content>
                               </Tab>
                            </tabs>
                         </TabPane>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overall Metrics" textAlignment="CENTER" underline="true" wrappingWidth="248.498046875">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <GridPane alignment="CENTER" prefHeight="173.0" prefWidth="255.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="134.0" minWidth="10.0" prefWidth="118.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="89.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="93.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="93.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Wait Time:" textAlignment="CENTER" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
+                              <TextField fx:id="overallAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                              <TextField fx:id="overallMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="overallAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="overallMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overall Score:" textAlignment="CENTER" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="overallScore" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           </children>
+                        </GridPane>
+                        <Button fx:id="runSimulationButton1" alignment="CENTER" mnemonicParsing="false" onAction="#runSimulationButtonPress" prefHeight="46.0" prefWidth="170.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Show Other Options" textAlignment="CENTER">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
                      </children></VBox>
                </children>
             </VBox>
