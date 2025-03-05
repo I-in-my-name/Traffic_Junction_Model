@@ -27,6 +27,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import com.trafficjunction.Junction_Classes.Junction;
+import com.trafficjunction.Junction_Classes.Triple;
+
 public class PrimaryController {
 
     // FXML elements
@@ -322,6 +325,7 @@ public class PrimaryController {
     @FXML
     private void runSimulationButtonPress() {
         // JunctionConfiguration userData = gatherUserData();
+        Junction junction = new Junction();
 
         // TODO call simulation
         return;

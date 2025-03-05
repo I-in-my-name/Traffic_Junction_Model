@@ -53,18 +53,18 @@ public class Junction {
         // Set vehicle rate to be 0 for all directions
         /* Changing vehicle rates to be non zero in every direction for simulation testing */
         vehicle_rate = new HashMap<>();
-        vehicle_rate.put("nte", 200);
-        vehicle_rate.put("nts", 200);
-        vehicle_rate.put("ntw", 200);
-        vehicle_rate.put("ets", 200);
-        vehicle_rate.put("etw", 200);
-        vehicle_rate.put("etn", 200);
-        vehicle_rate.put("ste", 200);
-        vehicle_rate.put("stn", 200);
-        vehicle_rate.put("stw", 200);
-        vehicle_rate.put("wts", 200);
-        vehicle_rate.put("wte", 200);
-        vehicle_rate.put("wtn", 200);
+        vehicle_rate.put("nte", 0);
+        vehicle_rate.put("nts", 0);
+        vehicle_rate.put("ntw", 0);
+        vehicle_rate.put("ets", 0);
+        vehicle_rate.put("etw", 0);
+        vehicle_rate.put("etn", 0);
+        vehicle_rate.put("ste", 0);
+        vehicle_rate.put("stn", 0);
+        vehicle_rate.put("stw", 0);
+        vehicle_rate.put("wts", 0);
+        vehicle_rate.put("wte", 0);
+        vehicle_rate.put("wtn", 0);
 
         vehicle_backlogs = new HashMap<>();
         
