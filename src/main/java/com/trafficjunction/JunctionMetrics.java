@@ -104,7 +104,7 @@ public class JunctionMetrics {
     }
 
     public void addLane(String dir, int numLanes, int l, int lf, int f, int rf, int r) {
-        Road road = new Road(dir, numLanes, l, lf, f, rf, r);
+        Road road = new Road(numLanes, l, lf, f, rf, r);
 
         switch (dir) {
             case "north":
@@ -133,7 +133,6 @@ public class JunctionMetrics {
 }
 
 class Road {
-    String parentRoad;
     int numLanes;
     int left;
     int leftForward;
@@ -141,23 +140,13 @@ class Road {
     int rightForward;
     int right;
 
-    public Road(String dir, int numLanes, int left, int leftForward, int forward, int rightForward, int right) {
-        this.dir = dir;
+    public Road(int numLanes, int left, int leftForward, int forward, int rightForward, int right) {
         this.numLanes = numLanes;
         this.left = left;
         this.leftForward = leftForward;
         this.forward = forward;
         this.rightForward = rightForward;
         this.right = right;
-    }
-
-    /*
-     * Getter method for the compass direction of the road.
-     * 
-     * @return String - The compass direction of the road e.g. "north".
-     */
-    public String getRoad() {
-        return this.parentRoad;
     }
 
     /*
