@@ -77,15 +77,15 @@ class VehicleMetrics {
     // calculates total wait time once vehicle removed from simulation, ensures all waiting periods are summed prior to deletion
     public void calculateTotalWaitTime(float exitTimestamp) {
         totalWaitTime = 0.f;
-        System.out.print("Wait times: ");
-        System.out.println(waitTimes);
+        //System.out.print("Wait times: ");
+        //System.out.println(waitTimes);
         for (float time : waitTimes) {
             totalWaitTime += time;
         }
-        System.out.println("Calc wait time");
-        System.out.println(totalWaitTime);
-        System.out.print("Total: ");
-        System.out.println(totalWaitTime);
+        //System.out.println("Calc wait time");
+        //System.out.println(totalWaitTime);
+        //System.out.print("Total: ");
+        //System.out.println(totalWaitTime);
         if (!isMoving && !waitTimes.isEmpty()) {
             // If not moving, then the last stop time is the final stop time
             // add it to the total wait time as it has previously been subtracted from the wait time
@@ -97,18 +97,17 @@ class VehicleMetrics {
             
             //totalWaitTime += (exitTimestamp - stopTimes.get(stopTimes.size() - 1));
         }
-        System.out.println(totalWaitTime);
-        System.out.println();
+        //System.out.println(totalWaitTime);
+        //System.out.println();
     }
-/*
-    // Don't need test for
-    public List<Float> getWaitTimes() {
-        return null;
-    }
-*/
+
     // Don't need test for
     public float getTotalWaitTime() {
         return totalWaitTime;
     }
 
+    // Don't need test for
+    public List<Float> getWaitTimes() {
+        return waitTimes;
+    }
 }

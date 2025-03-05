@@ -290,6 +290,18 @@ public class Lane {
         return metrics.getMaxQueueLength();
     }
 
+    public float getAverageQueueLength() {
+        return metrics.getAverageQueueLength();
+    }
+
+    public int getQueueLengthRunningTotal() {
+        return metrics.getQueueLengthRunningTotal();
+    }
+
+    public int getQueueTotalCount() {
+        return metrics.getQueueTotalCount();
+    }
+
     public void calculateMetrics(float timestamp) {
         metrics.calculateMetrics(timestamp);
     }

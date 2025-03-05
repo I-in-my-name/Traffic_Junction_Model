@@ -194,6 +194,16 @@ public class Junction {
         return maxQueueLength;
     }
 
+    public float getAverageQueueLength(int side) {
+        int totalQueueLength = 0;
+        int totalQueueRecordingsCount = 0;
+        for (Lane lane : entry_lanes.get(side)) {
+            totalQueueLength += lane.getQueueLengthRunningTotal();
+            totalQueueRecordingsCount += lane.getQueueTotalCount();
+        }
+        return totalQueueLength / totalQueueRecordingsCount;
+    }
+
     /**
      * Add Entry Lane method
      * Parameters - the side which we want to add a lane in.

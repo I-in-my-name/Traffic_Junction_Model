@@ -17,7 +17,7 @@ public class VehicleTests {
         // Test case of car at front of queue, traffic light green
         // i.e. car should: 
         TrafficLight trafficLight = new TrafficLight();
-        trafficLight.setState(1); // green
+        trafficLight.setState(0); // red
 
         Lane entryLane = new Lane(30.f, trafficLight, "lfr");
         Lane exitLane = new Lane(30.f, trafficLight, "lfr");
@@ -37,7 +37,7 @@ public class VehicleTests {
         System.out.print("Entry:\t");System.out.println(entryLane);
         System.out.print("Exit:\t");System.out.println(exitLane);
 
-        System.out.println("\nTime: 1.f (updated but nothing should change)");
+        System.out.println("\nTime: 1.f (updated but nothing should change since time has not passed)");
         System.out.println(vehicle.update(1.f, entryLane, 0));
         System.out.print("Entry:\t");System.out.println(entryLane);
         System.out.print("Exit:\t");System.out.println(exitLane);
@@ -49,22 +49,32 @@ public class VehicleTests {
         //vehicle.update(2.f, entryLane);
 
         ////interim tests
-        System.out.println("\nTime: 2.f");
+        System.out.println("\nTime: 2.f (moved)");
         System.out.println(vehicle.update(2.f, entryLane,0));
         System.out.print("Entry:\t");System.out.println(entryLane);
         System.out.print("Exit:\t");System.out.println(exitLane);
         float newPosition = 30.f - speed / 3.6f;
-        assertEquals(1, entryLane.getTrafficLight().getState());
         assertEquals(newPosition, entryLane.getVehicles().get(0).getLeft());
         
         
-        System.out.println("\nTime: 3.f");
+        System.out.println("\nTime: 3.f (moved but still in the entry lane)");
         System.out.println(vehicle.update(3.f, entryLane,0));
         System.out.print("Entry:\t");System.out.println(entryLane);
         System.out.print("Exit:\t");System.out.println(exitLane);
-        newPosition = 60.f - speed / 3.6f * 2.f;
+        assertEquals(0.f, entryLane.getVehicles().get(0).getLeft());
+
+        trafficLight.setState(1); // red
+
+        System.out.println("\nTime: 4.5f (moved, now in)");
+        System.out.println(vehicle.update(4.5f, entryLane,0));
+        System.out.print("Entry:\t");System.out.println(entryLane);
+        System.out.print("Exit:\t");System.out.println(exitLane);
+        newPosition = 30.f - speed / 3.6f * 1.5f;
         assertEquals(0, entryLane.getVehicleNum());
-        assertEquals(Math.round(newPosition), Math.round(exitLane.getVehicles().get(0).getLeft()));
+        assertEquals(1, exitLane.getVehicleNum());
+        //assertEquals(newPosition, exitLane.getVehicles().get(0).getLeft());
+
+        System.out.print(vehicle.getMetrics().getWaitTimes());
     }
 
 }

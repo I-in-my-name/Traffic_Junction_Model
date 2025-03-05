@@ -147,10 +147,10 @@ public class Vehicle {
         // traversable position = 20 means should be able to move 30 forward
         // TODO: this is right, right? Changed it when fixing bugs to run simulation
         if (position > traversablePosition) { // If the vehicle can move
-            if (speed != 0) {
+            if (speed == 0) {
                 speed = maxSpeed;
+                metrics.startMoving(currentTime);
             }
-            metrics.startMoving(currentTime);
             // Travel possible distance:
             float maxTraversableDistance = calculateDistanceFromTime(timeDifference);
             //float traversable_distance = traversable_position - position;
