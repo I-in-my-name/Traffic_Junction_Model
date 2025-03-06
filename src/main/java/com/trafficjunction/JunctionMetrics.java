@@ -258,7 +258,7 @@ public class JunctionMetrics implements Serializable {
                 ObjectInputStream in = new ObjectInputStream(file);) {
             return (JunctionMetrics) in.readObject();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // TODO return permutations
             return null;
         }
     }
@@ -271,6 +271,11 @@ public class JunctionMetrics implements Serializable {
                 getWest().getFormatted()
         };
         return toReturn;
+    }
+
+    public List<JunctionMetrics> getPermutations() {
+        // TODO return permutations
+        return null;
     }
 }
 
