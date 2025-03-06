@@ -55,13 +55,10 @@ public class AnimationHandler {
      * @param sweep - A boolean value dictating whether the arc has a sweep flag or
      * not (inversed direction of curve.)
      * 
-     * @param colour - The colour of the arc to be created. TODO: WILL BE REMOVED
-     * LATER AS PATHS SHOULD BE INVISIBLE.
-     * 
      * @return Path - The created path.
      */
     public static Path createArc(double startX, double startY, double endX, double endY,
-            boolean sweep, Paint colour) {
+            boolean sweep) {
         Path path = new Path();
         path.getElements().add(new MoveTo(startX, startY));
 
@@ -79,8 +76,7 @@ public class AnimationHandler {
         arcTo.setLargeArcFlag(false);
 
         path.getElements().add(arcTo);
-        path.setStroke(colour);
-        path.setStrokeWidth(2);
+        path.setVisible(false);
 
         return path;
     }
@@ -108,7 +104,7 @@ public class AnimationHandler {
         line.setStartY(startY);
         line.setEndX(endX);
         line.setEndY(endY);
-        line.setStroke(Color.BLUE);
+        line.setVisible(false);
 
         return line;
     }
@@ -138,7 +134,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    false, Color.RED);
+                    false);
         }
 
         return paths;
@@ -184,7 +180,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    true, Color.GREEN);
+                    true);
         }
 
         return paths;
@@ -208,7 +204,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    false, Color.RED);
+                    false);
         }
 
         return paths;
@@ -254,7 +250,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    true, Color.GREEN);
+                    true);
         }
 
         return paths;
@@ -278,7 +274,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    false, Color.RED);
+                    false);
         }
 
         return paths;
@@ -324,7 +320,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    true, Color.GREEN);
+                    true);
         }
 
         return paths;
@@ -348,7 +344,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    false, Color.RED);
+                    false);
         }
 
         return paths;
@@ -394,7 +390,7 @@ public class AnimationHandler {
 
         for (int i = 0; i < startPoints.length; i++) {
             paths[i] = createArc(startPoints[i][0], startPoints[i][1], endPoints[i][0], endPoints[i][1],
-                    true, Color.GREEN);
+                    true);
         }
 
         return paths;
