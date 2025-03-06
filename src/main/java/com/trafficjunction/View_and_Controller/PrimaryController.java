@@ -791,4 +791,34 @@ public class PrimaryController {
         careTaker.redo();
         populateFieldsWithData(configuration);
     }
+
+    /*
+     * Function that runs when the "Show Other Options" button is pressed on the UI.
+     * Will switch to the junction generation window.
+     */
+    @FXML
+    private void showJunctionOptions(ActionEvent event) {
+        try {
+            // Load the new FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trafficjunction/generationWindow.fxml"));
+            Parent root = loader.load();
+
+            GenerationController generationController = loader.getController();
+            Stage primaryStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            generationController.setPrimaryStage(primaryStage);
+
+            // Create a new Scene and Stage (window)
+            Stage genStage = new Stage();
+            genStage.setScene(new Scene(root));
+            genStage.setTitle("Generated Alternative Junctions");
+
+            genStage.show();
+
+            // Hide the current window.
+            primaryStage.hide();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

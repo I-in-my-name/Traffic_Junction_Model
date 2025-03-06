@@ -88,11 +88,11 @@
                                              </rowConstraints>
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To East" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                                <TextField fx:id="NTE" promptText="0" GridPane.columnIndex="2" />
+                                                <TextField fx:id="NTE" text="0" GridPane.columnIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To South" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To West" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="NTS" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextField fx:id="NTW" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                <TextField fx:id="NTS" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextField fx:id="NTW" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                 <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../../assets/leftArrow.png" />
@@ -131,11 +131,11 @@
                                              </rowConstraints>
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To South" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                                <TextField fx:id="ETS" promptText="0" GridPane.columnIndex="2" />
+                                                <TextField fx:id="ETS" text="0" GridPane.columnIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To West" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To North" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="ETW" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextField fx:id="ETN" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                <TextField fx:id="ETW" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextField fx:id="ETN" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                 <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../../assets/leftArrow.png" />
@@ -174,11 +174,11 @@
                                              </rowConstraints>
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To West" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                                <TextField fx:id="STW" promptText="0" GridPane.columnIndex="2" />
+                                                <TextField fx:id="STW" text="0" GridPane.columnIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To North" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To East" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="STN" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextField fx:id="STE" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                <TextField fx:id="STN" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextField fx:id="STE" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                 <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../../assets/leftArrow.png" />
@@ -217,11 +217,11 @@
                                              </rowConstraints>
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To North" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                                <TextField fx:id="WTN" promptText="0" GridPane.columnIndex="2" />
+                                                <TextField fx:id="WTN" text="0" GridPane.columnIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To East" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To South" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="WTE" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <TextField fx:id="WTS" promptText="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                <TextField fx:id="WTE" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextField fx:id="WTS" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                 <ImageView fitHeight="51.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../../assets/leftArrow.png" />
@@ -634,7 +634,7 @@
                               <TextField fx:id="overallScore" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
-                        <Button fx:id="runSimulationButton1" alignment="CENTER" mnemonicParsing="false" onAction="#runSimulationButtonPress" prefHeight="46.0" prefWidth="170.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Show Other Options" textAlignment="CENTER">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#showJunctionOptions" prefHeight="46.0" prefWidth="170.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Show Other Options" textAlignment="CENTER">
                            <font>
                               <Font size="16.0" />
                            </font>

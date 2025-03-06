@@ -1,5 +1,6 @@
 package com.trafficjunction;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -17,6 +18,7 @@ public class JunctionMetrics {
     private Map<String, Road> allRoads;
 
     public JunctionMetrics(int[] vehicleNums, int[] trafficLightDurs) {
+        this.vehicleNums = new HashMap<String, Integer>();
         this.vehicleNums.put("nte", vehicleNums[0]);
         this.vehicleNums.put("nts", vehicleNums[1]);
         this.vehicleNums.put("ntw", vehicleNums[2]);
@@ -30,11 +32,13 @@ public class JunctionMetrics {
         this.vehicleNums.put("wte", vehicleNums[10]);
         this.vehicleNums.put("wts", vehicleNums[11]);
 
+        this.trafficLightDurs = new HashMap<String, Integer>();
         this.trafficLightDurs.put("north", trafficLightDurs[0]);
         this.trafficLightDurs.put("east", trafficLightDurs[1]);
         this.trafficLightDurs.put("south", trafficLightDurs[2]);
         this.trafficLightDurs.put("west", trafficLightDurs[3]);
 
+        this.allRoads = new HashMap<String, Road>();
         this.allRoads.put("N", north);
         this.allRoads.put("E", east);
         this.allRoads.put("S", south);
