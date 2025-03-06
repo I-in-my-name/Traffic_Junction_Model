@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -206,8 +207,10 @@ public class PrimaryController {
                 Scene scene = new Scene(root);
                 Stage stage = new Stage();
                 stage.setScene(scene);
-                stage.setTitle("Traffic Light Controller");
+                stage.setTitle("Traffic Light Configuration");
                 stage.initModality(Modality.APPLICATION_MODAL);
+                Image icon = new Image(getClass().getResourceAsStream("/assets/trafficLightIcon.png"));
+                stage.getIcons().add(icon);
 
                 // Get controller and set the stage
                 TrafficLightController controller = loader.getController();
@@ -810,6 +813,8 @@ public class PrimaryController {
             // Create a new Scene and Stage (window)
             Stage genStage = new Stage();
             genStage.setScene(new Scene(root));
+            Image icon = new Image(getClass().getResourceAsStream("/assets/trafficCone.png"));
+            genStage.getIcons().add(icon);
             genStage.setTitle("Generated Alternative Junctions");
 
             genStage.show();
