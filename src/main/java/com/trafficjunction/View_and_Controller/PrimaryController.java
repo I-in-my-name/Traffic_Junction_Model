@@ -32,6 +32,7 @@ import javafx.stage.Stage;
 
 import com.trafficjunction.Junction_Classes.Junction;
 import com.trafficjunction.Junction_Classes.Triple;
+import java.util.List;
 import java.util.Map;
 
 public class PrimaryController {
@@ -179,6 +180,8 @@ public class PrimaryController {
     @FXML
     private AnchorPane junctionAnchor;
 
+    int[] trafficLightDurs = new int[5];
+
     @FXML
     private void initialize() {
         careTaker.addSnap(new ConfigurationSnapshot(configuration));
@@ -216,7 +219,10 @@ public class PrimaryController {
                 TrafficLightController controller = loader.getController();
                 controller.setStage(stage);
 
-                stage.show();
+                stage.showAndWait();
+
+                trafficLightDurs = controller.confirmLightDurations();
+
             } catch (IOException e) {
                 System.out.println("Error loading traffic light FXML: " + e);
                 e.printStackTrace();
@@ -442,11 +448,15 @@ public class PrimaryController {
             vehicleNums[i] = Integer.parseInt(allTextFields[i].getText());
         }
 
-        // TODO Need to populate this from the light junction config window.
-        int[] trafficDurs = new int[4];
+        // Checks if the user has not decided their own values for the traffic light
+        // configuration. If not, the default is 30.
+        if (this.trafficLightDurs == null) {
+            int[] temp = { 30, 30, 30, 30, 30 };
+            this.trafficLightDurs = temp;
+        }
 
         // Add all data to the junction metrics object.
-        junctionMetrics = new JunctionMetrics(vehicleNums, trafficDurs);
+        junctionMetrics = new JunctionMetrics(vehicleNums, trafficLightDurs);
 
         // Count the number of each type of lane in each road.
         int[] laneData;
@@ -513,9 +523,7 @@ public class PrimaryController {
         // junctionMetrics object.
         populateInputDataMetrics();
 
-        // JunctionConfiguration userData = gatherUserData();
-        // TODO get valid junction data and use
-        Junction junction = new Junction();
+        Junction junction = junctionMetrics.intoJunction();
 
         float runTime = 3600.f; // an hour in seconds
         float timeIncrement = 0.1f; // One tenth of a second
@@ -801,6 +809,15 @@ public class PrimaryController {
      */
     @FXML
     private void showJunctionOptions(ActionEvent event) {
+        // JunctionMetrics baseConfiguration = junctionMetrics;
+        List<JunctionMetrics> permutations = this.junctionMetrics.getPermutations();
+        Map<Float, JunctionMetrics> generationData;
+        Junction junction;
+        for (JunctionMetrics permutation : permutations) {
+            junction = permutation.intoJunction();
+
+        }
+
         try {
             // Load the new FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/trafficjunction/generationWindow.fxml"));
@@ -825,5 +842,6 @@ public class PrimaryController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }

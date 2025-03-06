@@ -36,7 +36,7 @@ public class Junction {
 
     private Map<String, Integer> vehicleRate; // Rate of vehicles coming into the junction for each direction
     private Map<String, List<List<Lane>>> vehicleRoutes; // Valid routes for vehicles needing to go from one direction
-                                                          // to another
+                                                         // to another
     private Map<String, Integer> vehicleBacklogs;
 
     private List<TrafficLight> trafficLights; // List of all traffic lights
@@ -118,6 +118,14 @@ public class Junction {
                 tlConfig.addState(10.f, new ArrayList<>(states)); // Passes in a copy, not the actual arraylist
             }
         }
+    }
+
+    /**
+     * Set the time a traffic light state is active for
+     */
+    public void setTrafficLightStateTime(int index, float time) {
+        List<Integer> lights = this.tlConfig.getStateByIndex(index).getRight();
+        this.tlConfig.setState(index, time, lights);
     }
 
     /**
@@ -558,7 +566,7 @@ public class Junction {
         String key = String.valueOf(entryInd) + String.valueOf(exitInd); // key for storing the routes in a hashmap
         validRoutes = vehicleRoutes.get(key);
         if (validRoutes != null) { // If the hashmap has already got the routes stored then it does not need to
-                                    // execute the rest of the function.
+                                   // execute the rest of the function.
             return validRoutes;
         }
 
@@ -623,7 +631,7 @@ public class Junction {
         // update vehicles from exit lanes -> middle lanes -> starting lanes
         // use 3 for loops for each lane type
         for (List<Lane> exitLaneList : exitLanes) { // double for loop due to nested list for class attribute:
-                                                     // outermost list stores list of lanes + then dir
+                                                    // outermost list stores list of lanes + then dir
             for (Lane lane : exitLaneList) {
                 lane.update(timer);
             }
@@ -760,7 +768,7 @@ public class Junction {
                 route = routes.get(0);
                 newCar = new Car(this.timer, route, key); // creates the vehicle
                 newCar.popRoute(); // pop route so that the next lane that the lane wants to go in is the correct
-                                    // one
+                                   // one
                 succesfull = false;
                 routesIndex = 0;
                 while (!succesfull && routesIndex < routes.size()) {

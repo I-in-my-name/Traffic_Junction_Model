@@ -12,7 +12,7 @@ public class LaneMetricsTests {
         // Simple typical test case
         // Record different sized queues at different times
         // Output should be the highest queue given, which will be 50
-        
+
         laneMetrics.updateQueueSize(2);
         laneMetrics.updateQueueSize(23);
         laneMetrics.updateQueueSize(49);
@@ -28,7 +28,7 @@ public class LaneMetricsTests {
 
         assertEquals(expectedQueueLength, actualQueueLength);
     }
-    
+
     // Dependent on VehicleMetrics working correctly
     @Test
     void testCalculateMetricsPositive() {
@@ -76,7 +76,7 @@ public class LaneMetricsTests {
         float expectedAverageWaitTime = (0.f + 20.f + 43.f) / 3.f;
         float expectedMaxWaitTime = 43.f;
 
-        laneMetrics.calculateMetrics(100.f); //?? what should the value be
+        laneMetrics.calculateMetrics(100.f); // ?? what should the value be
 
         assertEquals(expectedAverageWaitTime, laneMetrics.getAverageWaitTime());
         assertEquals(expectedMaxWaitTime, laneMetrics.getMaxWaitTime());

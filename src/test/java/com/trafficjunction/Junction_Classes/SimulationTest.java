@@ -25,13 +25,13 @@ public class SimulationTest {
 
         junction.connectJunction();
 
-        //TrafficLight
+        // TrafficLight
         junction.setLaneTrafficLight(0, 0, null);
     }
 
     /*
-    * Simpler test case to see if the values are correct
-    */
+     * Simpler test case to see if the values are correct
+     */
     @Test
     void simulationRunsCorrectly() {
         // calling setup again to ensure junction object is as we expect
@@ -88,7 +88,7 @@ public class SimulationTest {
             junction.update(timeStep);
             time += timeStep;
 
-            //System.out.println(junction);
+            // System.out.println(junction);
         }
 
         junction.calculateMetrics(time);
@@ -110,4 +110,3 @@ public class SimulationTest {
     }
 
 }
-
