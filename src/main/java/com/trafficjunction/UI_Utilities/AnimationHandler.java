@@ -2,6 +2,7 @@ package com.trafficjunction.UI_Utilities;
 
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.PathTransition.OrientationType;
 import javafx.scene.image.Image;
@@ -419,9 +420,20 @@ public class AnimationHandler {
         pathTransition.setNode(car);
         pathTransition.setPath(path);
         pathTransition.setDuration(Duration.seconds(3));
-        pathTransition.setCycleCount(3);
+        pathTransition.setCycleCount(1);
         pathTransition.setOrientation(OrientationType.ORTHOGONAL_TO_TANGENT);
         pathTransition.play();
+
+        // Have the car fade out after finishing its animation.
+        pathTransition.setOnFinished(event -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.3), car);
+            fadeOut.setToValue(0);
+            // Remove the car from the scene entirely.
+            fadeOut.setOnFinished(event2 -> {
+                ((AnchorPane) car.getParent()).getChildren().remove(car);
+            });
+            fadeOut.play();
+        });
 
         return pathTransition;
     }
@@ -442,9 +454,20 @@ public class AnimationHandler {
         pathTransition.setNode(car);
         pathTransition.setPath(line);
         pathTransition.setDuration(Duration.seconds(3));
-        pathTransition.setCycleCount(3);
+        pathTransition.setCycleCount(1);
         pathTransition.setOrientation(OrientationType.ORTHOGONAL_TO_TANGENT);
         pathTransition.play();
+
+        // Have the car fade out after finishing its animation.
+        pathTransition.setOnFinished(event -> {
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.3), car);
+            fadeOut.setToValue(0);
+            // Remove the car from the scene entirely.
+            fadeOut.setOnFinished(event2 -> {
+                ((AnchorPane) car.getParent()).getChildren().remove(car);
+            });
+            fadeOut.play();
+        });
 
         return pathTransition;
     }
