@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,7 @@ public class SimulationTest {
         junction.connectJunction();
 
         // TrafficLight
-        junction.setLaneTrafficLight(0, 0, null);
+        //junction.setLaneTrafficLight(0, 0, null);
     }
 
     /*
@@ -38,40 +39,52 @@ public class SimulationTest {
         setup();
 
         TrafficLightConfig allRed = new TrafficLightConfig();
-        allRed.addState(10.f, new ArrayList<>(Arrays.asList(0, 0, 0, 0)));
+        allRed.addState(100.f, new ArrayList<>(Arrays.asList(0, 0, 0, 0)));
+        //allRed.addState(30.f, new ArrayList<>(Arrays.asList(1, 0, 0, 0)));
         junction.setTrafficLightConfig(allRed);
 
         // Total of 60 vehicles per hour coming from north to some direction
         junction.setVehicleRate("nte", 200);
         junction.setVehicleRate("nts", 200);
         junction.setVehicleRate("ntw", 200);
-        junction.setVehicleRate("ets", 0);
-        junction.setVehicleRate("etw", 0);
-        junction.setVehicleRate("etn", 0);
-        junction.setVehicleRate("ste", 0);
-        junction.setVehicleRate("stn", 0);
-        junction.setVehicleRate("stw", 0);
-        junction.setVehicleRate("wts", 0);
-        junction.setVehicleRate("wte", 0);
-        junction.setVehicleRate("wtn", 0);
+        //junction.setVehicleRate("ets", 0);
+        //junction.setVehicleRate("etw", 0);
+        //junction.setVehicleRate("etn", 0);
+        //junction.setVehicleRate("ste", 0);
+        //junction.setVehicleRate("stn", 0);
+        //junction.setVehicleRate("stw", 0);
+        //junction.setVehicleRate("wts", 0);
+        //junction.setVehicleRate("wte", 0);
+        //junction.setVehicleRate("wtn", 0);
 
         float time = 0.f;
-        float timeStep = 1.f;
-        float endTime = 120.f;
+        float timeStep = 0.1f;
+        float endTime = 200.f;
 
         while (time < endTime) {
             junction.update(timeStep);
             time += timeStep;
-
-            System.out.println(junction);
         }
 
         junction.calculateMetrics(time);
 
+        LaneMetrics metr = junction.getEntryLanes().get(0).get(0).getMetrics();
+
+        System.out.println(metr.toString());
+        System.out.println(junction);
+
         // All lights are red and one vehicle
 
-        assertEquals(60, junction.getAverageWaitTime(0));
-        assertEquals(60, junction.getMaxWaitTime(0));
+        float averageWaitTime = junction.getAverageWaitTime(0);
+        float maxWaitTime = junction.getMaxWaitTime(0);
+        
+        // average wait time should be about half the runtime 200/2 = 100
+        assertTrue(85.f < averageWaitTime && averageWaitTime < 115.f);
+        // Vehicle travelling 60 kmph, entry lane is 100m long, max wait time is the vehicle that gets created first
+        // travelTime = 100 / (60 / 3.6) = 6
+        // expectedMaxWaitTime = 200 - 6 = 194
+        assertTrue(190.f < maxWaitTime && maxWaitTime < 200.f);
+        //int expectedAverageQueue = 
         assertEquals(60, junction.getAverageQueueLength(0));
     }
 
@@ -79,6 +92,11 @@ public class SimulationTest {
     void simulationRuns() {
         // calling setup again to ensure junction object is as we expect
         setup();
+        junction.setVehicleRate("nte", 200);
+        junction.setVehicleRate("nts", 200);
+        junction.setVehicleRate("ntw", 200);
+
+        junction.setVehicleRate("wte", 50);
 
         float time = 0.f;
         float timeStep = 1.f;
@@ -88,7 +106,7 @@ public class SimulationTest {
             junction.update(timeStep);
             time += timeStep;
 
-            // System.out.println(junction);
+            //System.out.println(junction);
         }
 
         junction.calculateMetrics(time);

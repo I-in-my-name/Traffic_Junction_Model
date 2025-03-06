@@ -171,8 +171,7 @@ public class Lane {
         if (isFull()) {
             return false;
         }
-
-        vehicleTotalNum++;
+        
         final float gap = 1.f; // fixed spacing between vehicles
         float newPosition;
         if (vehicles.isEmpty()) {
@@ -193,6 +192,7 @@ public class Lane {
 
         vehicles.add(new Pair<>(newPosition, vehicle));
         metrics.addVehicleMetric(vehicle.getMetrics());
+        vehicleTotalNum++;
         return true;
 
         /*

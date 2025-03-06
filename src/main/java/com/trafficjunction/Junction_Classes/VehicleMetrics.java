@@ -104,17 +104,13 @@ class VehicleMetrics {
         // System.out.println(totalWaitTime);
         // System.out.print("Total: ");
         // System.out.println(totalWaitTime);
-        if (!isMoving && !waitTimes.isEmpty()) {
+        if (!isMoving) {
+            totalWaitTime += exitTimestamp - lastStopTime;
             // If not moving, then the last stop time is the final stop time
             // add it to the total wait time as it has previously been subtracted from the
             // wait time
             // Essentially the time spent waiting doesn't care about the last stop time
             // as it doesn't start moving again, so that time isn't relevant to waiting time
-            if (!isMoving) {
-                totalWaitTime += exitTimestamp - lastStopTime;
-            }
-
-            // totalWaitTime += (exitTimestamp - stopTimes.get(stopTimes.size() - 1));
         }
         // System.out.println(totalWaitTime);
         // System.out.println();
@@ -128,5 +124,10 @@ class VehicleMetrics {
     // Don't need test for
     public List<Float> getWaitTimes() {
         return waitTimes;
+    }
+
+    @Override
+    public String toString() {
+        return waitTimes.toString();
     }
 }

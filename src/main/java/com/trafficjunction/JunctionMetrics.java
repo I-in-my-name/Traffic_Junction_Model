@@ -63,23 +63,23 @@ public class JunctionMetrics {
         }
 
         junction.setNumLanesEntry(0, north.getNumLanes());
-        junction.setNumLanesExit(0, north.getNumLanes());
+        junction.setNumLanesExit(0, 5);
         for (int i = 0; i < north.getNumLanes(); i++) {
             junction.setLaneDirections(0, i, north.getIndexDir(i));
         }
         junction.setNumLanesEntry(1, east.getNumLanes());
-        junction.setNumLanesExit(1, east.getNumLanes());
+        junction.setNumLanesExit(1, 5);
         for (int i = 0; i < east.getNumLanes(); i++) {
             junction.setLaneDirections(1, i, east.getIndexDir(i));
         }
         junction.setNumLanesEntry(2, south.getNumLanes());
-        junction.setNumLanesExit(2, south.getNumLanes());
+        junction.setNumLanesExit(2, 5);
         for (int i = 0; i < south.getNumLanes(); i++) {
             junction.setLaneDirections(2, i, south.getIndexDir(i));
         }
         junction.setNumLanesEntry(3, west.getNumLanes());
-        junction.setNumLanesExit(3, west.getNumLanes());
-        for (int i = 0; i < north.getNumLanes(); i++) {
+        junction.setNumLanesExit(3, 5);
+        for (int i = 0; i < west.getNumLanes(); i++) {
             junction.setLaneDirections(3, i, west.getIndexDir(i));
         }
 

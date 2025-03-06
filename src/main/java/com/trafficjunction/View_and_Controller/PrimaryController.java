@@ -2,9 +2,12 @@ package com.trafficjunction.View_and_Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.JunctionMetrics;
+import com.trafficjunction.Junction_Classes.Junction;
 import com.trafficjunction.UI_Utilities.AnimationHandler;
 import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.RoadType;
@@ -29,11 +32,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import com.trafficjunction.Junction_Classes.Junction;
-import com.trafficjunction.Junction_Classes.Triple;
-import java.util.List;
-import java.util.Map;
 
 public class PrimaryController {
 
@@ -462,11 +460,11 @@ public class PrimaryController {
         int[] laneData;
         laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
         junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
         junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        laneData = countRoadTypes(southRoadAllLanes, southLaneNum);
         junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        laneData = countRoadTypes(westRoadAllLanes, westLaneNum);
         junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
 
     };
@@ -525,11 +523,12 @@ public class PrimaryController {
 
         Junction junction = junctionMetrics.intoJunction();
 
-        float runTime = 3600.f; // an hour in seconds
+        float runTime = 600.f; // 10min in seconds
         float timeIncrement = 0.1f; // One tenth of a second
         float clock = 0;
         while (clock < runTime) {
             junction.update(timeIncrement);
+            clock += timeIncrement;
         }
 
         // Get metrics:

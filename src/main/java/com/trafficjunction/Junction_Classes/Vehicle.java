@@ -351,6 +351,8 @@ public class Vehicle {
 
         builder.append("Vehicle [");
         builder.append(Float.toString(speed)); // Append vehicle speed
+        builder.append("/");
+        builder.append(Float.toString(maxSpeed)); // Append vehicle speed
         builder.append(", ");
         builder.append(Float.toString(length)); // Append vehicle length
         builder.append("]");

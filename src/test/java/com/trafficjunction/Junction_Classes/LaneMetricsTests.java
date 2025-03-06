@@ -67,7 +67,7 @@ public class LaneMetricsTests {
         // wait time = total time - time spent moving
         // = 10 - (10 - 10) = 0
         vehicleThree.stopMoving(10.f);
-        vehicleThree.calculateTotalWaitTime(10.f);
+        //vehicleThree.calculateTotalWaitTime(10.f);
 
         laneMetrics.addVehicleMetric(vehicleOne);
         laneMetrics.addVehicleMetric(vehicleTwo);

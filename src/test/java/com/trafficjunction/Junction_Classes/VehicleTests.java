@@ -79,7 +79,12 @@ public class VehicleTests {
         assertEquals(1, exitLane.getVehicleNum());
         //assertEquals(newPosition, exitLane.getVehicles().get(0).getLeft());
 
-        System.out.print(vehicle.getMetrics().getWaitTimes());
+        System.out.print("Vehicle's wait times:");System.out.println(vehicle.getMetrics().getWaitTimes());
+        entryLane.calculateMetrics(4.5f);
+        LaneMetrics metr = entryLane.getMetrics();
+
+        System.out.print("Entry lane metrics: ");System.out.println(metr.getSize());
+        System.out.print("Entry lane average wait time: ");System.out.println(entryLane.getAverageWaitTime());
     }
 
 }

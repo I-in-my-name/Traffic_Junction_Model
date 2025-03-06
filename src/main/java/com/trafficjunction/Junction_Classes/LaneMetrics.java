@@ -103,6 +103,11 @@ public class LaneMetrics {
     }
 
     public String getMetrics() {
-        return null;
+        return Integer.toString(vehicleMetrics.size());
+    }
+
+    @Override
+    public String toString() {
+        return vehicleMetrics.toString();
     }
 }
