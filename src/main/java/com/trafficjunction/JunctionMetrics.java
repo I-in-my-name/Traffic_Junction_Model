@@ -1,5 +1,6 @@
 package com.trafficjunction;
 
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,7 +8,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.trafficjunction.Junction_Classes.Junction;
+import com.trafficjunction.Junction_Classes.TrafficLight;
+import com.trafficjunction.Junction_Classes.TrafficLightConfig;
 
 /*
  * Class to store user-input data in a single place.
@@ -21,10 +27,9 @@ public class JunctionMetrics implements Serializable {
     private Road south;
     private Road west;
 
-    private Map<String, Road> allRoads;
-
     public JunctionMetrics(int[] vehicleNums, int[] trafficLightDurs) {
         this.vehicleNums = new HashMap<String, Integer>();
+        this.trafficLightDurs = new HashMap<String, Integer>();
         this.vehicleNums.put("nte", vehicleNums[0]);
         this.vehicleNums.put("nts", vehicleNums[1]);
         this.vehicleNums.put("ntw", vehicleNums[2]);
@@ -38,17 +43,61 @@ public class JunctionMetrics implements Serializable {
         this.vehicleNums.put("wte", vehicleNums[10]);
         this.vehicleNums.put("wts", vehicleNums[11]);
 
-        this.trafficLightDurs = new HashMap<String, Integer>();
         this.trafficLightDurs.put("north", trafficLightDurs[0]);
         this.trafficLightDurs.put("east", trafficLightDurs[1]);
         this.trafficLightDurs.put("south", trafficLightDurs[2]);
         this.trafficLightDurs.put("west", trafficLightDurs[3]);
+        this.trafficLightDurs.put("allRed", trafficLightDurs[4]);
+    }
 
-        this.allRoads = new HashMap<String, Road>();
-        this.allRoads.put("N", north);
-        this.allRoads.put("E", east);
-        this.allRoads.put("S", south);
-        this.allRoads.put("W", west);
+    public JunctionMetrics(JunctionMetrics data) {
+        this.vehicleNums = new HashMap<String, Integer>(data.getAllVehicleNums());
+        this.trafficLightDurs = new HashMap<String, Integer>(data.getAllTrafficLightDurs());
+
+    }
+
+    public Junction intoJunction() {
+        Junction junction = new Junction();
+
+        // Set vehicle rates.
+        String[] routes = { "nte", "nts", "ntw",
+                "ets", "etw", "etn",
+                "ste", "stn", "stw",
+                "wts", "wte", "wtn" };
+        for (String dir : routes) {
+            junction.setVehicleRate(dir, vehicleNums.get(dir));
+        }
+
+        junction.setNumLanesEntry(0, north.getNumLanes());
+        junction.setNumLanesExit(0, 5);
+        for (int i = 0; i < north.getNumLanes(); i++) {
+            junction.setLaneDirections(0, i, north.getIndexDir(i));
+        }
+        junction.setNumLanesEntry(1, east.getNumLanes());
+        junction.setNumLanesExit(1, 5);
+        for (int i = 0; i < east.getNumLanes(); i++) {
+            junction.setLaneDirections(1, i, east.getIndexDir(i));
+        }
+        junction.setNumLanesEntry(2, south.getNumLanes());
+        junction.setNumLanesExit(2, 5);
+        for (int i = 0; i < south.getNumLanes(); i++) {
+            junction.setLaneDirections(2, i, south.getIndexDir(i));
+        }
+        junction.setNumLanesEntry(3, west.getNumLanes());
+        junction.setNumLanesExit(3, 5);
+        for (int i = 0; i < west.getNumLanes(); i++) {
+            junction.setLaneDirections(3, i, west.getIndexDir(i));
+        }
+
+        String[] directions = { "north", "east", "south", "west" };
+        for (int i = 0; i < 4; i++) {
+            float time = (float) trafficLightDurs.get(directions[i]);
+            junction.setTrafficLightStateTime(i, time); // Set time of traffic light states
+        }
+
+        junction.connectJunction();
+
+        return junction;
     }
 
     /*
@@ -240,6 +289,21 @@ class Road implements Serializable {
         this.forward = forward;
         this.rightForward = rightForward;
         this.right = right;
+    }
+
+    public String getIndexDir(int index) {
+        if (index < left) {
+            return "L";
+        } else if (index < left + leftForward) {
+            return "LF";
+        } else if (index < left + leftForward + forward) {
+            return "F";
+        } else if (index < left + leftForward + forward + rightForward) {
+            return "FR";
+        } else if (index < left + leftForward + forward + rightForward + right) {
+            return "R";
+        }
+        return null;
     }
 
     /*

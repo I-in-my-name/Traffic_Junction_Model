@@ -17,6 +17,8 @@ public class TrafficLightController {
     private TextField southRoadDuration;
     @FXML
     private TextField westRoadDuration;
+    @FXML
+    private TextField allRedDuration;
 
     @FXML
     private Stage stage;
@@ -28,6 +30,7 @@ public class TrafficLightController {
         DataSanitisation.applyNumericRestriction(eastRoadDuration);
         DataSanitisation.applyNumericRestriction(southRoadDuration);
         DataSanitisation.applyNumericRestriction(westRoadDuration);
+        DataSanitisation.applyNumericRestriction(allRedDuration);
     }
 
     /*
@@ -38,7 +41,7 @@ public class TrafficLightController {
      * each road.
      */
     @FXML
-    public Integer[] confirmLightDurations() {
+    public int[] confirmLightDurations() {
         // Check if any fields are empty.
         if (northRoadDuration.getText().trim().isEmpty() || eastRoadDuration.getText().trim().isEmpty()
                 || southRoadDuration.getText().trim().isEmpty() || westRoadDuration.getText().trim().isEmpty()) {
@@ -51,13 +54,16 @@ public class TrafficLightController {
             int eastRoadDuration = Integer.parseInt(this.eastRoadDuration.getText().trim());
             int southRoadDuration = Integer.parseInt(this.southRoadDuration.getText().trim());
             int westRoadDuration = Integer.parseInt(this.westRoadDuration.getText().trim());
+            int allRedDuration = Integer.parseInt(this.allRedDuration.getText().trim());
 
-            if (northRoadDuration <= 0 || eastRoadDuration <= 0 || southRoadDuration <= 0 || westRoadDuration <= 0) {
+            if (northRoadDuration <= 0 || eastRoadDuration <= 0 || southRoadDuration <= 0 || westRoadDuration <= 0
+                    || allRedDuration <= 0) {
                 showErrorAlert("Error", "Please enter a positive integer for each field.");
                 return null;
             }
 
-            Integer[] durations = { northRoadDuration, eastRoadDuration, southRoadDuration, westRoadDuration };
+            int[] durations = { northRoadDuration, eastRoadDuration, southRoadDuration, westRoadDuration,
+                    allRedDuration };
 
             // TODO
             // Add a confirmation window and send data to data store.

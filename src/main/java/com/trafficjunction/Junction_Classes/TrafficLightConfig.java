@@ -108,5 +108,23 @@ public class TrafficLightConfig {
     public Pair<Float, List<Integer>> getStateByIndex(int index) {
         return this.record.get(index);
     }
-
+    
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder();
+        text.append("TLConfig: ");
+        int count = 0;
+        for (Pair<Float,List<Integer>> pairs : record) {
+            text.append("(");
+            text.append(pairs.getLeft().toString());
+            text.append(", ");
+            text.append(pairs.getRight().toString());
+            text.append(")");
+            count++;
+            if (count != record.size()) {
+                text.append(", ");
+            }
+        }
+        return text.toString();
+    }
 }

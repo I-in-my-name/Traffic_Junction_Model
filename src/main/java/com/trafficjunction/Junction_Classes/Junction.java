@@ -36,7 +36,7 @@ public class Junction {
 
     private Map<String, Integer> vehicleRate; // Rate of vehicles coming into the junction for each direction
     private Map<String, List<List<Lane>>> vehicleRoutes; // Valid routes for vehicles needing to go from one direction
-                                                          // to another
+                                                         // to another
     private Map<String, Integer> vehicleBacklogs;
 
     private List<TrafficLight> trafficLights; // List of all traffic lights
@@ -118,6 +118,14 @@ public class Junction {
                 tlConfig.addState(10.f, new ArrayList<>(states)); // Passes in a copy, not the actual arraylist
             }
         }
+    }
+
+    /**
+     * Set the time a traffic light state is active for
+     */
+    public void setTrafficLightStateTime(int index, float time) {
+        List<Integer> lights = this.tlConfig.getStateByIndex(index).getRight();
+        this.tlConfig.setState(index, time, lights);
     }
 
     /**
@@ -213,7 +221,11 @@ public class Junction {
             totalNumberOfVehicles += lane.getTotalVehicleNum();
             totalWaitTime += lane.getAverageWaitTime() * lane.getTotalVehicleNum();
         }
-        return totalWaitTime / totalNumberOfVehicles;
+        if (totalNumberOfVehicles == 0) {
+            return 0.f;
+        } else {
+            return totalWaitTime / totalNumberOfVehicles;
+        }
     }
 
     public int getMaxQueueLength(int side) {
@@ -260,7 +272,7 @@ public class Junction {
          * 
          * Initially direction is any direction
          */
-        Lane lane = new Lane(30.f, trafficLights.get(side), "LFR");
+        Lane lane = new Lane(100.f, trafficLights.get(side), "LFR");
         road.add(lane);
         return true;
     }
@@ -535,7 +547,7 @@ public class Junction {
 
     // TODO: Is this a simple setter or any validation required?
     public void setTrafficLightConfig(TrafficLightConfig config) {
-
+        this.tlConfig = config;
     }
 
     /**
@@ -558,7 +570,7 @@ public class Junction {
         String key = String.valueOf(entryInd) + String.valueOf(exitInd); // key for storing the routes in a hashmap
         validRoutes = vehicleRoutes.get(key);
         if (validRoutes != null) { // If the hashmap has already got the routes stored then it does not need to
-                                    // execute the rest of the function.
+                                   // execute the rest of the function.
             return validRoutes;
         }
 
@@ -623,7 +635,7 @@ public class Junction {
         // update vehicles from exit lanes -> middle lanes -> starting lanes
         // use 3 for loops for each lane type
         for (List<Lane> exitLaneList : exitLanes) { // double for loop due to nested list for class attribute:
-                                                     // outermost list stores list of lanes + then dir
+                                                    // outermost list stores list of lanes + then dir
             for (Lane lane : exitLaneList) {
                 lane.update(timer);
             }
@@ -760,7 +772,7 @@ public class Junction {
                 route = routes.get(0);
                 newCar = new Car(this.timer, route, key); // creates the vehicle
                 newCar.popRoute(); // pop route so that the next lane that the lane wants to go in is the correct
-                                    // one
+                                   // one
                 succesfull = false;
                 routesIndex = 0;
                 while (!succesfull && routesIndex < routes.size()) {
@@ -861,15 +873,16 @@ public class Junction {
     }
 
     public Map<String, String> getMetrics() {
+        this.calculateMetrics(timer);
         Map<String, String> metrics = new HashMap<>();
         List<List<LaneMetrics>> rawMetrics = new ArrayList<>();
-        for (List<Lane> entryLaneList : entryLanes) {
+        int i = 0;
+        for (List<Lane> road : entryLanes) {
             rawMetrics.add(new ArrayList<>());
-            int i = 0;
-            for (Lane lane : entryLaneList) {
+            for (Lane lane : road) {
                 rawMetrics.get(i).add(lane.getMetrics());
-                i++;
             }
+            i++;
         }
         String[] directions = { "North", "East", "South", "West" };
         float overallAverageWaitTime = 0.f;
@@ -942,17 +955,19 @@ public class Junction {
     @Override
     public String toString() {
         StringBuilder text = new StringBuilder();
-        text.append("JUNCTION:");
+        text.append("JUNCTION:\n");
         String[] directions = { "North", "East", "South", "West" };
+        text.append(tlConfig.toString());
         text.append("\n Entry Lanes:");
-        for (int routesIndex = 0; routesIndex < 4; routesIndex++) {
+        for (int index = 0; index < 4; index++) {
             text.append("\n\t");
-            text.append(directions[routesIndex]);
-            for (List<Lane> road : this.entryLanes) {
+            text.append(directions[index]);
+            for (Lane lane : this.entryLanes.get(index)) {
                 text.append("\n\t");
-                text.append(road.toString());
+                text.append(lane.toString());
             }
         }
+        text.append("\n");
         return text.toString();
     }
 

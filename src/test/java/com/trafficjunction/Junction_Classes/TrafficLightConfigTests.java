@@ -389,5 +389,4 @@ public class TrafficLightConfigTests {
         assertEquals(states1, returnedStateAtThirty);
         assertEquals(states2, returnedStateAtThirtyFive);
     }
-
 }
