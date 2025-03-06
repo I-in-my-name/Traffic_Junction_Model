@@ -5,8 +5,10 @@ com/trafficjunction/UI_Utilities/UILane$3.class
 com/trafficjunction/observer/EventType.class
 com/trafficjunction/UI_Utilities/UILane$7.class
 com/trafficjunction/JunctionConfiguration$directions.class
+com/trafficjunction/View_and_Controller/GenerationController.class
 com/trafficjunction/UI_Utilities/AnimationHandler.class
 com/trafficjunction/Junction_Classes/LaneMetrics.class
+com/trafficjunction/View_and_Controller/PrimaryController$2.class
 com/trafficjunction/View_and_Controller/Saving_Utils/ConfigurationSnapshot.class
 com/trafficjunction/UI_Utilities/UILane$2.class
 com/trafficjunction/UI_Utilities/UILane$8.class
@@ -21,6 +23,7 @@ com/trafficjunction/Junction_Classes/TrafficLight.class
 com/trafficjunction/View_and_Controller/PrimaryController.class
 com/trafficjunction/UI_Utilities/UILane$1.class
 com/trafficjunction/observer/Subject.class
+com/trafficjunction/View_and_Controller/PrimaryController$1.class
 module-info.class
 com/trafficjunction/UI_Utilities/UILane.class
 com/trafficjunction/View_and_Controller/Saving_Utils/CareTaker.class

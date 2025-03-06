@@ -1,43 +1,36 @@
-package com.trafficjunction;  
-
+package com.trafficjunction;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-import com.trafficjunction.JunctionConfiguration.directions;
-
 public class SaveLoadTests {
 
     @Test
     void serialSaveLoadTest() {
-        JunctionConfiguration original = new JunctionConfiguration();
-        JunctionConfiguration loaded;
 
-        int[] inputValues = { 1,2,3,4,5,6,7,8,9,10,11,12 };
-        original.setDirectionInfo(inputValues);
+        int[] inputNums = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        int[] inputDurs = { 10, 10, 10, 10, 10 };
 
-        try{
-            File saveFile = File.createTempFile("temp","txt");
+        JunctionMetrics original = new JunctionMetrics(inputNums, inputDurs);
+        JunctionMetrics loaded;
+
+        try {
+            File saveFile = File.createTempFile("temp", "txt");
             original.saveObject(saveFile);
 
-            //first value will be set to 10
-            original.setOneDirection(directions.nte, 10);
+            // first value will be set to 10
+            original.setVehicleNum("nte", 10);
 
-            loaded = JunctionConfiguration.loadObject(saveFile);
+            loaded = JunctionMetrics.loadObject(saveFile);
 
-            assertEquals(10,original.getOneDirection(directions.nte));
-            assertEquals(1, loaded.getOneDirection(directions.nte));
-        
-        }catch(Exception ignored){}
+            assertEquals(10, original.getVehicleNum("nte"));
+            assertEquals(1, loaded.getVehicleNum("nte"));
+        } catch (Exception ignored) {
+            assertEquals(true, false);
+        }
 
-    }
-    //TODO when we have data that is optionally input, check without it 
-    @Test
-    void testPartialSave() {
-        Example example = new Example();
-        assertEquals(2, example.add(1, 1));
     }
 
     @Test
@@ -45,22 +38,22 @@ public class SaveLoadTests {
         JunctionConfiguration original = new JunctionConfiguration();
         JunctionConfiguration loaded;
 
-        int[] inputValues = { 1,2,3,4,5,6,7,8,9,10,11,12 };
+        int[] inputValues = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
         original.setDirectionInfo(inputValues);
 
-        try{
-            File saveFile = File.createTempFile("temp","txt");
+        try {
+            File saveFile = File.createTempFile("temp", "txt");
             original.saveObject(saveFile);
             File emptyFile = File.createTempFile("empty", "txt");
 
-            //first value will be set to 10
-
+            // first value will be set to 10
 
             loaded = JunctionConfiguration.loadObject(emptyFile);
 
             assertEquals(null, loaded);
-        
-        }catch(Exception ignored){}
+
+        } catch (Exception ignored) {
+        }
     }
-    
+
 }

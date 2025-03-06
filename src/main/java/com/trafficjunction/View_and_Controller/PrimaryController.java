@@ -2,9 +2,11 @@ package com.trafficjunction.View_and_Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.JunctionMetrics;
+import com.trafficjunction.Junction_Classes.Junction;
 import com.trafficjunction.UI_Utilities.AnimationHandler;
 import com.trafficjunction.UI_Utilities.DataSanitisation;
 import com.trafficjunction.UI_Utilities.RoadType;
@@ -13,6 +15,7 @@ import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
 import com.trafficjunction.View_and_Controller.Saving_Utils.ConfigurationSnapshot;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,22 +23,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import com.trafficjunction.Junction_Classes.Junction;
-import com.trafficjunction.Junction_Classes.Triple;
-import java.util.Map;
-
 public class PrimaryController {
 
+    protected static final String VBoxBuilder = null;
     // FXML elements
     @FXML
     private TabPane vehicleTabs;
@@ -162,13 +165,12 @@ public class PrimaryController {
 
     // Undo Redo FXML Links:
     @FXML
-    private Button undoButton;
+    private Menu undoButton;
     @FXML
-    private Button redoButton;
+    private Menu redoButton;
 
     // Undo Redo Java resources:
     private CareTaker careTaker = new CareTaker();
-    private JunctionConfiguration configuration = new JunctionConfiguration();
 
     // Value to decide whether the simulation is currently running.
     private boolean isRunningSimulation = false;
@@ -181,7 +183,8 @@ public class PrimaryController {
 
     @FXML
     private void initialize() {
-        careTaker.addSnap(new ConfigurationSnapshot(configuration));
+        populateInputDataMetrics();
+        careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
 
         TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
         this.allTextFields = allTextFields;
@@ -225,38 +228,7 @@ public class PrimaryController {
 
         buttonHoverEffects();
 
-        // Initialize UILane objects
-        northRoadAllLanes = new UILane[] {
-                new UILane(nLane0),
-                new UILane(nLane1),
-                new UILane(nLane2),
-                new UILane(nLane3),
-                new UILane(nLane4)
-        };
-
-        eastRoadAllLanes = new UILane[] {
-                new UILane(eLane0),
-                new UILane(eLane1),
-                new UILane(eLane2),
-                new UILane(eLane3),
-                new UILane(eLane4)
-        };
-
-        southRoadAllLanes = new UILane[] {
-                new UILane(sLane0),
-                new UILane(sLane1),
-                new UILane(sLane2),
-                new UILane(sLane3),
-                new UILane(sLane4)
-        };
-
-        westRoadAllLanes = new UILane[] {
-                new UILane(wLane0),
-                new UILane(wLane1),
-                new UILane(wLane2),
-                new UILane(wLane3),
-                new UILane(wLane4)
-        };
+        setAllLanesToDefaults();
 
         // Assign change image function to all lanes.
         for (UILane lane : northRoadAllLanes) {
@@ -346,10 +318,10 @@ public class PrimaryController {
             File chosenFile = fileChooser.showOpenDialog((Stage) NTE.getScene().getWindow());
             if (chosenFile.canRead()) {
                 try {
-                    JunctionConfiguration loadedConfiguration = JunctionConfiguration.loadObject(chosenFile);
-                    configuration.setDirectionInfo(loadedConfiguration.getDirectionInfo());
-                    careTaker.addSnap(new ConfigurationSnapshot(configuration));
-                    populateFieldsWithData(configuration);
+                    JunctionMetrics loadedMetrics = JunctionMetrics.loadObject(chosenFile);
+                    junctionMetrics = loadedMetrics;
+                    careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
+                    populateFieldsWithData(junctionMetrics);
                 } catch (NullPointerException nullPointerException) {
                     // Exited out of file chooser so ignore
                     Alert errorAlert = new Alert(AlertType.ERROR);
@@ -358,17 +330,74 @@ public class PrimaryController {
                             "The File you are trying to access is of the wrong filetype. Please ensure you have selected the correct file.");
                     errorAlert.showAndWait();
                 }
+            } else {
+                System.out.println("RRRRR");
             }
         });
 
         saveMenuItem.setOnAction((ActionEvent event) -> {
             File chosenFile = fileChooser.showSaveDialog((Stage) NTE.getScene().getWindow());
-            try {
-                // move into program
-                gatherUserData().saveObject(chosenFile);
-            } catch (Exception e) {
+            if (chosenFile != null) {
+                try {
+                    // move into program
+                    populateInputDataMetrics();
+                    junctionMetrics.saveObject(chosenFile);
+                } catch (Exception ignored) {
+                }
             }
         });
+
+        Label undoLabel = new Label("Undo");
+        undoLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                undo();
+            }
+        });
+        undoButton.setGraphic(undoLabel);
+
+        Label redoLabel = new Label("Redo");
+        redoLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                redo();
+            }
+        });
+        redoButton.setGraphic(redoLabel);
+    }
+
+    private void setAllLanesToDefaults() {
+        northRoadAllLanes = new UILane[] {
+                new UILane(nLane0),
+                new UILane(nLane1),
+                new UILane(nLane2),
+                new UILane(nLane3),
+                new UILane(nLane4)
+        };
+
+        eastRoadAllLanes = new UILane[] {
+                new UILane(eLane0),
+                new UILane(eLane1),
+                new UILane(eLane2),
+                new UILane(eLane3),
+                new UILane(eLane4)
+        };
+
+        southRoadAllLanes = new UILane[] {
+                new UILane(sLane0),
+                new UILane(sLane1),
+                new UILane(sLane2),
+                new UILane(sLane3),
+                new UILane(sLane4)
+        };
+
+        westRoadAllLanes = new UILane[] {
+                new UILane(wLane0),
+                new UILane(wLane1),
+                new UILane(wLane2),
+                new UILane(wLane3),
+                new UILane(wLane4)
+        };
     }
 
     @FXML
@@ -439,26 +468,37 @@ public class PrimaryController {
         // Get all the vehicle number data and insert into this array.
         int[] vehicleNums = new int[12];
         for (int i = 0; i < vehicleNums.length; i++) {
-            vehicleNums[i] = Integer.parseInt(allTextFields[i].getText());
+            try {
+                vehicleNums[i] = Integer.parseInt(allTextFields[i].getText());
+            } catch (Exception e) {
+                vehicleNums[i] = 0;
+            }
         }
 
         // TODO Need to populate this from the light junction config window.
-        int[] trafficDurs = new int[4];
+        int[] trafficDurs = { 10, 10, 10, 10, 10 };
 
         // Add all data to the junction metrics object.
         junctionMetrics = new JunctionMetrics(vehicleNums, trafficDurs);
 
         // Count the number of each type of lane in each road.
-        int[] laneData;
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
-
+        try {
+            int[] laneData;
+            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+        } catch (NullPointerException nullPointerException) {
+            nullPointerException.printStackTrace();
+        }
     };
 
     /*
@@ -671,15 +711,12 @@ public class PrimaryController {
                 laneArr[rightUpTo + 1].addRightTurn();
             }
         }
-        System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
         if (leftForwardIndex != leftUpTo) {
             if (leftUpTo > 0) {
                 // next lane can turn left
                 laneArr[leftUpTo - 1].addLeftTurn();
             }
         }
-
-        System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
 
         // need to check for any LFR and if none then all straight roads CAN become LFR
         // IF no FR or LF
@@ -711,7 +748,6 @@ public class PrimaryController {
         }
         // The leftmost and rightmost lanes should have left and right turns
         // respectively.
-        System.out.println(laneArr[laneNum - 1].getRoadType().getAsChars());
         laneArr[laneNum - 1].addLeftTurn();
         laneArr[0].addRightTurn();
     }
@@ -736,34 +772,6 @@ public class PrimaryController {
         });
     }
 
-    /*
-     * Both of the next two functions must be added to whenever new data is decided
-     * to be relevant
-     */
-    private JunctionConfiguration gatherUserData() {
-        // This is notably in order.
-        int[] sequentialList = new int[12];
-
-        TextField[] directionalFields = {
-                NTE, NTS, NTW,
-                ETS, ETW, ETN,
-                STW, STN, STE,
-                WTN, WTE, WTS
-        };
-
-        for (int i = 0; i < directionalFields.length; i++) {
-            String text = directionalFields[i].getText(); // replaces invisible/non-printable characters
-            int number = 0;
-            if (!text.isEmpty()) {
-                number = Integer.parseInt(text);
-            }
-            sequentialList[i] = number;
-        }
-        JunctionConfiguration data = new JunctionConfiguration();
-        data.setDirectionInfo(sequentialList);
-        return data;
-    }
-
     private boolean populateFieldsWithData(JunctionConfiguration configuration) {
         int[] directionalThroughput = configuration.getDirectionInfo();
 
@@ -780,11 +788,123 @@ public class PrimaryController {
         return true;
     }
 
+    private boolean populateFieldsWithData(JunctionMetrics newMetrics) {
+
+        Map<String, Integer> numbersMap = newMetrics.getAllVehicleNums();
+        NTE.setText(Integer.toString(numbersMap.get("nte")));
+        NTW.setText(Integer.toString(numbersMap.get("nts")));
+        NTS.setText(Integer.toString(numbersMap.get("ntw")));
+
+        ETS.setText(Integer.toString(numbersMap.get("ets")));
+        ETW.setText(Integer.toString(numbersMap.get("etw")));
+        ETN.setText(Integer.toString(numbersMap.get("etn")));
+
+        STW.setText(Integer.toString(numbersMap.get("stw")));
+        STN.setText(Integer.toString(numbersMap.get("stn")));
+        STE.setText(Integer.toString(numbersMap.get("ste")));
+
+        WTN.setText(Integer.toString(numbersMap.get("wtn")));
+        WTE.setText(Integer.toString(numbersMap.get("wte")));
+        WTS.setText(Integer.toString(numbersMap.get("wts")));
+
+        try {
+            String[][] formattedRoad = newMetrics.getRoadsFormatted();
+
+            // setAllToDefaults
+            setAllLanesToDefaults();
+
+            // correct all laneNums
+
+            int[] allNums = {
+                    northLaneNum,
+                    eastLaneNum,
+                    southLaneNum,
+                    westLaneNum,
+            };
+            for (int i = 0; i < formattedRoad.length; i++) {
+                allNums[i] = 5 - countDisabledLanesFromMetrics(formattedRoad[i]);
+            }
+
+            UILane[][] allLanes = {
+                    northRoadAllLanes,
+                    eastRoadAllLanes,
+                    southRoadAllLanes,
+                    westRoadAllLanes
+            };
+
+            System.out.println("AAAAAAAAAA");
+            boolean leftToRight = true;
+            int count;
+            for (int i = 0; i < allLanes.length; i++) {
+                leftToRight = false;
+                count = 0;
+                System.out.println("THE THING:");
+                System.out.println(leftToRight && count < formattedRoad[i].length);
+                while (!leftToRight && count < formattedRoad[i].length) {
+                    String nextString = formattedRoad[i][formattedRoad[i].length - 1 - count];
+                    System.out.println(nextString);
+                    if (nextString.equals("L") || nextString.equals("LF")) {
+                        changeUntilCorrect(allLanes[i][formattedRoad[i].length - 1 - count],
+                                allLanes[i], allNums[i], nextString);
+                        count++;
+                    } else {
+                        leftToRight = true;
+
+                    }
+                }
+                for (int j = 0; j < formattedRoad[i].length - count; j++) {
+                    changeUntilCorrect(allLanes[i][j],
+                            allLanes[i], allNums[i], formattedRoad[i][j]);
+                    System.out.println("EEEEEEEEEEEEEE");
+                }
+                // for (int j = 0; j < formattedRoad[i].length; j++) {
+                // changeUntilCorrect(allLanes[i][j], northRoadAllLanes, northLaneNum,
+                // formattedRoad[i][j]);
+                // }
+            }
+        } catch (NullPointerException nullPointerException) {
+            nullPointerException.printStackTrace();
+        }
+
+        return true;
+    }
+
+    private int countDisabledLanesFromMetrics(String[] array) {
+        int count = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals("D"))
+                count++;
+        }
+        return count;
+    }
+
+    private boolean changeUntilCorrect(UILane lane, UILane[] lanes, int laneNum, String direction) {
+        switch (direction) {
+            case "L":
+                updateLanes(lane, lanes, laneNum);
+                break;
+            case "LF":
+                updateLanes(lane, lanes, laneNum);
+                updateLanes(lane, lanes, laneNum);
+                return false;
+            case "F":
+                return false;
+            case "R":
+                updateLanes(lane, lanes, laneNum);
+                return false;
+            case "FR":
+                updateLanes(lane, lanes, laneNum);
+                updateLanes(lane, lanes, laneNum);
+                return false;
+        }
+        return true;
+    }
+
     @FXML
     private void undo() {
         System.out.println("undo pressed");
         careTaker.undo();
-        populateFieldsWithData(configuration);
+        populateFieldsWithData(junctionMetrics);
 
     }
 
@@ -792,7 +912,7 @@ public class PrimaryController {
     private void redo() {
         System.out.println("red pressed");
         careTaker.redo();
-        populateFieldsWithData(configuration);
+        populateFieldsWithData(junctionMetrics);
     }
 
     /*

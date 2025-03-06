@@ -1,12 +1,18 @@
 package com.trafficjunction;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /*
  * Class to store user-input data in a single place.
  */
-public class JunctionMetrics {
+public class JunctionMetrics implements Serializable {
     private Map<String, Integer> vehicleNums;
     private Map<String, Integer> trafficLightDurs;
 
@@ -102,6 +108,10 @@ public class JunctionMetrics {
         return this.vehicleNums;
     }
 
+    public void setAllVehicleNums(Map<String, Integer> map) {
+        this.vehicleNums = map;
+    }
+
     /*
      * Getter method to get the entire map containing all green-light durations in
      * each direction.
@@ -111,6 +121,10 @@ public class JunctionMetrics {
      */
     public Map<String, Integer> getAllTrafficLightDurs() {
         return this.trafficLightDurs;
+    }
+
+    public void setAllTrafficLightDurs(Map<String, Integer> map) {
+        this.trafficLightDurs = map;
     }
 
     /*
@@ -174,9 +188,44 @@ public class JunctionMetrics {
     public Road getWest() {
         return west;
     }
+
+    public boolean saveObject(File objectFile) {
+        try (
+                // try with resource so auto closes IO streams after
+                FileOutputStream file = new FileOutputStream(objectFile);
+                ObjectOutputStream out = new ObjectOutputStream(file);) {
+            out.writeObject(this);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static JunctionMetrics loadObject(File objectFile) {
+        try (
+                // try with resource so auto closes IO streams after
+                FileInputStream file = new FileInputStream(objectFile);
+                ObjectInputStream in = new ObjectInputStream(file);) {
+            return (JunctionMetrics) in.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String[][] getRoadsFormatted() {
+        String[][] toReturn = {
+                getNorth().getFormatted(),
+                getEast().getFormatted(),
+                getSouth().getFormatted(),
+                getWest().getFormatted()
+        };
+        return toReturn;
+    }
 }
 
-class Road {
+class Road implements Serializable {
     int numLanes;
     int left;
     int leftForward;
@@ -245,5 +294,33 @@ class Road {
      */
     public int getRight() {
         return this.right;
+    }
+
+    // L LF F FR R formatted string
+    public String[] getFormatted() {
+        String[] directions = { "D", "D", "D", "D", "D" };
+        int index = 0;
+        for (int i = 0; i < getLeft(); i++) {
+            directions[index] = "L";
+            index++;
+        }
+        for (int i = 0; i < getLeftForward(); i++) {
+            directions[index] = "LF";
+            index++;
+        }
+        for (int i = 0; i < getForward(); i++) {
+            directions[index] = "F";
+            index++;
+        }
+        for (int i = 0; i < getRightForward(); i++) {
+            directions[index] = "RF";
+            index++;
+        }
+        for (int i = 0; i < getRight(); i++) {
+            directions[index] = "R";
+            index++;
+        }
+
+        return directions;
     }
 }

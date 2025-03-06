@@ -32,7 +32,7 @@ public class JunctionTests {
         result = junction.setLaneBus(0, 1, true);
         assertEquals(expected, result);
         assertEquals(true, junction.getEntryLanes().get(0).get(1).isBusLane());
-        
+
         // Test validation for index that doesn't exist
         expected = false;
         result = junction.setLaneBus(0, 2, true);
@@ -53,12 +53,12 @@ public class JunctionTests {
 
         // Test basic functionality of setting light
         boolean expected = true;
-        boolean result; 
+        boolean result;
 
         result = junction.setLaneTrafficLight(0, 1, light1);
         assertEquals(expected, result);
         assertEquals(light1, junction.getEntryLanes().get(0).get(1).getTrafficLight());
-        
+
         result = junction.setLaneTrafficLight(0, 1, light2);
         assertEquals(expected, result);
         assertEquals(light2, junction.getEntryLanes().get(0).get(1).getTrafficLight());
@@ -77,14 +77,16 @@ public class JunctionTests {
     // dependent on addExitLane
     // the same exact test as removeEntryLane
     // TODO: Merge these methods into one? Or just okay to repeat logic?
-    // might be okay to just repeat it as combining could more complex than its worth
+    // might be okay to just repeat it as combining could more complex than its
+    // worth
     @Test
     void testRemoveExitLane() {
         /**
-        * Remove Exit Lane method
-        * Parameters - the side which we want to remove a lane in.
-        * @return - If the lane was removed.
-        */
+         * Remove Exit Lane method
+         * Parameters - the side which we want to remove a lane in.
+         * 
+         * @return - If the lane was removed.
+         */
         // new junction so we know it has 0 exit lanes to begin with
         Junction junction = new Junction();
         boolean expected;
@@ -150,7 +152,6 @@ public class JunctionTests {
         assertEquals(expectedSize, junction.getexitLanes().get(3).size());
         assertEquals(expected, result);
 
-        
         // test validation when attempting to remove from 0 exit lanes
         expected = false;
         result = junction.removeExitLane(1);
@@ -164,10 +165,11 @@ public class JunctionTests {
     @Test
     void testRemoveEntryLane() {
         /**
-        * Remove Entry Lane method
-        * Parameters - the side which we want to remove a lane in.
-        * @return - If the lane was removed.
-        */
+         * Remove Entry Lane method
+         * Parameters - the side which we want to remove a lane in.
+         * 
+         * @return - If the lane was removed.
+         */
         // new junction so we know it has 0 entry lanes to begin with
         Junction junction = new Junction();
         boolean expected;
@@ -233,7 +235,6 @@ public class JunctionTests {
         assertEquals(expectedSize, junction.getEntryLanes().get(3).size());
         assertEquals(expected, result);
 
-        
         // test validation when attempting to remove from 0 entry lanes
         expected = false;
         result = junction.removeEntryLane(1);
@@ -248,7 +249,7 @@ public class JunctionTests {
         /*
          * addEntryLane
          * Should add a default entry lane to the given side if that entry side
-         * has less than 4 lanes already 
+         * has less than 4 lanes already
          */
         // new junction so we know it has 0 entry lanes to begin with
         Junction junction = new Junction();
@@ -309,7 +310,6 @@ public class JunctionTests {
         expectedSize = 1;
         assertEquals(expectedSize, junction.getEntryLanes().get(3).size());
 
-
         // Test validation of not adding more than 5 to one side
         expected = false;
         result = junction.addEntryLane(0);
@@ -326,7 +326,7 @@ public class JunctionTests {
         /*
          * addExitLane
          * Should add a default exit lane to the given side if that exit side
-         * has less than 4 lanes already 
+         * has less than 4 lanes already
          */
         // new junction so we know it has 0 entry lanes to begin with
         Junction junction = new Junction();
@@ -387,7 +387,6 @@ public class JunctionTests {
         expectedSize = 1;
         assertEquals(expectedSize, junction.getexitLanes().get(3).size());
 
-
         // Test validation of not adding more than 5 to one side
         expected = false;
         result = junction.addExitLane(0);
@@ -437,19 +436,20 @@ public class JunctionTests {
         expected = false;
         assertEquals(expected, junctionThree.verifyJunction());
     }
-    
+
     @Test
     void testsetNumLanesEntryNegative() {
         // Testing function:
         /**
-        * Returns a boolean success or failure
-        * Given number must >= 0 and <= 5 (otherwise failure)
-        * If success, set the number of entry lanes at the
-        * given side to the given number
-        * @param    side    Side to update as a String
-        * @param    number  the number of lanes to set to
-        * @return   boolean success or failure
-        */
+         * Returns a boolean success or failure
+         * Given number must >= 0 and <= 5 (otherwise failure)
+         * If success, set the number of entry lanes at the
+         * given side to the given number
+         * 
+         * @param side   Side to update as a String
+         * @param number the number of lanes to set to
+         * @return boolean success or failure
+         */
 
         // test negative numbers
         boolean result = junction.setNumLanesEntry(0, -1);
@@ -475,40 +475,41 @@ public class JunctionTests {
     void testsetNumLanesEntryPositive() {
         // Testing function:
         /**
-        * Returns a boolean success or failure
-        * Given number must > 0 and <= 5 (otherwise failure)
-        * If success, set the number of entry lanes at the
-        * given side to the given number
-        * @param    side    Side to update as a String
-        * @param    number  the number of lanes to set to
-        * @return   boolean success or failure
-        */
+         * Returns a boolean success or failure
+         * Given number must > 0 and <= 5 (otherwise failure)
+         * If success, set the number of entry lanes at the
+         * given side to the given number
+         * 
+         * @param side   Side to update as a String
+         * @param number the number of lanes to set to
+         * @return boolean success or failure
+         */
         boolean result;
-        // test it works 
+        // test it works
         // So given (int side, int number) the lane at side should have number lanes
         result = junction.setNumLanesEntry(0, 3);
         assertEquals(true, result);
-        // should be 3 lanes in 0 
+        // should be 3 lanes in 0
         assertEquals(3, junction.getEntryLanes().get(0).size());
 
         result = junction.setNumLanesEntry(0, 5);
         assertEquals(true, result);
-        // should be 5 lanes in 0 
+        // should be 5 lanes in 0
         assertEquals(5, junction.getEntryLanes().get(0).size());
 
         result = junction.setNumLanesEntry(2, 4);
         assertEquals(true, result);
-        // should be 4 lanes in 2 
+        // should be 4 lanes in 2
         assertEquals(4, junction.getEntryLanes().get(2).size());
 
         result = junction.setNumLanesEntry(1, 3);
         assertEquals(true, result);
-        // should be 3 lanes in 0 
+        // should be 3 lanes in 0
         assertEquals(3, junction.getEntryLanes().get(1).size());
 
         result = junction.setNumLanesEntry(3, 0);
         assertEquals(true, result);
-        // should be 0 lanes in 3 
+        // should be 0 lanes in 3
         assertEquals(0, junction.getEntryLanes().get(3).size());
     }
 
@@ -520,9 +521,11 @@ public class JunctionTests {
          * 
          * Given a side and index, set the lane's direction to the one given
          * 
-         * @param side      int     the no. side it is (0-3)
-         * @param index     int     the index lane to set (>= 0)
-         * @param direction string  the new direction to set it to
+         * @param side int the no. side it is (0-3)
+         * 
+         * @param index int the index lane to set (>= 0)
+         * 
+         * @param direction string the new direction to set it to
          */
         boolean result;
 
@@ -540,7 +543,7 @@ public class JunctionTests {
         result = junction.setLaneDirections(2, 1000, "l");
         assertEquals(false, result);
 
-        // test direction must only contain "lfr" chars 
+        // test direction must only contain "lfr" chars
         result = junction.setLaneDirections(2, 2, "l ");
         assertEquals(false, result);
         result = junction.setLaneDirections(2, 2, "");
@@ -558,9 +561,11 @@ public class JunctionTests {
          * 
          * Given a side and index, set the lane's direction to the one given
          * 
-         * @param side      int     the no. side it is (0-3)
-         * @param index     int     the index lane to set (>= 0)
-         * @param direction string  the new direction to set it to
+         * @param side int the no. side it is (0-3)
+         * 
+         * @param index int the index lane to set (>= 0)
+         * 
+         * @param direction string the new direction to set it to
          */
         boolean result;
         String expectedDirection, newDirection;
@@ -632,8 +637,7 @@ public class JunctionTests {
 
         junction.createVehicles(10.f);
 
-        System.out.println(junction);
+        // System.out.println(junction);
     }
 
 }
-

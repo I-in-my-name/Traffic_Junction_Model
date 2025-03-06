@@ -1,19 +1,24 @@
 package com.trafficjunction.View_and_Controller.Saving_Utils;
 
-import com.trafficjunction.JunctionConfiguration;
+import java.util.Map;
+
+import com.trafficjunction.JunctionMetrics;
 
 public class ConfigurationSnapshot {
 
-    public JunctionConfiguration link;
-    int[] directionInfo;
+    public JunctionMetrics link;
+    Map<String, Integer> vehicleNumsMap;
+    Map<String, Integer> trafficLightDurs;
 
-    public ConfigurationSnapshot(JunctionConfiguration link) {
+    public ConfigurationSnapshot(JunctionMetrics link) {
         this.link = link;
-        directionInfo = link.getDirectionInfo().clone();
+        vehicleNumsMap = link.getAllVehicleNums();
+        trafficLightDurs = link.getAllTrafficLightDurs();
     }
 
     public void restore() {
-        link.setDirectionInfo(directionInfo);
+        link.setAllVehicleNums(vehicleNumsMap);
+        link.setAllTrafficLightDurs(trafficLightDurs);
     }
 
 }

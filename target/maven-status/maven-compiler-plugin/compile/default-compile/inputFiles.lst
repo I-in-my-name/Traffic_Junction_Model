@@ -23,6 +23,7 @@
 /home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/observer/Subject.java
 /home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/Junction_Classes/Lane.java
 /home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/Junction_Classes/TrafficLight.java
+/home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/GenerationController.java
 /home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/module-info.java
 /home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/TrafficLightController.java
 /home/jack/uni/cs261/cloned repo/Traffic_Junction_Model/src/main/java/com/trafficjunction/View_and_Controller/App.java
