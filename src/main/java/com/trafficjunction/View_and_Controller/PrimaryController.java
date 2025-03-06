@@ -95,7 +95,12 @@ public class PrimaryController {
     @FXML
     private TextField WTS;
 
-    TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
+    TextField[] allTextFields;
+
+    @FXML
+    private Button runSimulationButton;
+    @FXML
+    private Button cancelSimulationButton;
 
     // File system FXML Links:
     @FXML
@@ -129,12 +134,20 @@ public class PrimaryController {
     private void initialize() {
         careTaker.addSnap(new ConfigurationSnapshot(configuration));
 
+        TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
+        this.allTextFields = allTextFields;
+
         // Input validation against words.
         for (TextField node : allTextFields) {
             DataSanitisation.applyNumericRestriction(node);
         }
 
+        // Declare the animation handler for animations.
         AnimationHandler animationHandler = new AnimationHandler(junctionAnchor);
+
+        // Hide the cancel simulation button until the simulation is running.
+        cancelSimulationButton.setDisable(true);
+        cancelSimulationButton.setVisible(false);
 
         // Add button press to traffic light to open the window.
         trafficLightButton.setOnMouseClicked(event -> {
@@ -387,13 +400,13 @@ public class PrimaryController {
         // Count the number of each type of lane in each road.
         int[] laneData;
         laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addLane("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+        junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
         laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addLane("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+        junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
         laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addLane("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+        junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
         laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addLane("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
+        junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3], laneData[4]);
 
     };
 
@@ -405,6 +418,13 @@ public class PrimaryController {
     private void runSimulationButtonPress() {
         // Flag that the simulation is now running.
         isRunningSimulation = true;
+
+        // Change the cancel simulation button to be visible and the other to be
+        // invisible.
+        runSimulationButton.setDisable(true);
+        runSimulationButton.setVisible(false);
+        cancelSimulationButton.setDisable(false);
+        cancelSimulationButton.setVisible(true);
 
         // Populate the data metrics to be used as parameters. This populates the
         // junctionMetrics object.
@@ -427,6 +447,16 @@ public class PrimaryController {
         // TODO call animation
         return;
 
+    }
+
+    @FXML
+    private void cancelSimulationButtonPress() {
+        // Set the run simulation button to be visible and enabled, and disable the
+        // cancel button.
+        runSimulationButton.setDisable(false);
+        runSimulationButton.setVisible(true);
+        cancelSimulationButton.setDisable(true);
+        cancelSimulationButton.setVisible(false);
     }
 
     private int[] laneVerificationFeatures(String[] lanetypes) {

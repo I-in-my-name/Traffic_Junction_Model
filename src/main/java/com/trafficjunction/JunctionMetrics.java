@@ -15,6 +15,8 @@ public class JunctionMetrics {
     private Road south;
     private Road west;
 
+    private Map<String, Road> allRoads;
+
     public JunctionMetrics(int[] vehicleNums, int[] trafficLightDurs) {
         this.vehicleNums.put("nte", vehicleNums[0]);
         this.vehicleNums.put("nts", vehicleNums[1]);
@@ -33,6 +35,11 @@ public class JunctionMetrics {
         this.trafficLightDurs.put("east", trafficLightDurs[1]);
         this.trafficLightDurs.put("south", trafficLightDurs[2]);
         this.trafficLightDurs.put("west", trafficLightDurs[3]);
+
+        this.allRoads.put("N", north);
+        this.allRoads.put("E", east);
+        this.allRoads.put("S", south);
+        this.allRoads.put("W", west);
     }
 
     /*
@@ -103,7 +110,10 @@ public class JunctionMetrics {
         return this.trafficLightDurs;
     }
 
-    public void addLane(String dir, int numLanes, int l, int lf, int f, int rf, int r) {
+    /*
+     * Method to add lanes to the juncti
+     */
+    public void addRoad(String dir, int numLanes, int l, int lf, int f, int rf, int r) {
         Road road = new Road(numLanes, l, lf, f, rf, r);
 
         switch (dir) {
@@ -126,10 +136,41 @@ public class JunctionMetrics {
         return;
     }
 
-    // Queue Length
-    // Wait times
-    // Average and maximum wait times
-    // Individual road wait times.
+    /*
+     * Method to get the North Road object.
+     * 
+     * @return Road - The North Road object.
+     */
+    public Road getNorth() {
+        return north;
+    }
+
+    /*
+     * Method to get the East Road object.
+     * 
+     * @return Road - The East Road object.
+     */
+    public Road getEast() {
+        return east;
+    }
+
+    /*
+     * Method to get the South Road object.
+     * 
+     * @return Road - The South Road object.
+     */
+    public Road getSouth() {
+        return south;
+    }
+
+    /*
+     * Method to get the West Road object.
+     * 
+     * @return Road - The West Road object.
+     */
+    public Road getWest() {
+        return west;
+    }
 }
 
 class Road {

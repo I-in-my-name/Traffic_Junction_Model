@@ -6,6 +6,7 @@ com\trafficjunction\Junction_Classes\Car.class
 com\trafficjunction\View_and_Controller\Saving_Utils\CareTaker.class
 com\trafficjunction\UI_Utilities\AnimationHandler.class
 com\trafficjunction\UI_Utilities\UILane$6.class
+com\trafficjunction\Road.class
 com\trafficjunction\Junction_Classes\Junction.class
 com\trafficjunction\observer\Event.class
 com\trafficjunction\JunctionConfiguration.class

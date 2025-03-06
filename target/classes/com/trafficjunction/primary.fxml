@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -31,30 +32,30 @@
                      <children>
                         <HBox alignment="CENTER" maxHeight="144.0" maxWidth="256.0" minHeight="144.0" minWidth="256.0" prefHeight="144.0" prefWidth="256.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: black;">
                            <children>
-                              <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0">
+                              <VBox prefHeight="143.0" prefWidth="262.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Input Parameters" textAlignment="CENTER" wrappingWidth="241.50390625">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                    </Text>
-                                    <HBox alignment="BOTTOM_LEFT" prefHeight="63.0" prefWidth="242.0">
+                                    <MenuBar prefHeight="27.0" prefWidth="265.0" style="-fx-border-color: black; -fx-border-width: 0 1 0 0;">
+                                      <menus>
+                                        <Menu mnemonicParsing="false" text="File">
+                                          <items>
+                                            <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="load Junction" />
+                                                <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="save Junction" />
+                                          </items>
+                                        </Menu>
+                                          <Menu mnemonicParsing="false" text="Undo" />
+                                          <Menu mnemonicParsing="false" text="Redo" />
+                                      </menus>
+                                    </MenuBar>
+                                    <VBox alignment="CENTER" prefHeight="111.0" prefWidth="256.0">
                                        <children>
-                                          <MenuBar prefHeight="27.0" prefWidth="244.0">
-                                            <menus>
-                                              <Menu mnemonicParsing="false" text="File">
-                                                <items>
-                                                  <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="load Junction" />
-                                                      <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="save Junction" />
-                                                </items>
-                                              </Menu>
-                                            </menus>
-                                             <HBox.margin>
-                                                <Insets bottom="10.0" />
-                                             </HBox.margin>
-                                          </MenuBar>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Input Parameters" textAlignment="CENTER" wrappingWidth="254.50390625">
+                                             <font>
+                                                <Font size="25.0" />
+                                             </font>
+                                          </Text>
                                        </children>
-                                    </HBox>
+                                    </VBox>
+                                    <HBox alignment="BOTTOM_LEFT" prefHeight="63.0" prefWidth="242.0" />
                                  </children>
                               </VBox>
                            </children>
@@ -244,11 +245,20 @@
                               </Tab>
                            </tabs>
                         </TabPane>
-                        <Button fx:id="runSimulationButton" alignment="CENTER" mnemonicParsing="false" onAction="#runSimulationButtonPress" prefHeight="46.0" prefWidth="148.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Run Simulation" textAlignment="CENTER">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Button>
+                        <StackPane>
+                           <children>
+                              <Button fx:id="cancelSimulationButton" alignment="CENTER" mnemonicParsing="false" onAction="#cancelSimulationButtonPress" prefHeight="46.0" prefWidth="148.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Cancel Simulation" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="runSimulationButton" alignment="CENTER" mnemonicParsing="false" onAction="#runSimulationButtonPress" prefHeight="46.0" prefWidth="148.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Run Simulation" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </StackPane>
                      </children>
                   </VBox>
                </children>
