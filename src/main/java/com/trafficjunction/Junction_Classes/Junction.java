@@ -45,6 +45,73 @@ public class Junction {
 
     private List<Vehicle> animateVehicles;
 
+    // Same constructor as before but takes vehicleRates values as input
+    public Junction(int[] vehicleRates) {
+        // Initialise
+        vehicle_routes = new HashMap<>();
+        animateVehicles = new ArrayList<>();
+        vehicle_rate = new HashMap<>();
+
+        String[] keys = {
+            "nte", "nts", "ntw",
+            "ets", "etw", "etn",
+            "ste", "stn", "stw",
+            "wts", "wte", "wtn"
+        };
+        for (int i = 0; i < 12; i++) {
+            vehicle_rate.put(keys[i], vehicleRates[i]);
+        }
+
+        vehicle_backlogs = new HashMap<>();
+        
+        // Set vehicle rate to be 0 for all directions
+        vehicle_backlogs = new HashMap<>();
+        vehicle_backlogs.put("nte", 0);
+        vehicle_backlogs.put("nts", 0);
+        vehicle_backlogs.put("ntw", 0);
+        vehicle_backlogs.put("ets", 0);
+        vehicle_backlogs.put("etw", 0);
+        vehicle_backlogs.put("etn", 0);
+        vehicle_backlogs.put("ste", 0);
+        vehicle_backlogs.put("stn", 0);
+        vehicle_backlogs.put("stw", 0);
+        vehicle_backlogs.put("wts", 0);
+        vehicle_backlogs.put("wte", 0);
+        vehicle_backlogs.put("wtn", 0);
+
+        // Add a lane to each direction
+        for (int routes_index = 0; routes_index<4; routes_index++) {
+            entry_lanes.add(new ArrayList<>());
+            exit_lanes.add(new ArrayList<>());
+        }
+        
+        // Create one trafficlight per road
+        traffic_lights = new ArrayList<>();
+        for (int routes_index = 0; routes_index < 4; routes_index++) {
+            traffic_lights.add(new TrafficLight());
+        }
+
+        // Create a traffic light config
+        tl_config = new TrafficLightConfig();
+
+        /*
+         * Adding default traffic light config
+         * TODO: Should this be done somewhere else?
+         */
+        ArrayList<Integer> states;
+        for (int i = 0; i <= 5; i++) {
+            states = new ArrayList<>();
+            for (int j = 0; j < 4; j++) {
+                if (i==j) {
+                    states.add(1);
+                } else {
+                    states.add(0);
+                }
+                tl_config.addState(10.f, new ArrayList<>(states));  // Passes in a copy, not the actual arraylist
+            }
+        }
+    }
+
     public Junction() {
         // Initialise
         vehicle_routes = new HashMap<>();
