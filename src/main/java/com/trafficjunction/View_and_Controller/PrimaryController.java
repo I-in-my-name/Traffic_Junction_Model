@@ -523,7 +523,7 @@ public class PrimaryController {
 
         Junction junction = junctionMetrics.intoJunction();
 
-        float runTime = 600.f; // 10min in seconds
+        float runTime = 3600.f; // 1 hour in seconds
         float timeIncrement = 0.1f; // One tenth of a second
         float clock = 0;
         while (clock < runTime) {
@@ -814,7 +814,8 @@ public class PrimaryController {
         Junction junction;
         for (JunctionMetrics permutation : permutations) {
             junction = permutation.intoJunction();
-
+            // TODO run simulation
+            // TODO get data and add
         }
 
         try {

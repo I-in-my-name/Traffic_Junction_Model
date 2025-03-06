@@ -186,7 +186,7 @@ public class JunctionMetrics {
     }
 
     public List<JunctionMetrics> getPermutations() {
-
+        // TODO return permutations
         return null;
     }
 }
