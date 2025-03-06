@@ -50,9 +50,7 @@ public class LaneMetricsTests {
         vehicleOne.stopMoving(70.f);
         vehicleOne.startMoving(90.f);
         vehicleOne.stopMoving(100.f);
-        vehicleOne.calculateTotalWaitTime(100.f);
-
-        assertEquals(43.f, vehicleOne.getTotalWaitTime());
+        //vehicleOne.calculateTotalWaitTime(100.f);
 
         // wait time = total time - time spent moving
         // = (100 - 5) - (40 - 5) - (100 - 60)
@@ -60,23 +58,26 @@ public class LaneMetricsTests {
         vehicleTwo.stopMoving(40.f);
         vehicleTwo.startMoving(60.f);
         vehicleTwo.stopMoving(100.f);
-        vehicleTwo.calculateTotalWaitTime(100.f);
-
-        assertEquals(20.f, vehicleTwo.getTotalWaitTime());
+        //vehicleTwo.calculateTotalWaitTime(100.f);
 
         // wait time = total time - time spent moving
-        // = 10 - (10 - 10) = 0
         vehicleThree.stopMoving(10.f);
-        //vehicleThree.calculateTotalWaitTime(10.f);
+        // wait time will be 90s if we calculate at 100, for this vehicle
 
         laneMetrics.addVehicleMetric(vehicleOne);
         laneMetrics.addVehicleMetric(vehicleTwo);
         laneMetrics.addVehicleMetric(vehicleThree);
 
-        float expectedAverageWaitTime = (0.f + 20.f + 43.f) / 3.f;
-        float expectedMaxWaitTime = 43.f;
+        float expectedAverageWaitTime = (90.f + 20.f + 43.f) / 3.f;
+        float expectedMaxWaitTime = 90.f;
+
+        System.out.print("Lane metrics:");System.out.println(laneMetrics);
 
         laneMetrics.calculateMetrics(100.f); // ?? what should the value be
+
+        assertEquals(43.f, vehicleOne.getTotalWaitTime());
+        assertEquals(20.f, vehicleTwo.getTotalWaitTime());
+        assertEquals(90.f, vehicleThree.getTotalWaitTime());
 
         assertEquals(expectedAverageWaitTime, laneMetrics.getAverageWaitTime());
         assertEquals(expectedMaxWaitTime, laneMetrics.getMaxWaitTime());
