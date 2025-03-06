@@ -486,10 +486,10 @@
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
-                                                <TextField fx:id="northAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
-                                                <TextField fx:id="northMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField fx:id="northAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="northMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <TextField fx:id="northAvgWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="northMaxWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="northAvgQL" editable="false" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="northMaxQL" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
@@ -519,10 +519,10 @@
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
-                                                <TextField fx:id="eastAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
-                                                <TextField fx:id="eastMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField fx:id="eastAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="eastMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <TextField fx:id="eastAvgWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="eastMaxWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="eastAvgQL" editable="false" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="eastMaxQL" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
@@ -552,10 +552,10 @@
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
-                                                <TextField fx:id="southAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
-                                                <TextField fx:id="southMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField fx:id="southAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="southMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <TextField fx:id="southAvgWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="southMaxWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="southAvgQL" editable="false" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="southMaxQL" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
@@ -585,10 +585,10 @@
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
-                                                <TextField fx:id="westAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
-                                                <TextField fx:id="westMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField fx:id="westAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="westMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <TextField fx:id="westAvgWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                                                <TextField fx:id="westMaxWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="westAvgQL" editable="false" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="westMaxQL" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
                                        </children>
@@ -622,16 +622,16 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Wait Time:" textAlignment="CENTER" GridPane.rowIndex="1" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Queue Length:" textAlignment="CENTER" wrappingWidth="94.775390625" GridPane.rowIndex="2" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max Queue Length:" textAlignment="CENTER" GridPane.rowIndex="3" />
-                              <TextField fx:id="overallAvgWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
-                              <TextField fx:id="overallMaxWT" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="overallAvgQL" disable="true" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="overallMaxQL" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="overallAvgWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" />
+                              <TextField fx:id="overallMaxWT" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="overallAvgQL" editable="false" prefHeight="0.0" prefWidth="126.0" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="overallMaxQL" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overall Score:" textAlignment="CENTER" GridPane.rowIndex="4">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Text>
-                              <TextField fx:id="overallScore" disable="true" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="overallScore" editable="false" promptText="Data Will Appear Here" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
                         <Button fx:id="runSimulationButton1" alignment="CENTER" mnemonicParsing="false" onAction="#runSimulationButtonPress" prefHeight="46.0" prefWidth="170.0" style="-fx-border-width: 1 1 1 1; -fx-background-color: grey; -fx-border-radius: 15; -fx-padding: 3;" text="Show Other Options" textAlignment="CENTER">

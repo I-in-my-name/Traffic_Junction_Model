@@ -102,6 +102,54 @@ public class PrimaryController {
     @FXML
     private Button cancelSimulationButton;
 
+    // The FXML components used to display the metrics.
+    @FXML
+    private TextField northAvgWT;
+    @FXML
+    private TextField northMaxWT;
+    @FXML
+    private TextField northAvgQL;
+    @FXML
+    private TextField northMaxQL;
+
+    @FXML
+    private TextField eastAvgWT;
+    @FXML
+    private TextField eastMaxWT;
+    @FXML
+    private TextField eastAvgQL;
+    @FXML
+    private TextField eastMaxQL;
+
+    @FXML
+    private TextField southAvgWT;
+    @FXML
+    private TextField southMaxWT;
+    @FXML
+    private TextField southAvgQL;
+    @FXML
+    private TextField southMaxQL;
+
+    @FXML
+    private TextField westAvgWT;
+    @FXML
+    private TextField westMaxWT;
+    @FXML
+    private TextField westAvgQL;
+    @FXML
+    private TextField westMaxQL;
+
+    @FXML
+    private TextField overallAvgWT;
+    @FXML
+    private TextField overallMaxWT;
+    @FXML
+    private TextField overallAvgQL;
+    @FXML
+    private TextField overallMaxQL;
+    @FXML
+    private TextField overallScore;
+
     // File system FXML Links:
     @FXML
     private MenuItem saveMenuItem;
@@ -411,6 +459,38 @@ public class PrimaryController {
     };
 
     /*
+     * Function to populate the UI components with the data metrics taken from the
+     * simulation.
+     */
+    private void populateOutputDataMetrics(Map<String, String> metrics) {
+        northAvgWT.setText(metrics.get("North Average Wait Time"));
+        northMaxWT.setText(metrics.get("North Max Wait Time"));
+        northAvgQL.setText(metrics.get("North Average Queue Length"));
+        northMaxQL.setText(metrics.get("North Max Queue Length"));
+
+        eastAvgWT.setText(metrics.get("East Average Wait Time"));
+        eastMaxWT.setText(metrics.get("East Max Wait Time"));
+        eastAvgQL.setText(metrics.get("East Average Queue Length"));
+        eastMaxQL.setText(metrics.get("East Max Queue Length"));
+
+        southAvgWT.setText(metrics.get("South Average Wait Time"));
+        southMaxWT.setText(metrics.get("South Max Wait Time"));
+        southAvgQL.setText(metrics.get("South Average Queue Length"));
+        southMaxQL.setText(metrics.get("South Max Queue Length"));
+
+        westAvgWT.setText(metrics.get("West Average Wait Time"));
+        westMaxWT.setText(metrics.get("West Max Wait Time"));
+        westAvgQL.setText(metrics.get("West Average Queue Length"));
+        westMaxQL.setText(metrics.get("West Max Queue Length"));
+
+        overallAvgWT.setText(metrics.get("Overall Average Wait Time"));
+        overallMaxWT.setText(metrics.get("Overall Max Wait Time"));
+        overallAvgQL.setText(metrics.get("Overall Average Queue Length"));
+        overallMaxQL.setText(metrics.get("Overall Max Queue Length"));
+        overallScore.setText(metrics.get("Overall Score"));
+    }
+
+    /*
      * Function to occur when the run simulation button is pressed. Will start the
      * simulation and the button itself will change to a cancel simulation button.
      */
@@ -444,6 +524,9 @@ public class PrimaryController {
         // Get metrics:
         Map<String, String> metrics = junction.getMetrics();
 
+        // Populate the UI with these metrics.
+        populateOutputDataMetrics(metrics);
+
         // TODO call animation
         return;
 
@@ -457,6 +540,9 @@ public class PrimaryController {
         runSimulationButton.setVisible(true);
         cancelSimulationButton.setDisable(true);
         cancelSimulationButton.setVisible(false);
+
+        // Update the flag to show the simulation is no longer running.
+        isRunningSimulation = false;
     }
 
     private int[] laneVerificationFeatures(String[] lanetypes) {
