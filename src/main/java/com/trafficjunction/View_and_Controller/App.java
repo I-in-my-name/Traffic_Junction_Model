@@ -1,8 +1,10 @@
 package com.trafficjunction.View_and_Controller;
 
-import com.trafficjunction.observer.*;
-
 import java.io.IOException;
+
+import com.trafficjunction.observer.Event;
+import com.trafficjunction.observer.Observer;
+import com.trafficjunction.observer.Subject;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +30,7 @@ public class App extends Application implements Observer {
         stage.getIcons().add(icon);
         stage.setScene(scene);
         stage.show();
+
     }
 
     static void setRoot(String fxml) throws IOException {

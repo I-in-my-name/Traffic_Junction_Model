@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.trafficjunction</groupId>
     <artifactId>trafficjunctionproject</artifactId>
@@ -10,6 +10,14 @@
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.google.googlejavaformat/google-java-format -->
+        <dependency>
+            <groupId>com.google.googlejavaformat</groupId>
+            <artifactId>google-java-format</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit</artifactId>
@@ -53,9 +61,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-				    <source>21</source>
-				    <target>21</target>
-			</configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -80,6 +88,16 @@
                         <configuration>
                             <mainClass>com.trafficjunction.View_and_Controller.App</mainClass>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version> <!-- Use the latest version -->
+                <executions>
+                    <execution>
+                        
                     </execution>
                 </executions>
             </plugin>

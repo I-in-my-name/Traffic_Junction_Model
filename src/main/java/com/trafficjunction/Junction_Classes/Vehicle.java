@@ -189,7 +189,7 @@ public class Vehicle {
             traversablePosition = nextVehiclePosition + vehicleLength + 1.f;
         }
 
-        // position > traversable_position means can move
+        // position > traversablePosition means can move
         // e.g. position = 0 means start. position = 50 means 50 away from start. 
         // traversable position = 20 means should be able to move 30 forward
         // TODO: this is right, right? Changed it when fixing bugs to run simulation
@@ -200,11 +200,11 @@ public class Vehicle {
             }
             // Travel possible distance:
             float maxTraversableDistance = calculateDistanceFromTime(timeDifference);
-            //float traversable_distance = traversable_position - position;
+            //float traversableDistance = traversablePosition - position;
             // changed this from above to below as position > traversable position,
             // part of change described above
-            float traversable_distance = position - traversablePosition;
-            float distance = Math.min(traversable_distance, maxTraversableDistance);
+            float traversableDistance = position - traversablePosition;
+            float distance = Math.min(traversableDistance, maxTraversableDistance);
             // position - distance is new position
             // closer to 0 is closer to end of lane so position gets smaller as distance travelled grows
             thisPair.setLeft(position - distance);
@@ -212,7 +212,7 @@ public class Vehicle {
             float timeTaken = calculateTimeFromDistance(distance);
             currentTime += timeTaken;
             
-            // Run function again in case reaching the end of the lane; (current_time) is updated, so it won't run infinitely:
+            // Run function again in case reaching the end of the lane; (currentTime) is updated, so it won't run infinitely:
             if (newTime > currentTime) {
                 return "another update, "+ this.update(newTime, lane, index);
             }
@@ -275,8 +275,8 @@ public class Vehicle {
 
     // Methods to go from time (s) to distance (m) and vice versa, dependant on speed/max speed of vehicle
     public float calculateTimeFromDistance(float distanceToTravel) {
-        float time_taken = distanceToTravel / (maxSpeed / 3.6f);
-        return time_taken;
+        float timeTaken = distanceToTravel / (maxSpeed / 3.6f);
+        return timeTaken;
     }
     public float calculateDistanceFromTime(float timeToTravel) {
         if (timeToTravel==0) {

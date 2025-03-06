@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lane {
-    private List<Lane> goes_to; // lanes that current lane leads to
-    private List<Lane> comes_from; // previous lanes connected to current lane
+    private List<Lane> goesTo; // lanes that current lane leads to
+    private List<Lane> comesFrom; // previous lanes connected to current lane
     private float length; // length of lane
 
     private List<Pair<Float, Vehicle>> vehicles;
 
-    private TrafficLight traffic_light;
+    private TrafficLight trafficLight;
     private String direction; // N, S, E, W --> can formalise later
-    private boolean bus_lane; // if bus lane
+    private boolean busLane; // if bus lane
 
     private boolean removedVehicle;
     private List<Vehicle> removedVehiclesThisTurn;
@@ -21,14 +21,14 @@ public class Lane {
 
     private int vehicleTotalNum = 0;
 
-    public Lane(float length, TrafficLight traffic_light, String direction) {
-        this.goes_to = new ArrayList<>();
-        this.comes_from = new ArrayList<>();
+    public Lane(float length, TrafficLight trafficLight, String direction) {
+        this.goesTo = new ArrayList<>();
+        this.comesFrom = new ArrayList<>();
 
         this.length = length;
-        this.traffic_light = traffic_light;
+        this.trafficLight = trafficLight;
         this.direction = direction;
-        this.bus_lane = false;
+        this.busLane = false;
 
         this.removedVehicle = false;
         this.removedVehiclesThisTurn = new ArrayList<>();
@@ -53,8 +53,8 @@ public class Lane {
 
         // Check content/ Check for duplicates
         for (int i = 0; i < newDirection.length(); i++) {
-            char character_i = newDirection.charAt(i); // Gets the i'th characthter in direction
-            String character = Character.toString(character_i); // Converts the character to a string so the
+            char characterI = newDirection.charAt(i); // Gets the i'th characthter in direction
+            String character = Character.toString(characterI); // Converts the character to a string so the
                                                                 // (.contains()) method can be used
             String allowed = "lfr"; // Allowed characters
             if (!allowed.contains(character)) {
@@ -62,8 +62,8 @@ public class Lane {
             } else {
                 // Check if there is a duplicate character
                 for (int j = i + 1; j < newDirection.length(); j++) {
-                    char character_j = newDirection.charAt(j);
-                    if (character_i == character_j) {
+                    char characterJ = newDirection.charAt(j);
+                    if (characterI == characterJ) {
                         return false;
                     }
                 }
@@ -75,12 +75,12 @@ public class Lane {
 
     // Doesn't need test
     // Updates if the lane is a bus lane
-    public void setBusLane(boolean isbus_lane) {
-        this.bus_lane = isbus_lane; // need to restrict param to N, S etc
+    public void setBusLane(boolean isbusLane) {
+        this.busLane = isbusLane; // need to restrict param to N, S etc
     }
 
     public boolean isBusLane() {
-        return bus_lane;
+        return busLane;
     }
 
     // Doesn't need test
@@ -104,53 +104,53 @@ public class Lane {
     // Add a lane that connects to this lane
     public void addComingLane(Lane lane) {
         if (lane != null) {
-            comes_from.add(lane);
+            comesFrom.add(lane);
         }
     }
 
     // Doesn't need test
-    // Removes a lane from the comes_from list
+    // Removes a lane from the comesFrom list
     public void removeComingLane(Lane lane) {
-        comes_from.remove(lane);
+        comesFrom.remove(lane);
     }
 
     // Doesn't need test
     // Return list of connected lanes
     public List<Lane> getComesFrom() {
-        return comes_from;
+        return comesFrom;
     }
 
     // Doesn't need test
     public TrafficLight getTrafficLight() {
         // return the traffic light for a given lane (not the traffic light's state)
-        return this.traffic_light;
+        return this.trafficLight;
     }
 
     /**
      * Return if the lane can be passed to the next one
      */
     public boolean canPass() {
-        return (this.traffic_light == null || this.traffic_light.getState() == 1);
+        return (this.trafficLight == null || this.trafficLight.getState() == 1);
     }
 
     // Doesn't need test
     public void setTrafficLight(TrafficLight tl) {
-        this.traffic_light = tl;
+        this.trafficLight = tl;
     }
 
     // Doesn't need test
     public void addGoingLane(Lane lane) {
-        goes_to.add(lane);
+        goesTo.add(lane);
     }
 
     // Doesn't need test
     public void removeGoinglane(Lane lane) {
-        goes_to.remove(lane);
+        goesTo.remove(lane);
     }
 
     // Doesn't need test
     public List<Lane> getGoingTo() {
-        return goes_to;
+        return goesTo;
     }
 
     // Written test
@@ -277,21 +277,21 @@ public class Lane {
      * @param time The current simulation time (in seconds).
      */
     // public void updateTraffic(float time) {
-    // TrafficLight traffic_light = this.getTrafficLight(); // Retrieve the lane's
+    // TrafficLight trafficLight = this.getTrafficLight(); // Retrieve the lane's
     // traffic light
 
-    // for (Pair<Float, Vehicle> pos_vehicle : vehicles) { // Loop through all
+    // for (Pair<Float, Vehicle> posVehicle : vehicles) { // Loop through all
     // vehicles in the lane
-    // Vehicle vehicle = pos_vehicle.getRight(); // Extract the Vehicle object from
+    // Vehicle vehicle = posVehicle.getRight(); // Extract the Vehicle object from
     // the Pair
 
     // // If the light is red (0) or the lane is blocked, stop the vehicle
-    // if (traffic_light.getState() == 0 || this.isFull()) {
+    // if (trafficLight.getState() == 0 || this.isFull()) {
     // vehicle.updateMovement(time, this); // Stop the vehicle (tracked in
     // VehicleMetrics)
 
     // // If the light is green (1), allow movement
-    // } else if (traffic_light.getState() == 1) {
+    // } else if (trafficLight.getState() == 1) {
     // vehicle.updateMovement(time, this); // Allow vehicle to move
     // }
     // }
@@ -346,8 +346,8 @@ public class Lane {
         removedVehiclesThisTurn = new ArrayList<>();
 
         int index = 0;
-        for (Pair<Float, Vehicle> pos_vehicle : vehicles) {
-            Vehicle vehicle = pos_vehicle.getRight();
+        for (Pair<Float, Vehicle> posVehicle : vehicles) {
+            Vehicle vehicle = posVehicle.getRight();
             vehicle.update(time, this, index); // Give an index
             index++;
 
@@ -383,9 +383,9 @@ public class Lane {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Lane (");
-        if (this.traffic_light == null) { // Lane has no traffic light
+        if (this.trafficLight == null) { // Lane has no traffic light
             builder.append("-");
-        } else if (this.traffic_light.getState() == 0) { // traffic light is red
+        } else if (this.trafficLight.getState() == 0) { // traffic light is red
             builder.append("R");
         } else { // Traffic light is green
             builder.append("G");

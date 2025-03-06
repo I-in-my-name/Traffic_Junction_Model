@@ -7,12 +7,13 @@ public class ConfigurationSnapshot {
     public JunctionConfiguration link;
     int[] directionInfo;
 
-    public ConfigurationSnapshot(JunctionConfiguration link){
+    public ConfigurationSnapshot(JunctionConfiguration link) {
         this.link = link;
         directionInfo = link.getDirectionInfo().clone();
     }
-    public void restore(){
+
+    public void restore() {
         link.setDirectionInfo(directionInfo);
     }
-    
+
 }

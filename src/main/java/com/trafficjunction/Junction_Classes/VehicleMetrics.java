@@ -12,18 +12,18 @@ Vehicles should track their total wait time based on when they were stopped
 
 class VehicleMetrics {
     /*
-    public float move_timestamp;
-    public float stop_timestamp;
+    public float moveTimestamp;
+    public float stopTimestamp;
 
-    public int vehicle_direction;
+    public int vehicleDirection;
 
-    private float total_wait_time;
-    private List<Float> start_stop_times;
+    private float totalTime;
+    private List<Float> startTimes;
     */
     private float startExistingTime; // time the vehicle starts existing
-    // car could be moving immediately, in which case start_stop_times[0] = startExistingTime
+    // car could be moving immediately, in which case startTimes[0] = startExistingTime
     // may not thoguh
-    // total_wait = start_stop_times[i] - start_stop_times[i - 1] for every odd i + (start_stop_times[0] - startExistingTime) 
+    // totalWait = startTimes[i] - startTimes[i - 1] for every odd i + (startTimes[0] - startExistingTime) 
     private float lastWaitTime;    // total time spent waiting
     private float lastStopTime;   // last timestamp the vehicle has stopped
     private float totalWaitTime;

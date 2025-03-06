@@ -6,29 +6,32 @@ public class CareTaker {
     ArrayList<ConfigurationSnapshot> allSnapshots;
     public int index;
 
-    //starts at -1 so that record indexing is kept properly
-    public CareTaker(){
+    // starts at -1 so that record indexing is kept properly
+    public CareTaker() {
         allSnapshots = new ArrayList<>();
         index = -1;
     }
 
-    public void addSnap(ConfigurationSnapshot configSnap){
+    public void addSnap(ConfigurationSnapshot configSnap) {
         allSnapshots.add(configSnap);
         index++;
     }
 
-    public void undo(){
-        if(index >= 0){
+    public void undo() {
+        if (index >= 0) {
             allSnapshots.get(index).restore();
             index--;
-            if(index < 0) index++;
+            if (index < 0)
+                index++;
         }
     }
-    public void redo(){
-        if(index + 1 < allSnapshots.size()){
+
+    public void redo() {
+        if (index + 1 < allSnapshots.size()) {
             index++;
             allSnapshots.get(index).restore();
-            if(index >= allSnapshots.size()) index--;
+            if (index >= allSnapshots.size())
+                index--;
         }
     }
 }

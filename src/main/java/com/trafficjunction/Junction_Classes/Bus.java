@@ -8,7 +8,7 @@ public class Bus extends Vehicle {
     // time, speeds, and lengths? + Carrying capcity 
     // Bus could enforce lower maximum speed and higher length in its constructor
     
-    public Bus(float b_time, List<Lane> b_route) {
-        super(b_time, 60.f, 8.f, b_route);
+    public Bus(float bTime, List<Lane> bRoute) {
+        super(bTime, 60.f, 8.f, bRoute);
     }
 }
