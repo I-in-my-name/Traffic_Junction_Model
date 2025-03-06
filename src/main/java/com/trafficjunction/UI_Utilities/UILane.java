@@ -63,10 +63,10 @@ public class UILane {
         if (this.leftEnabled && this.rightEnabled && !allAllowedRoads.contains(allTurns)) {
             this.allAllowedRoads.add(allTurns);
         }
-        System.out.println("This lane has left enabled: " + leftEnabled);
-        System.out.println("This lane has right enabled: " + rightEnabled);
-        System.out.println("This lane is a left turn: " + this.roadType.getLeft());
-        System.out.println("This lane is a right turn: " + this.roadType.getRight());
+        // System.out.println("This lane has left enabled: " + leftEnabled);
+        // System.out.println("This lane has right enabled: " + rightEnabled);
+        // System.out.println("This lane is a left turn: " + this.roadType.getLeft());
+        // System.out.println("This lane is a right turn: " + this.roadType.getRight());
     }
 
     /* Method to enable this lane. */
@@ -106,6 +106,7 @@ public class UILane {
         sortAllowedRoads();
         update();
     }
+
     public void addLeftTurn() {
         this.removeLeftTurn();
         this.allAllowedRoads.add(new RoadType("/assets/leftOnlyRoad.png", false, true, false));
@@ -126,18 +127,20 @@ public class UILane {
         sortAllowedRoads();
         update();
     }
-    public void addRightTurn(){
+
+    public void addRightTurn() {
         this.removeRightTurn();
         this.allAllowedRoads.add(new RoadType("/assets/rightOnlyRoad.png", false, false, true));
         sortAllowedRoads();
     }
-    public void addForward(){
+
+    public void addForward() {
         this.removeForward();
         this.allAllowedRoads.add(new RoadType("/assets/straightOnRoad.png", true, false, false));
         sortAllowedRoads();
     }
 
-    //doesn't remove multiroad
+    // doesn't remove multiroad
     public void addMixedTurns() {
         this.removeMixedForward();
         this.allAllowedRoads.add(new RoadType("/assets/straightOnAndLeftRoad.png", true, true, false));
@@ -145,7 +148,8 @@ public class UILane {
         sortAllowedRoads();
         update();
     }
-    public void addMultiRoad(){
+
+    public void addMultiRoad() {
         this.removeMultiRoad();
         this.allAllowedRoads.add(new RoadType("/assets/straightLeftRightRoad.png", true, true, true));
         sortAllowedRoads();
@@ -170,6 +174,7 @@ public class UILane {
         });
         sortAllowedRoads();
     }
+
     public void removeRightTurn() {
         this.allAllowedRoads.removeIf(new Predicate<RoadType>() {
             @Override
@@ -179,6 +184,7 @@ public class UILane {
         });
         sortAllowedRoads();
     }
+
     public void removeForward() {
         this.allAllowedRoads.removeIf(new Predicate<RoadType>() {
             @Override
@@ -188,7 +194,8 @@ public class UILane {
         });
         sortAllowedRoads();
     }
-    //LF RF
+
+    // LF RF
     public void removeMixedForward() {
         this.allAllowedRoads.removeIf(new Predicate<RoadType>() {
             @Override
@@ -199,6 +206,7 @@ public class UILane {
         sortAllowedRoads();
 
     }
+
     public void removeMixedLeft() {
         this.allAllowedRoads.removeIf(new Predicate<RoadType>() {
             @Override
@@ -209,6 +217,7 @@ public class UILane {
         sortAllowedRoads();
         update();
     }
+
     public void removeMixedRight() {
         this.allAllowedRoads.removeIf(new Predicate<RoadType>() {
             @Override
@@ -219,7 +228,8 @@ public class UILane {
         sortAllowedRoads();
         update();
     }
-    public void removeMultiRoad(){
+
+    public void removeMultiRoad() {
         this.allAllowedRoads.removeIf(new Predicate<RoadType>() {
             @Override
             public boolean test(RoadType arg0) {
@@ -264,7 +274,8 @@ public class UILane {
     public RoadType getRoadType() {
         return this.roadType;
     }
-    public void sortAllowedRoads(){
+
+    public void sortAllowedRoads() {
         RoadType currentRoad = this.getRoadType();
 
         this.allAllowedRoads.sort(new Comparator<RoadType>() {
@@ -277,7 +288,7 @@ public class UILane {
             }
         });
         for (RoadType roadType : allAllowedRoads) {
-            if(roadType.imagePath.equals(currentRoad.imagePath)){
+            if (roadType.imagePath.equals(currentRoad.imagePath)) {
                 currentRoadCounter = this.allAllowedRoads.indexOf(roadType);
             }
         }

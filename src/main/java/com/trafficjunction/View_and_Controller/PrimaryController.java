@@ -183,7 +183,10 @@ public class PrimaryController {
 
     @FXML
     private void initialize() {
-        populateInputDataMetrics();
+        try {
+            populateInputDataMetrics();
+        } catch (Exception ignored) {
+        }
         careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
 
         TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
@@ -624,14 +627,19 @@ public class PrimaryController {
         StringBuilder sb = new StringBuilder();
         String[] roadTypeArray = new String[5];
 
-        lane.changeImage();
+        System.out.println("Here is a list of all of the allowed roads for this lane:");
         for (int i = 0; i < lane.allAllowedRoads.size(); i++) {
             System.out.println(lane.allAllowedRoads.get(i).getAsChars());
         }
-        System.out.println("RoadType = " + lane.getRoadType().getAsChars());
-        System.out.println("counter = " + lane.currentRoadCounter);
-        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
-        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
+        lane.changeImage();
+        System.out.println("IT is now over");
+        // System.out.println("RoadType = " + lane.getRoadType().getAsChars());
+        // System.out.println("counter = " + lane.currentRoadCounter);
+        // System.out.println("We say the image is: " +
+        // lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
+        // System.out.println("We say the image is: " +
+        // lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
+
         lane.update();
 
         for (int i = 0; i < laneArr.length; i++) {
@@ -667,10 +675,12 @@ public class PrimaryController {
         } else {
             leftUpTo = leftForwardIndex;
         }
-        System.out.println("RoadType = " + lane.getRoadType().getAsChars());
-        System.out.println("counter = " + lane.currentRoadCounter);
-        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
-        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
+        // System.out.println("RoadType = " + lane.getRoadType().getAsChars());
+        // System.out.println("counter = " + lane.currentRoadCounter);
+        // System.out.println("We say the image is: " +
+        // lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
+        // System.out.println("We say the image is: " +
+        // lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
         // remember index 0 equlas rightmost and 5 = leftmost
         for (int i = 0; i < laneNum; i++) {
             // sort exactly right turns for all lanes
@@ -810,8 +820,7 @@ public class PrimaryController {
         try {
             String[][] formattedRoad = newMetrics.getRoadsFormatted();
 
-            // setAllToDefaults
-            setAllLanesToDefaults();
+            // setAllToDefault
 
             // correct all laneNums
 
@@ -842,7 +851,7 @@ public class PrimaryController {
                 System.out.println(leftToRight && count < formattedRoad[i].length);
                 while (!leftToRight && count < formattedRoad[i].length) {
                     String nextString = formattedRoad[i][formattedRoad[i].length - 1 - count];
-                    System.out.println(nextString);
+                    System.out.println("next: " + nextString);
                     if (nextString.equals("L") || nextString.equals("LF")) {
                         changeUntilCorrect(allLanes[i][formattedRoad[i].length - 1 - count],
                                 allLanes[i], allNums[i], nextString);
@@ -867,6 +876,23 @@ public class PrimaryController {
         }
 
         return true;
+    }
+
+    private void getLanesToForward() {
+        UILane[][] allLanes = {
+                northRoadAllLanes,
+                eastRoadAllLanes,
+                southRoadAllLanes,
+                westRoadAllLanes
+        };
+        for (int i = 0; i < allLanes.length; i++) {
+            for (UILane allLane : allLanes[i]) {
+                while (!allLane.getRoadType().getImagePath().equals("/assets/straightOnRoad.png") &&
+                        !allLane.getRoadType().getImagePath().equals("/assets/blackedOutRoad.png")) {
+                    allLane.changeImage();
+                }
+            }
+        }
     }
 
     private int countDisabledLanesFromMetrics(String[] array) {
