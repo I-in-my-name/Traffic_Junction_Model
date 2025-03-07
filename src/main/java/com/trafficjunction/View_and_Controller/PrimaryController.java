@@ -670,6 +670,7 @@ public class PrimaryController {
             junction.update(timeIncrement);
             clock += timeIncrement;
         }
+        System.err.println(junction);
 
         // Get metrics:
         Map<String, String> metrics = junction.getMetrics();

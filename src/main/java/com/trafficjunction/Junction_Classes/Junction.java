@@ -107,7 +107,7 @@ public class Junction {
          * TODO: Should this be done somewhere else?
          */
         ArrayList<Integer> states;
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 4; i++) {
             states = new ArrayList<>();
             for (int j = 0; j < 4; j++) {
                 if (i == j) {
@@ -115,8 +115,8 @@ public class Junction {
                 } else {
                     states.add(0);
                 }
-                tlConfig.addState(10.f, new ArrayList<>(states)); // Passes in a copy, not the actual arraylist
             }
+            tlConfig.addState(10.f, new ArrayList<>(states)); // Passes in a copy, not the actual arraylist
         }
     }
 
@@ -746,7 +746,7 @@ public class Junction {
                         succesfull = routesBacklog.get(routesIndex).get(0).addVehicle(newCar);
                         routesIndex++;
                     }
-                    if (succesfull) {
+                    if (!succesfull) {
                         vehicleBacklogs.put(key, vehicleBacklogs.get(key) - 1);
                     }
                 }
@@ -769,16 +769,15 @@ public class Junction {
 
             while (multiple < currentTime) {
                 // create a vehicle
-                route = routes.get(0);
+                route = routes.get(0);  // Get the route for the car
                 newCar = new Car(this.timer, route, key); // creates the vehicle
-                newCar.popRoute(); // pop route so that the next lane that the lane wants to go in is the correct
-                                   // one
                 succesfull = false;
                 routesIndex = 0;
                 while (!succesfull && routesIndex < routes.size()) {
                     succesfull = routes.get(routesIndex).get(0).addVehicle(newCar);
                     routesIndex++;
                 }
+                newCar.popRoute(); // pop route so that the next lane that the vehicle wants to go in is the correct one
                 if (!succesfull) { // Car was not succesfully added
                     vehicleBacklogs.put(key, (vehicleBacklogs.get(key)) + 1);
                 }
@@ -958,6 +957,7 @@ public class Junction {
         text.append("JUNCTION:\n");
         String[] directions = { "North", "East", "South", "West" };
         text.append(tlConfig.toString());
+        text.append(vehicleBacklogs.toString());
         text.append("\n Entry Lanes:");
         for (int index = 0; index < 4; index++) {
             text.append("\n\t");

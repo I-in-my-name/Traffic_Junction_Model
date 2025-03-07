@@ -95,8 +95,8 @@ public class JunctionMetrics implements Serializable {
             junction.setLaneDirections(3, i, west.getIndexDir(i));
         }
 
-        String[] directions = { "north", "east", "south", "west" };
-        for (int i = 0; i < 4; i++) {
+        String[] directions = { "north", "east", "south", "west", "allRed" };
+        for (int i = 0; i < 5; i++) {
             float time = (float) trafficLightDurs.get(directions[i]);
             junction.setTrafficLightStateTime(i, time); // Set time of traffic light states
         }
