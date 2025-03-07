@@ -57,8 +57,8 @@ public class JunctionMetrics implements Serializable {
     }
 
     public JunctionMetrics(JunctionMetrics data) {
-        this.vehicleNums = new HashMap<String, Integer>(data.getAllVehicleNums());
-        this.trafficLightDurs = new HashMap<String, Integer>(data.getAllTrafficLightDurs());
+        this.vehicleNums = new HashMap<>(data.getAllVehicleNums());
+        this.trafficLightDurs = new HashMap<>(data.getAllTrafficLightDurs());
 
     }
 
@@ -182,6 +182,16 @@ public class JunctionMetrics implements Serializable {
         this.trafficLightDurs = map;
     }
 
+    // overload method to make it easier in another method
+    public void addRoad(String dir, int[] dirs) {
+        int L = dirs[0];
+        int LF = dirs[1];
+        int F = dirs[2];
+        int RF = dirs[3];
+        int R = dirs[4];
+        addRoad(dir, L + LF + F + RF + R, L, LF, F, RF, R);
+    }
+
     /*
      * Method to add lanes to the juncti
      */
@@ -302,9 +312,77 @@ public class JunctionMetrics implements Serializable {
         return toReturn;
     }
 
+    private boolean isValidLaneDirections(int[] laneDirections) {
+        // Order is L, LF, F, RF, R
+        // must be true: LF + F + RF > 0
+        // and L + LF > 0
+        // and R + RF > 0
+        // as need lanes pointing each direction
+        // and 6 > L + LF + F + RF + R > 0
+        int left = laneDirections[0];
+        int leftForward = laneDirections[1];
+        int forward = laneDirections[2];
+        int rightForward = laneDirections[3];
+        int right = laneDirections[4];
+
+        if (left < 0 || leftForward < 0 || forward < 0 || rightForward < 0 || right < 0)
+            return false;
+
+        if (left + leftForward == 0)
+            return false;
+
+        if (right + rightForward == 0)
+            return false;
+
+        if (leftForward + forward + rightForward == 0)
+            return false;
+
+        if (left + leftForward + forward + right + rightForward > 5 ||
+                left + leftForward + forward + right + rightForward == 0)
+            return false;
+
+        return true;
+    }
+
+    private List<int[]> getAllValidLaneDirections() {
+        ArrayList<int[]> validLaneDirections = new ArrayList<>();
+        for (int left = 0; left <= 4; left++) {
+            for (int leftForward = 0; leftForward <= 4; leftForward++) {
+                for (int forward = 0; forward <= 4; forward++) {
+                    for (int rightForward = 0; rightForward <= 4; rightForward++) {
+                        for (int right = 0; right <= 4; right++) {
+                            int[] directions = {
+                                    left, leftForward, forward, rightForward, right
+                            };
+                            if (!isValidLaneDirections(directions))
+                                continue;
+                            validLaneDirections.add(directions);
+                        }
+                    }
+                }
+            }
+        }
+        return validLaneDirections;
+    }
+
     public List<JunctionMetrics> getPermutations() {
-        // TODO return permutations
-        return null;
+        List<int[]> allValidDirections = getAllValidLaneDirections();
+        // Loops
+        List<JunctionMetrics> permutations = new ArrayList<>();
+        for (int northIndex = 0; northIndex < allValidDirections.size(); northIndex++) {
+            for (int eastIndex = 0; eastIndex < allValidDirections.size(); eastIndex++) {
+                for (int southIndex = 0; southIndex < allValidDirections.size(); southIndex++) {
+                    for (int westIndex = 0; westIndex < allValidDirections.size(); westIndex++) {
+                        JunctionMetrics perm = new JunctionMetrics(this);
+                        perm.addRoad("north", allValidDirections.get(northIndex));
+                        perm.addRoad("east", allValidDirections.get(eastIndex));
+                        perm.addRoad("south", allValidDirections.get(southIndex));
+                        perm.addRoad("west", allValidDirections.get(westIndex));
+                    }
+                }
+            }
+        }
+        return permutations;
     }
 }
 
