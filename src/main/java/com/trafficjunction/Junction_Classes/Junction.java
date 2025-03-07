@@ -228,6 +228,22 @@ public class Junction {
         }
     }
 
+    public float getJunctionAverageWaitTime() {
+        int totalNumberOfVehicles = 0;
+        float totalWaitTime = 0;
+        for (int i = 0; i < 4; i++) {
+            for (Lane lane : entryLanes.get(i)) {
+                totalNumberOfVehicles += lane.getTotalVehicleNum();
+                totalWaitTime += lane.getAverageWaitTime() * lane.getTotalVehicleNum();
+            }
+        }
+        if (totalNumberOfVehicles == 0) {
+            return 0.f;
+        } else {
+            return totalWaitTime / totalNumberOfVehicles;
+        }
+    }
+
     public int getMaxQueueLength(int side) {
         int maxQueueLength = -1;
         for (Lane lane : entryLanes.get(side)) {
@@ -729,28 +745,28 @@ public class Junction {
             int routesIndex;
 
             int backlogNumber = vehicleBacklogs.get(key);
-            //if (backlogNumber > 0) {
-            //    // Backlog section for findRoute
-            //    int entryBacklog = directionString.indexOf(key.charAt(0));
-            //    int exitBacklog = directionString.indexOf(key.charAt(2));
-            //    List<List<Lane>> routesBacklog = findRoute(entryBacklog, exitBacklog);
+            // if (backlogNumber > 0) {
+            // // Backlog section for findRoute
+            // int entryBacklog = directionString.indexOf(key.charAt(0));
+            // int exitBacklog = directionString.indexOf(key.charAt(2));
+            // List<List<Lane>> routesBacklog = findRoute(entryBacklog, exitBacklog);
 
-            //    // TODO: revise logic
-            //    for (int k = 0; k < backlogNumber; k++) {
-            //        route = routesBacklog.get(0);
-            //        newCar = new Car(this.timer, route, key);
-            //        newCar.popRoute();
-            //        succesfull = false;
-            //        routesIndex = 0;
-            //        while (!succesfull && routesIndex < routesBacklog.size()) {
-            //            succesfull = routesBacklog.get(routesIndex).get(0).addVehicle(newCar);
-            //            routesIndex++;
-            //        }
-            //        if (!succesfull) {
-            //            vehicleBacklogs.put(key, vehicleBacklogs.get(key) - 1);
-            //        }
-            //    }
-            //}
+            // // TODO: revise logic
+            // for (int k = 0; k < backlogNumber; k++) {
+            // route = routesBacklog.get(0);
+            // newCar = new Car(this.timer, route, key);
+            // newCar.popRoute();
+            // succesfull = false;
+            // routesIndex = 0;
+            // while (!succesfull && routesIndex < routesBacklog.size()) {
+            // succesfull = routesBacklog.get(routesIndex).get(0).addVehicle(newCar);
+            // routesIndex++;
+            // }
+            // if (!succesfull) {
+            // vehicleBacklogs.put(key, vehicleBacklogs.get(key) - 1);
+            // }
+            // }
+            // }
 
             // Gets the index direction for the entry
             int entryInd = directionString.indexOf(key.charAt(0));
@@ -769,7 +785,7 @@ public class Junction {
 
             while (multiple < currentTime) {
                 // create a vehicle
-                route = routes.get(0);  // Get the route for the car
+                route = routes.get(0); // Get the route for the car
                 newCar = new Car(this.timer, route, key); // creates the vehicle
                 succesfull = false;
                 routesIndex = 0;
@@ -781,7 +797,8 @@ public class Junction {
                     succesfull = routes.get(routesIndex).get(0).addVehicle(newCar);
                     routesIndex++;
                 }
-                newCar.popRoute(); // pop route so that the next lane that the vehicle wants to go in is the correct one
+                newCar.popRoute(); // pop route so that the next lane that the vehicle wants to go in is the
+                                   // correct one
                 if (!succesfull) { // Car was not succesfully added
                     vehicleBacklogs.put(key, (vehicleBacklogs.get(key)) + 1);
                 }
@@ -820,6 +837,8 @@ public class Junction {
 
     public float computeOverallScore() {
         // Update all lane metrics first
+        // TODO: These have already been calculated, could be changing time by calling
+        // this again?
         updateAllMetrics(this.timer);
 
         float totalScore = 0.0f;
