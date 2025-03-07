@@ -56,7 +56,7 @@ public class Lane {
             char characterI = newDirection.charAt(i); // Gets the i'th characthter in direction
             String character = Character.toString(characterI); // Converts the character to a string so the
                                                                 // (.contains()) method can be used
-            String allowed = "lfr"; // Allowed characters
+            String allowed = "LFR"; // Allowed characters
             if (!allowed.contains(character)) {
                 return false;
             } else {
@@ -397,7 +397,8 @@ public class Lane {
                 builder.append(", ");
             }
         }
-        builder.append("]");
+        builder.append("] ");
+        builder.append(direction);
         return builder.toString();
     }
 }

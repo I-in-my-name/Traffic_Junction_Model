@@ -505,6 +505,11 @@ public class PrimaryController {
         try {
             int[] laneData;
             laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            System.err.print("Lane Data: "); 
+            for (int i = 0; i < 5; i++) {
+                System.err.print(laneData[i]);
+                System.err.print(", ");
+            }
             junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
                     laneData[4]);
             laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
