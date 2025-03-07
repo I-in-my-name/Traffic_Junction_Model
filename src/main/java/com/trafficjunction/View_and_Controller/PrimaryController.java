@@ -501,13 +501,13 @@ public class PrimaryController {
             laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
             junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
                     laneData[4]);
-            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
             junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
                     laneData[4]);
-            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            laneData = countRoadTypes(southRoadAllLanes, southLaneNum);
             junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
                     laneData[4]);
-            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            laneData = countRoadTypes(westRoadAllLanes, westLaneNum);
             junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
                     laneData[4]);
         } catch (NullPointerException nullPointerException) {
@@ -553,6 +553,8 @@ public class PrimaryController {
      */
     @FXML
     private void runSimulationButtonPress() {
+        populateInputDataMetrics();
+        careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
         // Flag that the simulation is now running.
         isRunningSimulation = true;
 
@@ -637,12 +639,7 @@ public class PrimaryController {
         StringBuilder sb = new StringBuilder();
         String[] roadTypeArray = new String[5];
 
-        System.out.println("Here is a list of all of the allowed roads for this lane:");
-        for (int i = 0; i < lane.allAllowedRoads.size(); i++) {
-            System.out.println(lane.allAllowedRoads.get(i).getAsChars());
-        }
         lane.changeImage();
-        System.out.println("IT is now over");
         // System.out.println("RoadType = " + lane.getRoadType().getAsChars());
         // System.out.println("counter = " + lane.currentRoadCounter);
         // System.out.println("We say the image is: " +
@@ -661,7 +658,6 @@ public class PrimaryController {
                 sb.append("R");
 
             roadTypeArray[i] = sb.toString();
-            System.out.println(sb.toString());
 
             sb.setLength(0);
         }
@@ -719,11 +715,6 @@ public class PrimaryController {
             laneArr[i].sortAllowedRoads();
             laneArr[i].update();
         }
-        System.out.println("RUT: " + rightUpTo);
-        System.out.println("RoadType = " + lane.getRoadType().getAsChars());
-        System.out.println("counter = " + lane.currentRoadCounter);
-        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
-        System.out.println("We say the image is: " + lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
 
         if (rightForwardIndex != rightUpTo) {
             if (rightUpTo < laneNum - 1) {
@@ -770,9 +761,6 @@ public class PrimaryController {
         // respectively.
         laneArr[laneNum - 1].addLeftTurn();
         laneArr[0].addRightTurn();
-
-        populateInputDataMetrics();
-        careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
     }
 
     // Change the image of the current lane.
@@ -832,13 +820,11 @@ public class PrimaryController {
         WTS.setText(Integer.toString(numbersMap.get("wts")));
 
         try {
-            System.out.println("STUCK ZERO");
             String[][] formattedRoad = newMetrics.getRoadsFormatted();
 
             // setAllToDefault
             getLanesToForward();
 
-            System.out.println("STUCK ONE");
             // correct all laneNums
 
             int[] allNums = {
@@ -857,33 +843,50 @@ public class PrimaryController {
                     southRoadAllLanes,
                     westRoadAllLanes
             };
-
-            boolean rightToLeft;
-            int count;
             for (int i = 0; i < allLanes.length; i++) {
-                rightToLeft = false;
-                count = 0;
-                System.out.println("STUCK A");
-                while (!rightToLeft && count < formattedRoad[i].length) {
-                    String nextString = formattedRoad[i][formattedRoad[i].length - 1 - count];
-                    System.out.println(nextString);
-                    if (nextString.equals("L") || nextString.equals("LF")) {
-                        changeUntilCorrect(allLanes[i][formattedRoad[i].length - 1 - count],
+                int highestIndex = formattedRoad[i].length - 1;
+                boolean rightToLeft = true;
+                while (rightToLeft && highestIndex >= 0) {
+                    String nextString = formattedRoad[i][highestIndex];
+                    if (nextString.equals("R") || nextString.equals("FR")) {
+                        changeUntilCorrect(allLanes[i][allLanes[i].length - 1 - highestIndex],
                                 allLanes[i], allNums[i], nextString);
-                        count++;
+                        highestIndex--;
+                        System.out.println(nextString);
                     } else {
-                        rightToLeft = true;
+                        rightToLeft = false;
                     }
                 }
-                for (int j = 0; j < formattedRoad[i].length - count; j++) {
-                    changeUntilCorrect(allLanes[i][j],
+                for (int j = 0; j <= highestIndex; j++) {
+                    changeUntilCorrect(allLanes[i][allLanes[i].length - 1 - j],
                             allLanes[i], allNums[i], formattedRoad[i][j]);
                 }
-                // for (int j = 0; j < formattedRoad[i].length; j++) {
-                // changeUntilCorrect(allLanes[i][j], northRoadAllLanes, northLaneNum,
-                // formattedRoad[i][j]);
-                // }
             }
+
+            // for (int i = 0; i < allLanes.length; i++) {
+            // rightToLeft = false;
+            // count = 0;
+            // for (int j = 0; j < allLanes[i].length; j++) {
+            // System.out.println(formattedRoad[i][j]);
+            // }
+            // while (!rightToLeft && count < formattedRoad[i].length) {
+            // String nextString = formattedRoad[i][formattedRoad[i].length - 1 - count];
+            // if (nextString.equals("L") || nextString.equals("LF")) {
+            // changeUntilCorrect(allLanes[i][formattedRoad[i].length - 1 - count],
+            // allLanes[i], allNums[i], nextString);
+            // count++;
+            // } else {
+            // rightToLeft = true;
+            // }
+            // }
+            // for (int j = 0; j < formattedRoad[i].length - count; j++) {
+            // changeUntilCorrect(allLanes[i][j],
+            // allLanes[i], allNums[i], formattedRoad[i][j]);
+            // }
+            // for (int j = 0; j < formattedRoad[i].length; j++) {
+            // changeUntilCorrect(allLanes[i][j], northRoadAllLanes, northLaneNum,
+            // formattedRoad[i][j]);
+            // }
         } catch (NullPointerException nullPointerException) {
             nullPointerException.printStackTrace();
         }
@@ -959,10 +962,18 @@ public class PrimaryController {
                 return false;
             case "R":
                 updateLanes(lane, lanes, laneNum);
+                if (lane == lanes[laneNum - 1]) {
+                    updateLanes(lane, lanes, laneNum);
+                    updateLanes(lane, lanes, laneNum);
+                }
                 return false;
             case "FR":
                 updateLanes(lane, lanes, laneNum);
                 updateLanes(lane, lanes, laneNum);
+                if (lane == lanes[laneNum - 1]) {
+                    updateLanes(lane, lanes, laneNum);
+                    updateLanes(lane, lanes, laneNum);
+                }
                 return false;
         }
         return true;
@@ -970,15 +981,9 @@ public class PrimaryController {
 
     @FXML
     private void undo() {
-        System.out.println("undo pressed");
-        populateInputDataMetrics();
-        System.out.println("here undo");
-        // careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
-        careTaker.undo();
-        System.out.println("finished");
-        populateFieldsWithData(junctionMetrics);
-        System.out.println("X_X");
 
+        careTaker.undo();
+        populateFieldsWithData(junctionMetrics);
     }
 
     @FXML

@@ -411,7 +411,7 @@ class Road implements Serializable {
             index++;
         }
         for (int i = 0; i < getRightForward(); i++) {
-            directions[index] = "RF";
+            directions[index] = "FR";
             index++;
         }
         for (int i = 0; i < getRight(); i++) {
