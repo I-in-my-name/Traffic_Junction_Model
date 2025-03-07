@@ -919,22 +919,22 @@ public class Junction {
             int maxQueueLength = 0;
 
             // Merge metrics of lanes in the same direction:
-            //for (LaneMetrics laneMetric : rawMetrics.get(index)) {
-            //    // Add averages:
-            //    averageWaitTime += laneMetric.getAverageWaitTime();
-            //    averageQueueLength += laneMetric.getAverageQueueLength();
-            //    // Get new maximums:
-            //    float newMaxWaitTime = laneMetric.getMaxWaitTime();
-            //    int newMaxQueueLength = laneMetric.getMaxQueueLength();
-            //    // Update maximum values if needed:
-            //    if (maxWaitTime < newMaxWaitTime) {
-            //        maxWaitTime = newMaxWaitTime;
-            //    }
-            //    if (maxQueueLength < newMaxQueueLength) {
-            //        maxQueueLength = newMaxQueueLength;
-            //    }
-            //    count++;
-            //}
+            // for (LaneMetrics laneMetric : rawMetrics.get(index)) {
+            // // Add averages:
+            // averageWaitTime += laneMetric.getAverageWaitTime();
+            // averageQueueLength += laneMetric.getAverageQueueLength();
+            // // Get new maximums:
+            // float newMaxWaitTime = laneMetric.getMaxWaitTime();
+            // int newMaxQueueLength = laneMetric.getMaxQueueLength();
+            // // Update maximum values if needed:
+            // if (maxWaitTime < newMaxWaitTime) {
+            // maxWaitTime = newMaxWaitTime;
+            // }
+            // if (maxQueueLength < newMaxQueueLength) {
+            // maxQueueLength = newMaxQueueLength;
+            // }
+            // count++;
+            // }
             averageWaitTime = this.getAverageWaitTime(index);
             averageQueueLength = this.getAverageQueueLength(index);
             maxWaitTime = this.getAverageWaitTime(index);
@@ -961,7 +961,7 @@ public class Junction {
                 overallMaximumQueueLength = maxQueueLength;
             }
         }
-        //getAverageWaitTime
+        // getAverageWaitTime
         overallAverageWaitTime = overallAverageWaitTime / 4;
         overallAverageQueueLength = overallAverageQueueLength / 4;
 
