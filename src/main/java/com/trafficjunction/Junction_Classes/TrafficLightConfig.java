@@ -10,7 +10,6 @@ Traffic Light Initial Config:
 - After cycle the user can input the pedestrian crossing period.
 */
 
-
 public class TrafficLightConfig {
     /**
      * Example:
@@ -21,22 +20,21 @@ public class TrafficLightConfig {
      * }
      */
     private List<Pair<Float, List<Integer>>> record;
-    private float cycle_duration;   // stores the total time it takes for the cycle
+    private float cycleDuration; // stores the total time it takes for the cycle
 
     public TrafficLightConfig() {
         record = new ArrayList<>();
-        cycle_duration = 0;
+        cycleDuration = 0;
     }
 
     // Test written
     public boolean addState(Float time, List<Integer> states) {
         if (time <= 0 || states == null || states.isEmpty()) {
             return false;
-        }
-        else {
+        } else {
             Pair<Float, List<Integer>> thisCycle = new Pair<>(time, states);
             record.add(thisCycle);
-            cycle_duration += time; // Update total cycle duration
+            cycleDuration += time; // Update total cycle duration
             return true;
         }
     }
@@ -47,7 +45,7 @@ public class TrafficLightConfig {
             return false;
         } else {
             float time = record.get(index).getLeft();
-            cycle_duration -= time;
+            cycleDuration -= time;
             record.remove(index);
             return true;
         }
@@ -58,7 +56,7 @@ public class TrafficLightConfig {
         if (index < 0 || index > record.size()) {
             return false;
         } else {
-            Pair <Float, List<Integer>> thisCycle = new Pair<>(time, states);
+            Pair<Float, List<Integer>> thisCycle = new Pair<>(time, states);
             record.add(index, thisCycle);
             return true;
         }
@@ -73,17 +71,17 @@ public class TrafficLightConfig {
         if (index < 0 || index >= record.size()) {
             return false;
         } else {
-            Pair <Float, List<Integer>> thisCycle = new Pair<>(time, states);
+            Pair<Float, List<Integer>> thisCycle = new Pair<>(time, states);
             record.remove(index);
             record.add(index, thisCycle);
             return true;
         }
     }
-    
+
     // Test written
     public List<Integer> getStates(float time) {
         if (record.isEmpty()) {
-            return null;  // Early return if no configurations are defined
+            return null; // Early return if no configurations are defined
         }
 
         float cycleTime = 0;
@@ -93,17 +91,17 @@ public class TrafficLightConfig {
         }
 
         // Make sure time is within one full cycle (modulo operation)
-        time = time % cycleTime;  // Wrap the time around the cycle duration
+        time = time % cycleTime; // Wrap the time around the cycle duration
 
         float currentTime = 0;
         for (Pair<Float, List<Integer>> config : record) {
             currentTime += config.getLeft();
             if (time < currentTime) {
-                return config.getRight();  // Return the state that matches the given time
+                return config.getRight(); // Return the state that matches the given time
             }
         }
 
-        return null;  // In case no match was found (shouldn't happen with the modulo adjustment)
+        return null; // In case no match was found (shouldn't happen with the modulo adjustment)
     }
 
     // public getter for testing purposes
@@ -111,4 +109,22 @@ public class TrafficLightConfig {
         return this.record.get(index);
     }
     
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder();
+        text.append("TLConfig: ");
+        int count = 0;
+        for (Pair<Float,List<Integer>> pairs : record) {
+            text.append("(");
+            text.append(pairs.getLeft().toString());
+            text.append(", ");
+            text.append(pairs.getRight().toString());
+            text.append(")");
+            count++;
+            if (count != record.size()) {
+                text.append(", ");
+            }
+        }
+        return text.toString();
+    }
 }

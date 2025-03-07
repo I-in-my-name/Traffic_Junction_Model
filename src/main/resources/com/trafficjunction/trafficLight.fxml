@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficjunction.View_and_Controller.TrafficLightController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-width: 0 0 1 0;">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Traffic Light Configuration">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="300.0" prefWidth="600.0" style="-fx-padding: 5;">
+         <children>
+            <ImageView fitHeight="275.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../assets/trafficLight.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="TOP_CENTER" prefHeight="304.0" prefWidth="273.0" style="-fx-padding: 20;">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Light Duration Facing:">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <GridPane style="-fx-padding: 10;">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="North:" wrappingWidth="87.638671875">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="northRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="East:" wrappingWidth="87.638671875" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="South:" wrappingWidth="87.638671875" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="West:" wrappingWidth="87.638671875" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="eastRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="southRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="westRoadDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All Red:" wrappingWidth="87.638671875" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="allRedDuration" promptText="30 seconds" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
+                  <Button fx:id="confirmDurationButton" mnemonicParsing="false" onAction="#confirmLightDurations" prefHeight="82.0" prefWidth="160.0" text="Submit">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="176.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Information&#10;This assumes a fixed traffic light configuration using seconds. This means that only one road will be shown a Green Light at a time. All other roads will be shown a Red Light. This is the most basic traffic configuration.Leaving the configuration blank will allow more complicated configurations to be generated." textAlignment="CENTER" wrappingWidth="220.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -10,7 +10,7 @@ import com.trafficjunction.observer.*;
 public class Vehicle {
 
     // stores the speed of the vehicle
-    private float speed; 
+    private float speed;
 
     // stores the maximum speed the vehicle can travel at
     private float maxSpeed;
@@ -18,7 +18,7 @@ public class Vehicle {
     // stores the length of the vehicle
     private float length;
 
-    // A queue storing the route the route the given 
+    // A queue storing the route the route the given
     // vehicle will take
     private Queue<Lane> desiredRoute;
 
@@ -32,7 +32,6 @@ public class Vehicle {
 
     // stores the direction the vehicle is moving in (eg "nte")
     private String direction;
-
 
     /**
      * Overload method in the case that vehicle route/direction is not specified
@@ -49,22 +48,23 @@ public class Vehicle {
     /**
      * Main constucture for the Vehicle class
      * <p>
-     * Initializes all necessary attributes, 
+     * Initializes all necessary attributes,
      * these include speed route and direction
      * <p>
-     * @param time Time at which vehicle was created
+     * 
+     * @param time     Time at which vehicle was created
      * @param maxSpeed The maximum speed at which the vehicle can travel
-     * @param Length The length of the vehicle
-     * @param route the route that the vehicle will take
+     * @param Length   The length of the vehicle
+     * @param route    the route that the vehicle will take
      */
     public Vehicle(float time, float maxSpeed, float length, List<Lane> route, String direction) {
-        
+
         // Inittaly sets the speed to the max speed
         this.speed = maxSpeed;
         this.maxSpeed = maxSpeed;
         this.length = length;
         this.metrics = new VehicleMetrics(time);
-        
+
         // Sets the creation time and current time to 0
         this.creationTime = time;
         this.currentTime = time;
@@ -96,9 +96,9 @@ public class Vehicle {
      */
     public Lane popRoute() {
         // returns the part of the route that has been complete or null
-        return desiredRoute.poll();   
+        return desiredRoute.poll();
     }
-    
+
     /**
      * Gets the length of the vehicle
      */
@@ -119,7 +119,7 @@ public class Vehicle {
      * Sets the direction that the vehicle will take
      */
     public String getDirection() {
-        //returns the direction the vehicle is traveling in
+        // returns the direction the vehicle is traveling in
         return this.direction;
     }
 
@@ -131,140 +131,150 @@ public class Vehicle {
      * If the light is green (state = 1), the vehicle moves.
      * Time here is an objective timestamp and is not relative.
      */
-    //public void updateMovement(float time, Lane lane) {
-    //    TrafficLight trafficLight = lane.getTrafficLight();
-        
-    //    if (trafficLight.getState() == 0 || lane.isFull()) {  // 0 = Red
-    //        if (this.speed != 0) {
-    //            metrics.stopMoving(time);  // Track wait time
-    //        }
-    //    } else if (trafficLight.getState() == 1) {  // 1 = Green
-    //        if (this.speed == 0) {
-    //            metrics.startMoving(time);  // Resume movement
-    //        }
-    //        lane.removeVehicle();
-    //        List<Lane> lanes = lane.getGoingTo();
-    //        if (lanes == null) {
-    //            // TODO: delete self, pass metrics to JunctionMetrics somehow.
-    //        } else {
-    //            lanes.get(0).addVehicle(this);
-    //        }
-    //    }
-    //}
+    // public void updateMovement(float time, Lane lane) {
+    // TrafficLight trafficLight = lane.getTrafficLight();
+
+    // if (trafficLight.getState() == 0 || lane.isFull()) { // 0 = Red
+    // if (this.speed != 0) {
+    // metrics.stopMoving(time); // Track wait time
+    // }
+    // } else if (trafficLight.getState() == 1) { // 1 = Green
+    // if (this.speed == 0) {
+    // metrics.startMoving(time); // Resume movement
+    // }
+    // lane.removeVehicle();
+    // List<Lane> lanes = lane.getGoingTo();
+    // if (lanes == null) {
+    // // TODO: delete self, pass metrics to JunctionMetrics somehow.
+    // } else {
+    // lanes.get(0).addVehicle(this);
+    // }
+    // }
+    // }
 
     // TODO: finish test for
     /**
      * Method to update a vehicle's position
      * <p>
+     * Updates the vehicles position in its lane based on the time and traffic
+     * Determines if the vehcicle can move, needs to wait or can transfer to another
+     * lane
+     * <p>
      * 
-     * Parameters - (time) the time since simulation started, (lane) the lane that the vehicle is currently in
+     * @param newTime updated simulation time
+     * @param lane    the lane which the vehicle is currently in
+     * @param index   The position of the vehicle in the lane's vehicle list.
+     * @return A status message indicating the outcome of the update.
      */
-    
-    // Overload method so we can get the index without searching for the vehicle in the lane
     public String update(float newTime, Lane lane, int index) {
-        //TODO: Figure out where metrics.startMoving and metrics.stopMoving calls go
-        // I think that is the bug causing weird metrics rn 
+        // get the time difference since the last update
+        float timeDifference = newTime - currentTime;
 
-        // Get needed variables:
-        float timeDifference = newTime - currentTime;			// Gets the time increment increase
-        if (timeDifference <= 0.f || index >= lane.getVehicles().size() || index < 0) { // If index is out of bounds, or no update is needed
+        // If no update is needed (time hasn't progressed or index is out of bounds),
+        // return early
+        if (timeDifference <= 0.f || index >= lane.getVehicles().size() || index < 0) { // If index is out of bounds, or
+                                                                                        // no update is needed
             return "no update";
         }
-        Pair<Float,Vehicle> thisPair = lane.getVehicles().get(index);	// Gets the pair which stores this vehicle
-        float position = thisPair.getLeft();	// Gets the vehicle's current position
 
-        // If index == 0, traversable position = 0
-        // TODO / QUESTION: Is traversable position the length possible ot move
-        // or the new position that it could get to in theory if it kept moving?
-        // If the latter, then 0 makes sense
-        // otherwise it doesn't
-        // Code looks like it means the first though
-        float traversablePosition;		// Get the possible distance our vehicle can/should move forward
+        // Retrieve the vehicle's position from the lane
+        Pair<Float, Vehicle> thisPair = lane.getVehicles().get(index); // Gets the pair which stores this vehicle
+        float position = thisPair.getLeft(); // Gets the vehicle's current position
+
+        // Get the possible distance our vehicle can/should move forward
+        float traversablePosition;
         if (index == 0) {
             traversablePosition = 0;
         } else {
-            Pair<Float,Vehicle> posVehicle = lane.getVehicles().get(index-1);  // Gets the entry of the next vehicle
-            float nextVehiclePosition = posVehicle.getLeft();                // Gets the next vehicle position on the lane
-            float vehicleLength = posVehicle.getRight().getLength();          // Gets the next vehicle's length
+            Pair<Float, Vehicle> posVehicle = lane.getVehicles().get(index - 1); // Gets the entry of the next vehicle
+            float nextVehiclePosition = posVehicle.getLeft(); // Gets the next vehicle position on the lane
+            float vehicleLength = posVehicle.getRight().getLength(); // Gets the next vehicle's length
             traversablePosition = nextVehiclePosition + vehicleLength + 1.f;
         }
 
-        // position > traversable_position means can move
-        // e.g. position = 0 means start. position = 50 means 50 away from start. 
+        // Checks to see if the vehicle can move forward
+        // If position > traversable_position means can move
+        // e.g. position = 0 means start. position = 50 means 50 away from start.
         // traversable position = 20 means should be able to move 30 forward
-        // TODO: this is right, right? Changed it when fixing bugs to run simulation
         if (position > traversablePosition) { // If the vehicle can move
             if (speed == 0) {
                 speed = maxSpeed;
-                metrics.startMoving(currentTime);
+                metrics.startMoving(currentTime); // track movement start time
             }
-            // Travel possible distance:
+
+            // calculate possibe travel distance based on speed and time difference
             float maxTraversableDistance = calculateDistanceFromTime(timeDifference);
-            //float traversable_distance = traversable_position - position;
-            // changed this from above to below as position > traversable position,
-            // part of change described above
             float traversable_distance = position - traversablePosition;
             float distance = Math.min(traversable_distance, maxTraversableDistance);
-            // position - distance is new position
-            // closer to 0 is closer to end of lane so position gets smaller as distance travelled grows
+
+            // Update the vehicle's position
             thisPair.setLeft(position - distance);
-            // Calculate time taken:
+
+            // Calculate actual time taken for this movement
             float timeTaken = calculateTimeFromDistance(distance);
             currentTime += timeTaken;
-            
-            // Run function again in case reaching the end of the lane; (current_time) is updated, so it won't run infinitely:
+
+            // If more time remains, attempt another update
             if (newTime > currentTime) {
-                return "another update, "+ this.update(newTime, lane, index);
+                return "another update, " + this.update(newTime, lane, index);
             }
 
         } else { // The vehicle can not move OR is at 0 and waiting for TrafficLights
             boolean canProceed = lane.canPass();
-            if (index == 0 && position == 0.f && canProceed) { // If we are able to go to the next lane
-                // TODO: Remember to shift list up if needed
+
+            // If at the start of the lane and allowed to move to the next lane
+            if (index == 0 && position == 0.f && canProceed) {
                 Lane nextLane = popRoute();
                 if (nextLane != null && lane.getGoingTo().contains(nextLane)) {
-                    lane.removeVehicle();                           // Remove vehicle from current lane
+                    lane.removeVehicle(); // Remove vehicle from current lane
                     nextLane.addVehicle(this);
-                    update(newTime, nextLane, nextLane.getVehicleNum()-1);
-                } else if (!lane.getGoingTo().isEmpty()) {  // If there is one or more possible lanes for the vehicle to go in
+                    update(newTime, nextLane, nextLane.getVehicleNum() - 1);
+                } else if (!lane.getGoingTo().isEmpty()) { // If there is one or more possible lanes for the vehicle to
+                                                           // go in
                     List<Lane> nextLanes = lane.getGoingTo();
                     // Go to the lane with the least number of vehicles:
                     int checkIndex = 1;
                     int lowestIndex = 0;
-                    int leastV = nextLanes.get(0).getVehicleNum();    // Initially gets the number of vehicles in the first possible lane
+                    int leastV = nextLanes.get(0).getVehicleNum(); // Initially gets the number of vehicles in the first
+                                                                   // possible lane
                     boolean available = !nextLanes.get(0).isFull();
                     while (checkIndex != nextLanes.size()) {
                         boolean canGoTo = !nextLanes.get(checkIndex).isFull();
-                        int newV = nextLanes.get(checkIndex).getVehicleNum();    // Get number of vehicles in the first lane
-                        if (leastV > newV && canGoTo) {       // Compares num of vehicles between current lowest and another lane's
+                        int newV = nextLanes.get(checkIndex).getVehicleNum(); // Get number of vehicles in the first
+                                                                              // lane
+                        if (leastV > newV && canGoTo) { // Compares num of vehicles between current lowest and another
+                                                        // lane's
                             lowestIndex = checkIndex;
                             leastV = newV;
                             available = true;
                         }
                         checkIndex++;
                     }
-                    Lane desiredLane = nextLanes.get(lowestIndex);    // Gets the lane
-                    if (available) {  // If a lane is available
-                        lane.removeVehicle();                           // Remove vehicle from current lane
-                        
+                    Lane desiredLane = nextLanes.get(lowestIndex); // Gets the lane
+                    if (available) { // If a lane is available
+                        lane.removeVehicle(); // Remove vehicle from current lane
+
                         // send event
                         ArrayList<Float> eventData = new ArrayList<>();
-                        //eventData.add();
+                        // eventData.add();
                         // TODO: What is the index of lane leaving and lane joining?
                         Subject.notifyObservers(new Event(EventType.VEHICLE_LEFT_LANE, eventData));
 
-                        desiredLane.addVehicle(this);                   // Adds vehicle
-                        return "add to another lane, " + this.update(newTime, desiredLane, desiredLane.getVehicles().size()-1);
+                        desiredLane.addVehicle(this); // Adds vehicle
+                        return "add to another lane, "
+                                + this.update(newTime, desiredLane, desiredLane.getVehicles().size() - 1);
                     } else {
                         return "unsuccesful in adding to lane";
                     }
                 } else {
                     this.currentTime = newTime;
-                    lane.removeVehicle();   // Remove vehicle from current lane
+                    lane.removeVehicle(); // Remove vehicle from current lane
                     // Vehicle has reached the end of the route
-                    // Give vehicle metrics to junction somehow (TODO: Discuss Start and End 'nodes'?)
+                    // Give vehicle metrics to junction somehow (TODO: Discuss Start and End
+                    // 'nodes'?)
                 }
-            } else if (speed != 0) {   // If the vehicle has speed meaning it has stopped when the method executed this time
+            } else if (speed != 0) { // If the vehicle has speed meaning it has stopped when the method executed this
+                                     // time
                 speed = 0;
                 metrics.stopMoving(this.currentTime); // Saves time to vehicle metrics
             }
@@ -273,32 +283,80 @@ public class Vehicle {
         return "?";
     }
 
-    // Methods to go from time (s) to distance (m) and vice versa, dependant on speed/max speed of vehicle
+    /**
+     * Calculates the time required to travel a given distance based on the
+     * vehicle's maximum speed.
+     * <p>
+     * The speed is converted from km/h to m/s by dividing by 3.6.
+     * <p>
+     * 
+     * @param distanceToTravel The distance to be traveled in meters.
+     * @return The time taken to travel the given distance in seconds.
+     */
     public float calculateTimeFromDistance(float distanceToTravel) {
+        // Convert maxSpeed from km/h to m/s and calculate time using time = distance /
+        // speed formula
         float time_taken = distanceToTravel / (maxSpeed / 3.6f);
         return time_taken;
     }
+
+    /**
+     * Calculates the distance a vehicle can travel in a given time based on its
+     * maximum speed.
+     * <p>
+     * 
+     * @param timeToTravel The time duration (in seconds) for which the vehicle
+     *                     moves.
+     * @return The distance (in meters) that the vehicle can travel in the given
+     *         time.
+     */
     public float calculateDistanceFromTime(float timeToTravel) {
-        if (timeToTravel==0) {
+        // If no time has passed, no distance is traveled
+        if (timeToTravel == 0) {
             return 0;
         }
+
+        // Convert speed from km/h to m/s by dividing by 3.6, then multiply by time to
+        // get distance
         float distance = (maxSpeed / 3.6f) * timeToTravel;
+
         return distance;
     }
 
+    /**
+     * Retrieves the current speed of the vehicle.
+     * <p>
+     * 
+     * @return The current speed of the vehicle in meters per second.
+     */
     public float getSpeed() {
         return speed;
     }
 
-    // method: get vehicle position: used in lane class for deleting vehicles. 
+    /**
+     * Returns a string representation of the Vehicle object.
+     * <p>
+     * This method provides a simple way to display vehicle information,
+     * including its speed and length.
+     * <p>
+     * Used in the Lane class for vehicle management (e.g., deleting vehicles).
+     * <p>
+     * 
+     * @return A string containing the vehicle's speed and length.
+     */
     @Override
     public String toString() {
+        // Using StringBuilder for efficient string concatenation
         StringBuilder builder = new StringBuilder();
+
         builder.append("Vehicle [");
-        builder.append(Float.toString(speed));
+        builder.append(Float.toString(speed)); // Append vehicle speed
+        builder.append("/");
+        builder.append(Float.toString(maxSpeed)); // Append vehicle speed
         builder.append(", ");
-        builder.append(Float.toString(length));
+        builder.append(Float.toString(length)); // Append vehicle length
         builder.append("]");
+
         return builder.toString();
     }
 }

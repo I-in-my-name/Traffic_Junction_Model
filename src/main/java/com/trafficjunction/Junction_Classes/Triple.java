@@ -1,6 +1,6 @@
 package com.trafficjunction.Junction_Classes;
 
-class Triple<K, V, X> { // amount of time the taffic light will be in a given state
+public class Triple<K, V, X> { // amount of time the taffic light will be in a given state
 // the state (e.g. red =)
     K left;
     V middle;
