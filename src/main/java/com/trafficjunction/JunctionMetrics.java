@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.trafficjunction.Junction_Classes.Junction;
 import com.trafficjunction.Junction_Classes.TrafficLight;
@@ -325,6 +327,13 @@ public class JunctionMetrics implements Serializable {
         int rightForward = laneDirections[3];
         int right = laneDirections[4];
 
+        System.out.println(left);
+        System.out.println(leftForward);
+        System.out.println(forward);
+        System.out.println(rightForward);
+        System.out.println(right);
+
+        System.out.println(numLanesTotal);
         if (left + leftForward + forward + rightForward + right != numLanesTotal)
             return false;
 
@@ -341,7 +350,7 @@ public class JunctionMetrics implements Serializable {
             return false;
 
         if (left + leftForward + forward + right + rightForward > 5 ||
-                left + leftForward + forward + right + rightForward == 0)
+                left + leftForward + forward + right + rightForward <= 0)
             return false;
 
         return true;
@@ -349,11 +358,11 @@ public class JunctionMetrics implements Serializable {
 
     private List<int[]> getAllValidLaneDirections(int numLanesTotal) {
         ArrayList<int[]> validLaneDirections = new ArrayList<>();
-        for (int left = 0; left <= 4; left++) {
-            for (int leftForward = 0; leftForward <= 4 - left; leftForward++) {
-                for (int forward = 0; forward <= 4 - left - leftForward; forward++) {
-                    for (int rightForward = 0; rightForward <= 4 - left - leftForward - forward; rightForward++) {
-                        for (int right = 0; right <= 4 - left - leftForward - forward - rightForward; right++) {
+        for (int left = 0; left <= 5; left++) {
+            for (int leftForward = 0; leftForward <= 5 - left; leftForward++) {
+                for (int forward = 0; forward <= 5 - left - leftForward; forward++) {
+                    for (int rightForward = 0; rightForward <= 5 - left - leftForward - forward; rightForward++) {
+                        for (int right = 0; right <= 5 - left - leftForward - forward - rightForward; right++) {
                             int[] directions = {
                                     left, leftForward, forward, rightForward, right
                             };
@@ -368,10 +377,12 @@ public class JunctionMetrics implements Serializable {
         return validLaneDirections;
     }
 
-    public List<JunctionMetrics> getPermutations() {
+    public SortedMap<Float, JunctionMetrics> getPermutations() {
         // Loops
         int index = 0;
-        List<JunctionMetrics> permutations = new ArrayList<>();
+        SortedMap<Float, JunctionMetrics> permutations = new TreeMap<>();
+        Junction tempJunction;
+
         List<int[]> allValidNorthDirections = getAllValidLaneDirections(north.numLanes);
         List<int[]> allValidEastDirections = getAllValidLaneDirections(east.numLanes);
         List<int[]> allValidSouthDirections = getAllValidLaneDirections(south.numLanes);
@@ -387,11 +398,23 @@ public class JunctionMetrics implements Serializable {
                         perm.addRoad("west", allValidWestDirections.get(westIndex));
                         index++;
                         System.out.println(index);
-                        permutations.add(perm);
+                        tempJunction = perm.intoJunction();
+                        permutations.put(tempJunction.computeOverallScore(), perm);
+                    }
+                    while (permutations.size() > 20) {
+                        System.out.println("delete");
+                        permutations.remove(permutations.firstKey());
                     }
                 }
+                if (index >= 5000) {
+                    break;
+                }
+            }
+            if (index >= 50000) {
+                break;
             }
         }
+        System.out.println("WOAH");
         return permutations;
     }
 }

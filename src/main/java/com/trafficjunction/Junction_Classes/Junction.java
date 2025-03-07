@@ -220,8 +220,10 @@ public class Junction {
         for (Lane lane : entryLanes.get(side)) {
             totalNumberOfVehicles += lane.getTotalVehicleNum();
             totalWaitTime += lane.getAverageWaitTime() * lane.getTotalVehicleNum();
-            System.out.print("Lane average wait time: ");System.out.print(lane.getAverageWaitTime());
-            System.out.print(" VehicleNum: ");System.out.println(lane.getTotalVehicleNum());
+            // System.out.print("Lane average wait time:
+            // ");System.out.print(lane.getAverageWaitTime());
+            // System.out.print(" VehicleNum:
+            // ");System.out.println(lane.getTotalVehicleNum());
         }
         if (totalNumberOfVehicles == 0) {
             return 0.f;
@@ -921,31 +923,32 @@ public class Junction {
             int maxQueueLength = 0;
 
             // Merge metrics of lanes in the same direction:
-            //for (LaneMetrics laneMetric : rawMetrics.get(index)) {
-            //    // Add averages:
-            //    averageWaitTime += laneMetric.getAverageWaitTime();
-            //    averageQueueLength += laneMetric.getAverageQueueLength();
-            //    // Get new maximums:
-            //    float newMaxWaitTime = laneMetric.getMaxWaitTime();
-            //    int newMaxQueueLength = laneMetric.getMaxQueueLength();
-            //    // Update maximum values if needed:
-            //    if (maxWaitTime < newMaxWaitTime) {
-            //        maxWaitTime = newMaxWaitTime;
-            //    }
-            //    if (maxQueueLength < newMaxQueueLength) {
-            //        maxQueueLength = newMaxQueueLength;
-            //    }
-            //    count++;
-            //}
-            System.out.println(directions[side]+" Metrics:");
-            averageWaitTime = this.getAverageWaitTime(side);System.out.println(averageWaitTime);
+            // for (LaneMetrics laneMetric : rawMetrics.get(index)) {
+            // // Add averages:
+            // averageWaitTime += laneMetric.getAverageWaitTime();
+            // averageQueueLength += laneMetric.getAverageQueueLength();
+            // // Get new maximums:
+            // float newMaxWaitTime = laneMetric.getMaxWaitTime();
+            // int newMaxQueueLength = laneMetric.getMaxQueueLength();
+            // // Update maximum values if needed:
+            // if (maxWaitTime < newMaxWaitTime) {
+            // maxWaitTime = newMaxWaitTime;
+            // }
+            // if (maxQueueLength < newMaxQueueLength) {
+            // maxQueueLength = newMaxQueueLength;
+            // }
+            // count++;
+            // }
+            System.out.println(directions[side] + " Metrics:");
+            averageWaitTime = this.getAverageWaitTime(side);
+            System.out.println(averageWaitTime);
             averageQueueLength = this.getAverageQueueLength(side);
             maxWaitTime = this.getAverageWaitTime(side);
             maxQueueLength = this.getMaxQueueLength(side);
 
             //// Divide averages to get correct values:
-            //averageWaitTime = averageWaitTime / count;
-            //averageQueueLength = averageQueueLength / count;
+            // averageWaitTime = averageWaitTime / count;
+            // averageQueueLength = averageQueueLength / count;
 
             String key = directions[side];
             metrics.put(key + " Average Wait Time", Float.toString(averageWaitTime));

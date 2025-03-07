@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.JunctionMetrics;
@@ -1127,18 +1128,7 @@ public class PrimaryController {
     @FXML
     private void showJunctionOptions(ActionEvent event) {
         // JunctionMetrics baseConfiguration = junctionMetrics;
-        List<JunctionMetrics> permutations = this.junctionMetrics.getPermutations();
-        Map<Float, JunctionMetrics> generationData = new HashMap<>();
-        int index = 0;
-        for (JunctionMetrics junctionMetrics : permutations) {
-            index++;
-            System.out.println(index);
-            // Change to get more or less accurate data
-            Junction junction = junctionMetrics.intoJunction();
-            junction.calculateMetrics(1000);
-
-            generationData.put(Float.parseFloat(junction.getMetrics().get("Overall Score")), junctionMetrics);
-        }
+        SortedMap<Float, JunctionMetrics> generationData = this.junctionMetrics.getPermutations();
 
         try {
             // Load the new FXML file
@@ -1157,6 +1147,9 @@ public class PrimaryController {
             genStage.setTitle("Generated Alternative Junctions");
 
             genStage.show();
+
+            generationController.setGenerationData(generationData);
+            generationController.displayGenerationProfiles();
 
             // Hide the current window.
             primaryStage.hide();
