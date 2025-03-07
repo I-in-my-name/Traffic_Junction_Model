@@ -15,6 +15,7 @@ import com.trafficjunction.UI_Utilities.UILane;
 import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
 import com.trafficjunction.View_and_Controller.Saving_Utils.ConfigurationSnapshot;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -53,6 +54,8 @@ public class PrimaryController {
     private ImageView wLane0, wLane1, wLane2, wLane3, wLane4;
     @FXML
     private ImageView trafficLightButton;
+
+    private Stage stage;
 
     // Buttons for adding and subtracting the number of lanes.
     @FXML
@@ -184,6 +187,8 @@ public class PrimaryController {
 
     int[] trafficLightDurs = new int[5];
 
+    public AnimationHandler animationHandler;
+
     @FXML
     private void initialize() {
         try {
@@ -194,6 +199,12 @@ public class PrimaryController {
         junctionMetrics = new JunctionMetrics(dummyData, dummyData);
         careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
 
+        // Initialize the stage when the anchor pane is ready, getting it from any FXML
+        // component
+        Platform.runLater(() -> {
+            stage = (Stage) junctionAnchor.getScene().getWindow();
+        });
+
         TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
         this.allTextFields = allTextFields;
 
@@ -203,7 +214,7 @@ public class PrimaryController {
         }
 
         // Declare the animation handler for animations.
-        AnimationHandler animationHandler = new AnimationHandler(junctionAnchor);
+        animationHandler = new AnimationHandler(junctionAnchor);
 
         // Hide the cancel simulation button until the simulation is running.
         cancelSimulationButton.setDisable(true);
@@ -563,68 +574,83 @@ public class PrimaryController {
         // Left Turn
         if (junctionMetrics.getVehicleNum("nte") > 0
                 && (junctionMetrics.getNorth().getLeft() == 0 && junctionMetrics.getNorth().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the North road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("nts") > 0
                 && (junctionMetrics.getNorth().getLeftForward() == 0 && junctionMetrics.getNorth().getForward() == 0)
                 && junctionMetrics.getNorth().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the North road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("ntw") > 0
                 && (junctionMetrics.getNorth().getRightForward() == 0 && junctionMetrics.getNorth().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the North road.");
             return false;
         }
 
         // VERIFY EAST
+        // Left turn
         if (junctionMetrics.getVehicleNum("ets") > 0
                 && (junctionMetrics.getEast().getLeft() == 0 && junctionMetrics.getEast().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the East road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("etw") > 0
                 && (junctionMetrics.getEast().getLeftForward() == 0 && junctionMetrics.getEast().getForward() == 0)
                 && junctionMetrics.getEast().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the East road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("etn") > 0
                 && (junctionMetrics.getEast().getRightForward() == 0 && junctionMetrics.getEast().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the East road.");
             return false;
         }
 
         // VERIFY SOUTH
+        // Left turn
         if (junctionMetrics.getVehicleNum("stw") > 0
                 && (junctionMetrics.getSouth().getLeft() == 0 && junctionMetrics.getSouth().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the South road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("stn") > 0
                 && (junctionMetrics.getSouth().getLeftForward() == 0 && junctionMetrics.getSouth().getForward() == 0)
                 && junctionMetrics.getSouth().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the South road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("ste") > 0
                 && (junctionMetrics.getSouth().getRightForward() == 0 && junctionMetrics.getSouth().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the South road.");
             return false;
         }
 
         // VERIFY WEST
+        // Left turn
         if (junctionMetrics.getVehicleNum("wtn") > 0
                 && (junctionMetrics.getWest().getLeft() == 0 && junctionMetrics.getWest().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the West road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("wte") > 0
                 && (junctionMetrics.getWest().getLeftForward() == 0 && junctionMetrics.getWest().getForward() == 0)
                 && junctionMetrics.getWest().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the West road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("wts") > 0
                 && (junctionMetrics.getWest().getRightForward() == 0 && junctionMetrics.getWest().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the West road.");
             return false;
         }
 
@@ -642,10 +668,8 @@ public class PrimaryController {
         // junctionMetrics object.
         populateInputDataMetrics();
 
-        // TODO Verify that the vehicle inputs match the lanes.
         if (!verifyLaneTrafficInformation()) {
             // Invalid lane setup.
-            System.out.println("Invalid setup.");
             return;
         }
 
@@ -661,7 +685,7 @@ public class PrimaryController {
 
         careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
 
-        Junction junction = junctionMetrics.intoJunction();
+        Junction junction = junctionMetrics.intoJunction(animationHandler);
 
         float runTime = 3600.f; // 1 hour in seconds
         float timeIncrement = 0.1f; // One tenth of a second
@@ -1095,7 +1119,7 @@ public class PrimaryController {
         Map<Float, JunctionMetrics> generationData;
         Junction junction;
         for (JunctionMetrics permutation : permutations) {
-            junction = permutation.intoJunction();
+            junction = permutation.intoJunction(animationHandler);
             // TODO run simulation
             // TODO get data and add
         }
@@ -1126,4 +1150,15 @@ public class PrimaryController {
         }
 
     }
+
+    /* Function to show an error. */
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(stage);
+        alert.showAndWait();
+    }
+
 }

@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.trafficjunction.UI_Utilities.AnimationHandler;
+
+import javafx.animation.Animation;
+
 public class Junction {
 
     // Junction Ranking Constants:
@@ -45,11 +49,13 @@ public class Junction {
     private float timer; // How much time has passed since the start of the simulation
 
     private List<Vehicle> animateVehicles;
+    AnimationHandler animationHandler;
 
-    public Junction() {
+    public Junction(AnimationHandler animationHandler) {
         // Initialise
         vehicleRoutes = new HashMap<>();
         animateVehicles = new ArrayList<>();
+        this.animationHandler = animationHandler;
 
         // Set vehicle rate to be 0 for all directions
         /*
@@ -851,6 +857,9 @@ public class Junction {
                     String entryCharacter = direction.substring(0, 1).toUpperCase();
                     String exitCharacter = direction.substring(0, 1).toUpperCase();
                     Triple triple = new Triple(entryCharacter, exitCharacter, index);
+                    // TODO CALL ANIMATION HANDLER HERE.
+                    animationHandler.chooseAnimation(entryCharacter.toCharArray()[0], exitCharacter
+                            .toCharArray()[0], index);
                     returnData.add(triple);
                 }
                 index++;

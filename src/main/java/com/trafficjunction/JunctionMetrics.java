@@ -15,6 +15,7 @@ import java.util.Map;
 import com.trafficjunction.Junction_Classes.Junction;
 import com.trafficjunction.Junction_Classes.TrafficLight;
 import com.trafficjunction.Junction_Classes.TrafficLightConfig;
+import com.trafficjunction.UI_Utilities.AnimationHandler;
 
 /*
  * Class to store user-input data in a single place.
@@ -62,8 +63,8 @@ public class JunctionMetrics implements Serializable {
 
     }
 
-    public Junction intoJunction() {
-        Junction junction = new Junction();
+    public Junction intoJunction(AnimationHandler animationHandler) {
+        Junction junction = new Junction(animationHandler);
 
         // Set vehicle rates.
         String[] routes = { "nte", "nts", "ntw",
