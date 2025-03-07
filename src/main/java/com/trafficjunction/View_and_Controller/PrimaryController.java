@@ -15,6 +15,7 @@ import com.trafficjunction.UI_Utilities.UILane;
 import com.trafficjunction.View_and_Controller.Saving_Utils.CareTaker;
 import com.trafficjunction.View_and_Controller.Saving_Utils.ConfigurationSnapshot;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -170,6 +171,8 @@ public class PrimaryController {
     @FXML
     private Menu redoButton;
 
+    private Stage stage;
+
     // Undo Redo Java resources:
     private CareTaker careTaker = new CareTaker();
 
@@ -193,6 +196,12 @@ public class PrimaryController {
         int[] dummyData = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         junctionMetrics = new JunctionMetrics(dummyData, dummyData);
         careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
+
+        // Initialize the stage when the anchor pane is ready, getting it from any FXML
+        // component
+        Platform.runLater(() -> {
+            stage = (Stage) junctionAnchor.getScene().getWindow();
+        });
 
         TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
         this.allTextFields = allTextFields;
@@ -488,7 +497,12 @@ public class PrimaryController {
 
         // Checks if the user has not decided their own values for the traffic light
         // configuration. If not, the default is 30.
-        if (this.trafficLightDurs == null) {
+        boolean allZero = true;
+        for (int i = 0; i < trafficLightDurs.length; i++) {
+            if (trafficLightDurs[i] != 0)
+                allZero = false;
+        }
+        if (allZero) {
             int[] temp = { 30, 30, 30, 30, 30 };
             this.trafficLightDurs = temp;
         }
@@ -563,68 +577,83 @@ public class PrimaryController {
         // Left Turn
         if (junctionMetrics.getVehicleNum("nte") > 0
                 && (junctionMetrics.getNorth().getLeft() == 0 && junctionMetrics.getNorth().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the North road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("nts") > 0
                 && (junctionMetrics.getNorth().getLeftForward() == 0 && junctionMetrics.getNorth().getForward() == 0)
                 && junctionMetrics.getNorth().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the North road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("ntw") > 0
                 && (junctionMetrics.getNorth().getRightForward() == 0 && junctionMetrics.getNorth().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the North road.");
             return false;
         }
 
         // VERIFY EAST
+        // Left turn
         if (junctionMetrics.getVehicleNum("ets") > 0
                 && (junctionMetrics.getEast().getLeft() == 0 && junctionMetrics.getEast().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the East road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("etw") > 0
                 && (junctionMetrics.getEast().getLeftForward() == 0 && junctionMetrics.getEast().getForward() == 0)
                 && junctionMetrics.getEast().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the East road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("etn") > 0
                 && (junctionMetrics.getEast().getRightForward() == 0 && junctionMetrics.getEast().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the East road.");
             return false;
         }
 
         // VERIFY SOUTH
+        // Left turn
         if (junctionMetrics.getVehicleNum("stw") > 0
                 && (junctionMetrics.getSouth().getLeft() == 0 && junctionMetrics.getSouth().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the South road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("stn") > 0
                 && (junctionMetrics.getSouth().getLeftForward() == 0 && junctionMetrics.getSouth().getForward() == 0)
                 && junctionMetrics.getSouth().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the South road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("ste") > 0
                 && (junctionMetrics.getSouth().getRightForward() == 0 && junctionMetrics.getSouth().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the South road.");
             return false;
         }
 
         // VERIFY WEST
+        // Left turn
         if (junctionMetrics.getVehicleNum("wtn") > 0
                 && (junctionMetrics.getWest().getLeft() == 0 && junctionMetrics.getWest().getLeftForward() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no left-turn lanes from the West road.");
             return false;
         }
         // Forward
         if (junctionMetrics.getVehicleNum("wte") > 0
                 && (junctionMetrics.getWest().getLeftForward() == 0 && junctionMetrics.getWest().getForward() == 0)
                 && junctionMetrics.getWest().getRightForward() == 0) {
+            showErrorAlert("Invalid Lane Setup", "There are no forward lanes from the West road.");
             return false;
         }
         // Right turn
         if (junctionMetrics.getVehicleNum("wts") > 0
                 && (junctionMetrics.getWest().getRightForward() == 0 && junctionMetrics.getWest().getRight() == 0)) {
+            showErrorAlert("Invalid Lane Setup", "There are no right-turn lanes from the West road.");
             return false;
         }
 
@@ -1126,5 +1155,14 @@ public class PrimaryController {
             e.printStackTrace();
         }
 
+    }
+
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(stage);
+        alert.showAndWait();
     }
 }
