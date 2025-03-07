@@ -350,10 +350,10 @@ public class JunctionMetrics implements Serializable {
     private List<int[]> getAllValidLaneDirections(int numLanesTotal) {
         ArrayList<int[]> validLaneDirections = new ArrayList<>();
         for (int left = 0; left <= 4; left++) {
-            for (int leftForward = 0; leftForward <= 4; leftForward++) {
-                for (int forward = 0; forward <= 4; forward++) {
-                    for (int rightForward = 0; rightForward <= 4; rightForward++) {
-                        for (int right = 0; right <= 4; right++) {
+            for (int leftForward = 0; leftForward <= 4 - left; leftForward++) {
+                for (int forward = 0; forward <= 4 - left - leftForward; forward++) {
+                    for (int rightForward = 0; rightForward <= 4 - left - leftForward - forward; rightForward++) {
+                        for (int right = 0; right <= 4 - left - leftForward - forward - rightForward; right++) {
                             int[] directions = {
                                     left, leftForward, forward, rightForward, right
                             };
@@ -370,6 +370,7 @@ public class JunctionMetrics implements Serializable {
 
     public List<JunctionMetrics> getPermutations() {
         // Loops
+        int index = 0;
         List<JunctionMetrics> permutations = new ArrayList<>();
         List<int[]> allValidNorthDirections = getAllValidLaneDirections(north.numLanes);
         List<int[]> allValidEastDirections = getAllValidLaneDirections(east.numLanes);
@@ -384,6 +385,8 @@ public class JunctionMetrics implements Serializable {
                         perm.addRoad("east", allValidEastDirections.get(eastIndex));
                         perm.addRoad("south", allValidSouthDirections.get(southIndex));
                         perm.addRoad("west", allValidWestDirections.get(westIndex));
+                        index++;
+                        System.out.println(index);
                         permutations.add(perm);
                     }
                 }
