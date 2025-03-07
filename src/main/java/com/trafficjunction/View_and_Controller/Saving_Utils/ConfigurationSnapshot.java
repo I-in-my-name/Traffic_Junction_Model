@@ -1,24 +1,21 @@
 package com.trafficjunction.View_and_Controller.Saving_Utils;
 
-import java.util.Map;
-
 import com.trafficjunction.JunctionMetrics;
 
 public class ConfigurationSnapshot {
 
     public JunctionMetrics link;
-    Map<String, Integer> vehicleNumsMap;
-    Map<String, Integer> trafficLightDurs;
+    private JunctionMetrics copy;
 
     public ConfigurationSnapshot(JunctionMetrics link) {
         this.link = link;
-        vehicleNumsMap = link.getAllVehicleNums();
-        trafficLightDurs = link.getAllTrafficLightDurs();
+        int[] empty = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        copy = new JunctionMetrics(empty, empty);
+        copy.copyValues(link);
     }
 
     public void restore() {
-        link.setAllVehicleNums(vehicleNumsMap);
-        link.setAllTrafficLightDurs(trafficLightDurs);
+        link.copyValues(copy);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.trafficjunction;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,26 +17,57 @@ public class MementoTests {
 
     @Test
     void testSnapshotBasicFunctionalityPositiveNegative() {
+        CareTaker careTaker = new CareTaker();
 
         int[] inputNums = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
         int[] inputDurs = { 10, 10, 10, 10, 10 };
 
         JunctionMetrics original = new JunctionMetrics(inputNums, inputDurs);
 
-        Map<String, Integer> vehicleMap = original.getAllVehicleNums();
+        Map<String, Integer> vehicleMap = new HashMap<>(original.getAllVehicleNums());
 
         ConfigurationSnapshot configurationSnapshot = new ConfigurationSnapshot(original);
+        careTaker.addSnap(configurationSnapshot);
 
-        // assertEquals(vehicleMap,);
+        original.setVehicleNum("nte", 30);
+        assertEquals(30, original.getAllVehicleNums().get("nte"));
+        assertEquals(1, vehicleMap.get("nte"));
 
-        // int[] replacementValues = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        // original.setDirectionInfo(replacementValues);
-        // assertEquals(false, Arrays.equals(original.getDirectionInfo(), inputValues));
+        assertEquals(false, original.getAllVehicleNums().equals(vehicleMap));
 
-        // configurationSnapshot.restore();
+        Map<String, Integer> newMap = original.getAllVehicleNums();
 
-        // assertEquals(true, Arrays.equals(original.getDirectionInfo(), inputValues));
+        careTaker.undo();
 
+        assertEquals(vehicleMap, original.getAllVehicleNums());
+    }
+
+    @Test
+    void testSnapshotLaneRestoration() {
+        CareTaker careTaker = new CareTaker();
+
+        int[] inputNums = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        int[] inputDurs = { 10, 10, 10, 10, 10 };
+
+        JunctionMetrics original = new JunctionMetrics(inputNums, inputDurs);
+
+        Map<String, Integer> vehicleMap = new HashMap<>(original.getAllVehicleNums());
+
+        original.addRoad("north", 5, 5, 0, 0, 0, 0);
+        ConfigurationSnapshot configurationSnapshot = new ConfigurationSnapshot(original);
+        careTaker.addSnap(configurationSnapshot);
+
+        original.addRoad("north", 5, 1, 1, 1, 1, 1);
+
+        assertEquals(true, original.getNorth().equals(new Road(5, 1, 1, 1, 1, 1)));
+
+        assertEquals(false, original.getNorth().equals(new Road(1, 1, 1, 0, 1, 1)));
+
+        careTaker.undo();
+        assertEquals(false, original.getNorth().equals(new Road(5, 1, 1, 1, 1, 1)));
+        assertEquals(false, original.getNorth().equals(new Road(5, 1, 1, 1, 1, 1)));
+
+        assertEquals(vehicleMap, original.getAllVehicleNums());
     }
 
     @Test

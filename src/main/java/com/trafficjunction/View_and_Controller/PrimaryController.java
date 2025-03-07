@@ -770,7 +770,11 @@ public class PrimaryController {
         // respectively.
         laneArr[laneNum - 1].addLeftTurn();
         laneArr[0].addRightTurn();
+
+        populateInputDataMetrics();
+        careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
     }
+
     // Change the image of the current lane.
 
     /*
@@ -828,10 +832,13 @@ public class PrimaryController {
         WTS.setText(Integer.toString(numbersMap.get("wts")));
 
         try {
+            System.out.println("STUCK ZERO");
             String[][] formattedRoad = newMetrics.getRoadsFormatted();
 
             // setAllToDefault
+            getLanesToForward();
 
+            System.out.println("STUCK ONE");
             // correct all laneNums
 
             int[] allNums = {
@@ -851,30 +858,26 @@ public class PrimaryController {
                     westRoadAllLanes
             };
 
-            System.out.println("AAAAAAAAAA");
-            boolean leftToRight = true;
+            boolean rightToLeft;
             int count;
             for (int i = 0; i < allLanes.length; i++) {
-                leftToRight = false;
+                rightToLeft = false;
                 count = 0;
-                System.out.println("THE THING:");
-                System.out.println(leftToRight && count < formattedRoad[i].length);
-                while (!leftToRight && count < formattedRoad[i].length) {
+                System.out.println("STUCK A");
+                while (!rightToLeft && count < formattedRoad[i].length) {
                     String nextString = formattedRoad[i][formattedRoad[i].length - 1 - count];
-                    System.out.println("next: " + nextString);
+                    System.out.println(nextString);
                     if (nextString.equals("L") || nextString.equals("LF")) {
                         changeUntilCorrect(allLanes[i][formattedRoad[i].length - 1 - count],
                                 allLanes[i], allNums[i], nextString);
                         count++;
                     } else {
-                        leftToRight = true;
-
+                        rightToLeft = true;
                     }
                 }
                 for (int j = 0; j < formattedRoad[i].length - count; j++) {
                     changeUntilCorrect(allLanes[i][j],
                             allLanes[i], allNums[i], formattedRoad[i][j]);
-                    System.out.println("EEEEEEEEEEEEEE");
                 }
                 // for (int j = 0; j < formattedRoad[i].length; j++) {
                 // changeUntilCorrect(allLanes[i][j], northRoadAllLanes, northLaneNum,
@@ -895,14 +898,43 @@ public class PrimaryController {
                 southRoadAllLanes,
                 westRoadAllLanes
         };
+        int[] allNums = {
+                northLaneNum,
+                eastLaneNum,
+                southLaneNum,
+                westLaneNum,
+        };
         for (int i = 0; i < allLanes.length; i++) {
-            for (UILane allLane : allLanes[i]) {
-                while (!allLane.getRoadType().getImagePath().equals("/assets/straightOnRoad.png") &&
-                        !allLane.getRoadType().getImagePath().equals("/assets/blackedOutRoad.png")) {
-                    allLane.changeImage();
+            fixRoadToForward(allLanes[i], allNums[i]);
+        }
+
+    }
+
+    private void fixRoadToForward(UILane[] lanes, int laneNum) {
+        for (int i = 0; i < lanes.length; i++) {
+            int rightMostLeft = 100;
+            int leftMostRight = -100;
+            for (int j = 0; j < lanes.length; j++) {
+                if (lanes[j].getRoadType().getRight() && j > leftMostRight)
+                    leftMostRight = j;
+                if (lanes[j].getRoadType().getLeft() && j < rightMostLeft)
+                    rightMostLeft = j;
+            }
+            if (rightMostLeft != 100) {
+                while (!lanes[rightMostLeft].getRoadType().getImagePath().equals("/assets/straightOnRoad.png")) {
+
+                    updateLanes(lanes[rightMostLeft], lanes, laneNum);
+                    System.out.println(lanes[rightMostLeft].allAllowedRoads);
                 }
             }
+            if (leftMostRight != -100) {
+                while (!lanes[leftMostRight].getRoadType().getImagePath().equals("/assets/straightOnRoad.png")) {
+                    updateLanes(lanes[leftMostRight], lanes, laneNum);
+                }
+            }
+            System.out.println("OUT");
         }
+        System.out.println("Actually out");
     }
 
     private int countDisabledLanesFromMetrics(String[] array) {
@@ -939,8 +971,13 @@ public class PrimaryController {
     @FXML
     private void undo() {
         System.out.println("undo pressed");
+        populateInputDataMetrics();
+        System.out.println("here undo");
+        // careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
         careTaker.undo();
+        System.out.println("finished");
         populateFieldsWithData(junctionMetrics);
+        System.out.println("X_X");
 
     }
 

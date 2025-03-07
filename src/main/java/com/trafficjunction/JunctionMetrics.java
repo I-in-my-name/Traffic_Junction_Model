@@ -1,6 +1,7 @@
 package com.trafficjunction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -48,6 +49,11 @@ public class JunctionMetrics implements Serializable {
         this.trafficLightDurs.put("south", trafficLightDurs[2]);
         this.trafficLightDurs.put("west", trafficLightDurs[3]);
         this.trafficLightDurs.put("allRed", trafficLightDurs[4]);
+
+        north = new Road(5, 0, 0, 5, 0, 0);
+        east = new Road(5, 0, 0, 5, 0, 0);
+        south = new Road(5, 0, 0, 5, 0, 0);
+        west = new Road(5, 0, 0, 5, 0, 0);
     }
 
     public JunctionMetrics(JunctionMetrics data) {
@@ -202,6 +208,24 @@ public class JunctionMetrics implements Serializable {
         return;
     }
 
+    public void copyValues(JunctionMetrics copy) {
+        this.setAllTrafficLightDurs(new HashMap<>(copy.getAllTrafficLightDurs()));
+        this.setAllVehicleNums(new HashMap<>(copy.getAllVehicleNums()));
+        this.setCardinals(Arrays.copyOf(copy.getCardinals(), 4));
+    }
+
+    private Road[] getCardinals() {
+        Road[] toReturn = { getNorth(), getEast(), getSouth(), getWest() };
+        return toReturn;
+    }
+
+    public void setCardinals(Road[] cardinalRoads) {
+        north = cardinalRoads[0];
+        east = cardinalRoads[1];
+        south = cardinalRoads[2];
+        west = cardinalRoads[3];
+    }
+
     /*
      * Method to get the North Road object.
      * 
@@ -236,6 +260,11 @@ public class JunctionMetrics implements Serializable {
      */
     public Road getWest() {
         return west;
+    }
+
+    public boolean equals(JunctionMetrics otherMetrics) {
+        return this.getNorth().equals(otherMetrics.getNorth()) && this.getEast().equals(otherMetrics.getEast())
+                && this.getSouth().equals(otherMetrics.getSouth()) && this.getWest().equals(otherMetrics.getWest());
     }
 
     public boolean saveObject(File objectFile) {
@@ -391,5 +420,14 @@ class Road implements Serializable {
         }
 
         return directions;
+    }
+
+    public boolean equals(Road otherRoad) {
+        System.out.println(otherRoad.forward);
+        System.out.println(this.forward);
+        return otherRoad.getForward() == this.getForward() && otherRoad.getLeft() == this.getLeft()
+                && otherRoad.getRight() == this.getRight() && this.getNumLanes() == otherRoad.getNumLanes()
+                && otherRoad.getRightForward() == this.getRightForward()
+                && this.getLeftForward() == otherRoad.getLeftForward();
     }
 }

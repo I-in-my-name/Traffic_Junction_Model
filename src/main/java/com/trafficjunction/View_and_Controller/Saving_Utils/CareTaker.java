@@ -32,6 +32,8 @@ public class CareTaker {
             allSnapshots.get(index).restore();
             if (index >= allSnapshots.size())
                 index--;
+        } else {
+            System.out.println("MAN");
         }
     }
 }
