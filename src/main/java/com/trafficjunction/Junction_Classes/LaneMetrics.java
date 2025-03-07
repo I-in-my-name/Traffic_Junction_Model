@@ -76,6 +76,9 @@ public class LaneMetrics {
     }
 
     public float getAverageQueueLength() {
+        if (queueTotalCount == 0) {
+            return 0.f;
+        }
         return queueLengthRunningTotal / queueTotalCount;
     }
 
