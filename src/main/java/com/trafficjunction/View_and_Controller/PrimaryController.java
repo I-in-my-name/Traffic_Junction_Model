@@ -488,7 +488,12 @@ public class PrimaryController {
 
         // Checks if the user has not decided their own values for the traffic light
         // configuration. If not, the default is 30.
-        if (this.trafficLightDurs == null) {
+        boolean allZero = true;
+        for (int i = 0; i < trafficLightDurs.length; i++) {
+            if (trafficLightDurs[i] != 0)
+                allZero = false;
+        }
+        if (allZero) {
             int[] temp = { 30, 30, 30, 30, 30 };
             this.trafficLightDurs = temp;
         }
