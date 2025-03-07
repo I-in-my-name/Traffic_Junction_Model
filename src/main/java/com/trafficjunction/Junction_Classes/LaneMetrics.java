@@ -45,7 +45,8 @@ public class LaneMetrics {
         maxWaitTime = 0.f;
         for (VehicleMetrics metric : vehicleMetrics) {
             metric.calculateTotalWaitTime(timestamp);
-            averageWaitTime += metric.getTotalWaitTime() / vehicleMetrics.size();
+            if (!vehicleMetrics.isEmpty())
+                averageWaitTime += metric.getTotalWaitTime() / vehicleMetrics.size();
 
             if (metric.getTotalWaitTime() > maxWaitTime)
                 maxWaitTime = metric.getTotalWaitTime();

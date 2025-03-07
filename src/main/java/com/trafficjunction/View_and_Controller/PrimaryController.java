@@ -512,19 +512,28 @@ public class PrimaryController {
         junctionMetrics.copyValues(new JunctionMetrics(vehicleNums, trafficLightDurs));
 
         // Count the number of each type of lane in each road.
-        int[] laneData;
-        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-        junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                laneData[4]);
-        laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
-        junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                laneData[4]);
-        laneData = countRoadTypes(southRoadAllLanes, southLaneNum);
-        junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                laneData[4]);
-        laneData = countRoadTypes(westRoadAllLanes, westLaneNum);
-        junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                laneData[4]);
+        try {
+            int[] laneData;
+            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            System.err.print("Lane Data: ");
+            for (int i = 0; i < 5; i++) {
+                System.err.print(laneData[i]);
+                System.err.print(", ");
+            }
+            junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+            laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
+            junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+            laneData = countRoadTypes(southRoadAllLanes, southLaneNum);
+            junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+            laneData = countRoadTypes(westRoadAllLanes, westLaneNum);
+            junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                    laneData[4]);
+        } catch (NullPointerException nullPointerException) {
+            nullPointerException.printStackTrace();
+        }
     };
 
     /*
