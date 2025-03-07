@@ -2,6 +2,7 @@ package com.trafficjunction.View_and_Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -511,23 +512,19 @@ public class PrimaryController {
         junctionMetrics.copyValues(new JunctionMetrics(vehicleNums, trafficLightDurs));
 
         // Count the number of each type of lane in each road.
-        try {
-            int[] laneData;
-            laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
-            junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                    laneData[4]);
-            laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
-            junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                    laneData[4]);
-            laneData = countRoadTypes(southRoadAllLanes, southLaneNum);
-            junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                    laneData[4]);
-            laneData = countRoadTypes(westRoadAllLanes, westLaneNum);
-            junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
-                    laneData[4]);
-        } catch (NullPointerException nullPointerException) {
-            nullPointerException.printStackTrace();
-        }
+        int[] laneData;
+        laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+        junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                laneData[4]);
+        laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
+        junctionMetrics.addRoad("east", eastLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                laneData[4]);
+        laneData = countRoadTypes(southRoadAllLanes, southLaneNum);
+        junctionMetrics.addRoad("south", southLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                laneData[4]);
+        laneData = countRoadTypes(westRoadAllLanes, westLaneNum);
+        junctionMetrics.addRoad("west", westLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
+                laneData[4]);
     };
 
     /*
@@ -1122,12 +1119,16 @@ public class PrimaryController {
     private void showJunctionOptions(ActionEvent event) {
         // JunctionMetrics baseConfiguration = junctionMetrics;
         List<JunctionMetrics> permutations = this.junctionMetrics.getPermutations();
-        Map<Float, JunctionMetrics> generationData;
-        Junction junction;
-        for (JunctionMetrics permutation : permutations) {
-            junction = permutation.intoJunction();
-            // TODO run simulation
-            // TODO get data and add
+        Map<Float, JunctionMetrics> generationData = new HashMap<>();
+        int index = 0;
+        for (JunctionMetrics junctionMetrics : permutations) {
+            index++;
+            System.out.println(index);
+            // Change to get more or less accurate data
+            Junction junction = junctionMetrics.intoJunction();
+            junction.calculateMetrics(1000);
+
+            generationData.put(Float.parseFloat(junction.getMetrics().get("Overall Score")), junctionMetrics);
         }
 
         try {
