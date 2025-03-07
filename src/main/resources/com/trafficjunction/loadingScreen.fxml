@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" spacing="60.0" style="-fx-background-color: lightgrey; -fx-border-color: black; -fx-border-radius: 10; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficjunction.View_and_Controller.SplashScreen">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Traffic Junction Simulator">
+         <font>
+            <Font name="System Bold" size="50.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/trafficCone.png" />
+         </image>
+      </ImageView>
+      <ProgressBar fx:id="loadingProgress" prefHeight="18.0" prefWidth="393.0" progress="0.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Group 19&#10;Taz Siriwardena, Jack Lleweyn, Jonathan Chiwele, Rupert Wadman,  Conor Looney, Vlad Palermiti&#10;&#10;&#10;" textAlignment="CENTER" wrappingWidth="753.099609375">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Text>
+   </children>
+</VBox>

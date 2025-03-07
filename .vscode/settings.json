@@ -1,3 +1,12 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.checkstyle.configuration": "${workspaceFolder}/checkstyle.xml",
+
+    "editor.formatOnSave": true,
+    "google-java-format.executable": "/absolute/path/to/google-java-format",
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "java.compile.nullAnalysis.mode": "disabled"
 }

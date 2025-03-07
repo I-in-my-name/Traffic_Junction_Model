@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.trafficjunction.View_and_Controller.GenerationController">
+   <children>
+      <HBox>
+         <children>
+            <VBox>
+               <children>
+                  <StackPane>
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="144.0" prefWidth="1280.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: black;">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Junction Generation">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="48.0" prefWidth="83.0" text="Back" translateX="585.0" translateY="-35.0">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </StackPane>
+                  <HBox prefHeight="580.0" prefWidth="1280.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="578.0" prefWidth="301.0" style="-fx-border-radius: 10; -fx-border-color: black; -fx-border-width: 1 1 1 1; -fx-background-color: lightgrey; -fx-background-radius: 10;">
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="15.0" top="10.0" />
+                           </HBox.margin>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Junction Metrics" textAlignment="CENTER" wrappingWidth="215.5078125">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="15.0" />
+                           </padding>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" prefHeight="558.0" prefWidth="945.0" style="-fx-border-radius: 10; -fx-border-color: black;">
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Generated Junctions" textAlignment="CENTER" wrappingWidth="215.5078125">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                              <ScrollPane fitToHeight="true" hbarPolicy="ALWAYS" pannable="true" prefHeight="510.0" prefWidth="933.0" vbarPolicy="NEVER">
+                                <content>
+                                    <HBox spacing="15.0">
+                                       <children>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" style="-fx-border-width: 0 0 0 0;">
+                                             <children>
+                                                <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="480.0" prefWidth="240.0" spacing="5.0" style="-fx-border-color: black; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../assets/istockphoto-1147544807-612x612.jpg" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Option 1" textAlignment="CENTER">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <HBox>
+                                                         <children>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overall Score:&#10;Average Waiting Time:&#10;Vehicle Throughput:&#10;&#10;" wrappingWidth="170.13671875">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="986/1000&#10;1m43s&#10;450" textAlignment="RIGHT" wrappingWidth="62.95703125">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                         </children>
+                                                      </HBox>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Expand">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Delete" textFill="RED">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </AnchorPane>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0">
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                             <children>
+                                                <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="480.0" prefWidth="240.0" spacing="5.0" style="-fx-border-color: black; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../assets/istockphoto-1147544807-612x612.jpg" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Option 2" textAlignment="CENTER">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <HBox>
+                                                         <children>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overall Score:&#10;Average Waiting Time:&#10;Vehicle Throughput:&#10;&#10;" wrappingWidth="170.13671875">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="986/1000&#10;1m43s&#10;450" textAlignment="RIGHT" wrappingWidth="62.95703125">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                         </children>
+                                                      </HBox>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Expand">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Delete" textFill="RED">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0">
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                             <children>
+                                                <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="480.0" prefWidth="240.0" spacing="5.0" style="-fx-border-color: black; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../assets/istockphoto-1147544807-612x612.jpg" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Option 3" textAlignment="CENTER">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <HBox>
+                                                         <children>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overall Score:&#10;Average Waiting Time:&#10;Vehicle Throughput:&#10;&#10;" wrappingWidth="170.13671875">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="986/1000&#10;1m43s&#10;450" textAlignment="RIGHT" wrappingWidth="62.95703125">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                         </children>
+                                                      </HBox>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Expand">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Delete" textFill="RED">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0">
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                             <children>
+                                                <VBox alignment="TOP_CENTER" layoutX="5.0" layoutY="10.0" prefHeight="480.0" prefWidth="240.0" spacing="5.0" style="-fx-border-color: black; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../assets/istockphoto-1147544807-612x612.jpg" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Option 4" textAlignment="CENTER">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <HBox>
+                                                         <children>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Overall Score:&#10;Average Waiting Time:&#10;Vehicle Throughput:&#10;&#10;" wrappingWidth="170.13671875">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="986/1000&#10;1m43s&#10;450" textAlignment="RIGHT" wrappingWidth="62.95703125">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Text>
+                                                         </children>
+                                                      </HBox>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Expand">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="222.0" text="Delete" textFill="RED">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </HBox>
+                                </content>
+                              </ScrollPane>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="15.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>
