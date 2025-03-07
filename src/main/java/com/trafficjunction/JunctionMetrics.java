@@ -378,6 +378,7 @@ public class JunctionMetrics implements Serializable {
                         perm.addRoad("east", allValidDirections.get(eastIndex));
                         perm.addRoad("south", allValidDirections.get(southIndex));
                         perm.addRoad("west", allValidDirections.get(westIndex));
+                        permutations.add(perm);
                     }
                 }
             }
