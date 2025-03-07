@@ -38,7 +38,6 @@ class VehicleMetrics {
      * Initializes the vehicle's state as moving and sets the start time
      * of existence.
      * <p>
-     * 
      * @param startExistingTime The timestamp when the vehicle first
      *                          appears in the simulation.
      */
@@ -62,7 +61,6 @@ class VehicleMetrics {
      * <p>
      * Ensures consecutive calls do not affect the recorded wat times
      * <p>
-     * 
      * @param timesamp the current simulation time when the vehicle starts
      *                 moving
      */
@@ -81,51 +79,60 @@ class VehicleMetrics {
         }
     }
 
-    // Don't need test for
-    // Mark when vehicle stops, store the timestamp
+    /**
+     * Marks the vehicle as stopped and records the timestamp of when it stopped
+     * <p>
+     * Ensures that consecutive stop events are not recorded to prevent duplicate entries
+     * <p>
+     * @param timestamp The time at which the vehicle stops moving.
+     */
     public void stopMoving(float timestamp) {
-        if (isMoving) { // Prevent consecutive stopMoving calls
+        
+        // Only updates if the vehicle was previously moving
+        if (isMoving) {
+
+            // Mark the vehicle as stopped
             isMoving = false;
+
+            // Store the time the vehicle stopped
             lastStopTime = timestamp;
         }
     }
 
-    // Test written for
-    // calculates total wait time once vehicle removed from simulation, ensures all
-    // waiting periods are summed prior to deletion
+    /**
+     * Calculates the total wait time for the vehicle once it is removed from the simulation.
+     * It ensures that all waiting periods are summed prior to deletion.
+     * 
+     * @param exitTimestamp The timestamp when the vehicle exits the simulation.
+     */
     public void calculateTotalWaitTime(float exitTimestamp) {
         totalWaitTime = 0.f;
-        // System.out.print("Wait times: ");
-        // System.out.println(waitTimes);
+
+        // Sum all recorded wait times
         for (float time : waitTimes) {
             totalWaitTime += time;
         }
-        // System.out.println("Calc wait time");
-        // System.out.println(totalWaitTime);
-        // System.out.print("Total: ");
-        // System.out.println(totalWaitTime);
+       
+
+        // If the vehicle is not moving at the time of exit, account for the last waiting period
         if (!isMoving) {
             totalWaitTime += exitTimestamp - lastStopTime;
-            // If not moving, then the last stop time is the final stop time
-            // add it to the total wait time as it has previously been subtracted from the
-            // wait time
-            // Essentially the time spent waiting doesn't care about the last stop time
-            // as it doesn't start moving again, so that time isn't relevant to waiting time
+            
         }
-        // System.out.println(totalWaitTime);
-        // System.out.println();
+        
     }
 
-    // Don't need test for
+    // Getter for the total wait time for all of the vehicles
     public float getTotalWaitTime() {
         return totalWaitTime;
     }
 
-    // Don't need test for
+    // Getter for the wait times of the vehicles
     public List<Float> getWaitTimes() {
         return waitTimes;
     }
 
+    // Coverts the wait time to a string to be processed
     @Override
     public String toString() {
         return waitTimes.toString();
