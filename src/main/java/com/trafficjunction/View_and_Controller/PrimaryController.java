@@ -549,11 +549,106 @@ public class PrimaryController {
     }
 
     /*
+     * Function to verify that the vehicle number input matches the lane input. E.g.
+     * Inputting that 10 vehicles turn left but no left lanes for a given road.
+     * 
+     * @return boolean - False if the numbers do not match, true if the system is
+     * valid.
+     */
+    private boolean verifyLaneTrafficInformation() {
+        // Check left and right turns for each road. If there is a left or right input
+        // but no left or right lane, return false.
+
+        // VERIFY NORTH
+        // Left Turn
+        if (junctionMetrics.getVehicleNum("nte") > 0
+                && (junctionMetrics.getNorth().getLeft() == 0 && junctionMetrics.getNorth().getLeftForward() == 0)) {
+            return false;
+        }
+        // Forward
+        if (junctionMetrics.getVehicleNum("nts") > 0
+                && (junctionMetrics.getNorth().getLeftForward() == 0 && junctionMetrics.getNorth().getForward() == 0)
+                && junctionMetrics.getNorth().getRightForward() == 0) {
+            return false;
+        }
+        // Right turn
+        if (junctionMetrics.getVehicleNum("ntw") > 0
+                && (junctionMetrics.getNorth().getRightForward() == 0 && junctionMetrics.getNorth().getRight() == 0)) {
+            return false;
+        }
+
+        // VERIFY EAST
+        if (junctionMetrics.getVehicleNum("ets") > 0
+                && (junctionMetrics.getEast().getLeft() == 0 && junctionMetrics.getEast().getLeftForward() == 0)) {
+            return false;
+        }
+        // Forward
+        if (junctionMetrics.getVehicleNum("etw") > 0
+                && (junctionMetrics.getEast().getLeftForward() == 0 && junctionMetrics.getEast().getForward() == 0)
+                && junctionMetrics.getEast().getRightForward() == 0) {
+            return false;
+        }
+        // Right turn
+        if (junctionMetrics.getVehicleNum("etn") > 0
+                && (junctionMetrics.getEast().getRightForward() == 0 && junctionMetrics.getEast().getRight() == 0)) {
+            return false;
+        }
+
+        // VERIFY SOUTH
+        if (junctionMetrics.getVehicleNum("stw") > 0
+                && (junctionMetrics.getSouth().getLeft() == 0 && junctionMetrics.getSouth().getLeftForward() == 0)) {
+            return false;
+        }
+        // Forward
+        if (junctionMetrics.getVehicleNum("stn") > 0
+                && (junctionMetrics.getSouth().getLeftForward() == 0 && junctionMetrics.getSouth().getForward() == 0)
+                && junctionMetrics.getSouth().getRightForward() == 0) {
+            return false;
+        }
+        // Right turn
+        if (junctionMetrics.getVehicleNum("ste") > 0
+                && (junctionMetrics.getSouth().getRightForward() == 0 && junctionMetrics.getSouth().getRight() == 0)) {
+            return false;
+        }
+
+        // VERIFY WEST
+        if (junctionMetrics.getVehicleNum("wtn") > 0
+                && (junctionMetrics.getWest().getLeft() == 0 && junctionMetrics.getWest().getLeftForward() == 0)) {
+            return false;
+        }
+        // Forward
+        if (junctionMetrics.getVehicleNum("wte") > 0
+                && (junctionMetrics.getWest().getLeftForward() == 0 && junctionMetrics.getWest().getForward() == 0)
+                && junctionMetrics.getWest().getRightForward() == 0) {
+            return false;
+        }
+        // Right turn
+        if (junctionMetrics.getVehicleNum("wts") > 0
+                && (junctionMetrics.getWest().getRightForward() == 0 && junctionMetrics.getWest().getRight() == 0)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /*
      * Function to occur when the run simulation button is pressed. Will start the
      * simulation and the button itself will change to a cancel simulation button.
      */
     @FXML
     private void runSimulationButtonPress() {
+
+        // Populate the data metrics to be used as parameters. This populates the
+        // junctionMetrics object.
+        populateInputDataMetrics();
+
+        // TODO Verify that the vehicle inputs match the lanes.
+        if (!verifyLaneTrafficInformation()) {
+            // Invalid lane setup.
+            System.out.println("Invalid setup.");
+            return;
+        }
+
         // Flag that the simulation is now running.
         isRunningSimulation = true;
 
@@ -564,9 +659,6 @@ public class PrimaryController {
         cancelSimulationButton.setDisable(false);
         cancelSimulationButton.setVisible(true);
 
-        // Populate the data metrics to be used as parameters. This populates the
-        // junctionMetrics object.
-        populateInputDataMetrics();
         careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
 
         Junction junction = junctionMetrics.intoJunction();
