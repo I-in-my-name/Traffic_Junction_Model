@@ -729,28 +729,28 @@ public class Junction {
             int routesIndex;
 
             int backlogNumber = vehicleBacklogs.get(key);
-            if (backlogNumber > 0) {
-                // Backlog section for findRoute
-                int entryBacklog = directionString.indexOf(key.charAt(0));
-                int exitBacklog = directionString.indexOf(key.charAt(2));
-                List<List<Lane>> routesBacklog = findRoute(entryBacklog, exitBacklog);
+            //if (backlogNumber > 0) {
+            //    // Backlog section for findRoute
+            //    int entryBacklog = directionString.indexOf(key.charAt(0));
+            //    int exitBacklog = directionString.indexOf(key.charAt(2));
+            //    List<List<Lane>> routesBacklog = findRoute(entryBacklog, exitBacklog);
 
-                // TODO: revise logic
-                for (int k = 0; k < backlogNumber; k++) {
-                    route = routesBacklog.get(0);
-                    newCar = new Car(this.timer, route, key);
-                    newCar.popRoute();
-                    succesfull = false;
-                    routesIndex = 0;
-                    while (!succesfull && routesIndex < routesBacklog.size()) {
-                        succesfull = routesBacklog.get(routesIndex).get(0).addVehicle(newCar);
-                        routesIndex++;
-                    }
-                    if (!succesfull) {
-                        vehicleBacklogs.put(key, vehicleBacklogs.get(key) - 1);
-                    }
-                }
-            }
+            //    // TODO: revise logic
+            //    for (int k = 0; k < backlogNumber; k++) {
+            //        route = routesBacklog.get(0);
+            //        newCar = new Car(this.timer, route, key);
+            //        newCar.popRoute();
+            //        succesfull = false;
+            //        routesIndex = 0;
+            //        while (!succesfull && routesIndex < routesBacklog.size()) {
+            //            succesfull = routesBacklog.get(routesIndex).get(0).addVehicle(newCar);
+            //            routesIndex++;
+            //        }
+            //        if (!succesfull) {
+            //            vehicleBacklogs.put(key, vehicleBacklogs.get(key) - 1);
+            //        }
+            //    }
+            //}
 
             // Gets the index direction for the entry
             int entryInd = directionString.indexOf(key.charAt(0));
@@ -773,7 +773,11 @@ public class Junction {
                 newCar = new Car(this.timer, route, key); // creates the vehicle
                 succesfull = false;
                 routesIndex = 0;
-                while (!succesfull && routesIndex < routes.size()) {
+                int size = routes.size();
+                int noiseNumber = Math.round(this.timer * 10027);
+                int index;
+                while (!succesfull && routesIndex < size) {
+                    index = (routesIndex + noiseNumber) % size;
                     succesfull = routes.get(routesIndex).get(0).addVehicle(newCar);
                     routesIndex++;
                 }
