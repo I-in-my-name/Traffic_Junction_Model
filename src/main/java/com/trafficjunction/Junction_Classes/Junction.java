@@ -857,6 +857,7 @@ public class Junction {
                     String entryCharacter = direction.substring(0, 1).toUpperCase();
                     String exitCharacter = direction.substring(0, 1).toUpperCase();
                     Triple triple = new Triple(entryCharacter, exitCharacter, index);
+                    System.out.println("Vehicle to animate: " + entryCharacter + " " + exitCharacter + " " + "index");
                     // TODO CALL ANIMATION HANDLER HERE.
                     animationHandler.chooseAnimation(entryCharacter.toCharArray()[0], exitCharacter
                             .toCharArray()[0], index);

@@ -157,7 +157,7 @@ public class Vehicle {
      * Method to update a vehicle's position
      * <p>
      * Updates the vehicles position in its lane based on the time and traffic
-     * Determines if the vehcicle can move, needs to wait or can transfer to another
+     * Determines if the vehicle can move, needs to wait or can transfer to another
      * lane
      * <p>
      * 

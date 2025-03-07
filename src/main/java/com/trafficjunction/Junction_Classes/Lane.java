@@ -55,7 +55,7 @@ public class Lane {
         for (int i = 0; i < newDirection.length(); i++) {
             char characterI = newDirection.charAt(i); // Gets the i'th characthter in direction
             String character = Character.toString(characterI); // Converts the character to a string so the
-                                                                // (.contains()) method can be used
+                                                               // (.contains()) method can be used
             String allowed = "lfr"; // Allowed characters
             if (!allowed.contains(character)) {
                 return false;
@@ -163,6 +163,7 @@ public class Lane {
         removedVehicle = true;
         removedVehiclesThisTurn.add(vehicles.get(0).getRight());
         vehicles.remove(0); // Remove the first vehicle in the list (front of the lane)
+        // TODO RUN THE ANIMATION HERE.
         return true; // Successfully removed
     }
 
@@ -171,7 +172,7 @@ public class Lane {
         if (isFull()) {
             return false;
         }
-        
+
         final float gap = 1.f; // fixed spacing between vehicles
         float newPosition;
         if (vehicles.isEmpty()) {

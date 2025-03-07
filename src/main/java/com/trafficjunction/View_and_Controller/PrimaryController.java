@@ -328,11 +328,6 @@ public class PrimaryController {
             }
         });
 
-        // ######################### Trialling animation ###################//
-
-        // animationHandler.addToAnchorPane();
-        animationHandler.chooseAnimation('W', 'N', 3);
-
         // ######################### Saving and Memento's section ###################//
 
         fileChooser.setTitle("value");
