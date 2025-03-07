@@ -964,7 +964,7 @@ public class Junction {
                 overallMaximumQueueLength = maxQueueLength;
             }
         }
-        //getAverageWaitTime
+        // getAverageWaitTime
         overallAverageWaitTime = overallAverageWaitTime / 4;
         overallAverageQueueLength = overallAverageQueueLength / 4;
 

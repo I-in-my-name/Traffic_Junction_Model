@@ -312,7 +312,7 @@ public class JunctionMetrics implements Serializable {
         return toReturn;
     }
 
-    private boolean isValidLaneDirections(int[] laneDirections) {
+    private boolean isValidLaneDirections(int[] laneDirections, int numLanesTotal) {
         // Order is L, LF, F, RF, R
         // must be true: LF + F + RF > 0
         // and L + LF > 0
@@ -324,6 +324,9 @@ public class JunctionMetrics implements Serializable {
         int forward = laneDirections[2];
         int rightForward = laneDirections[3];
         int right = laneDirections[4];
+
+        if (left + leftForward + forward + rightForward + right != numLanesTotal)
+            return false;
 
         if (left < 0 || leftForward < 0 || forward < 0 || rightForward < 0 || right < 0)
             return false;
@@ -344,7 +347,7 @@ public class JunctionMetrics implements Serializable {
         return true;
     }
 
-    private List<int[]> getAllValidLaneDirections() {
+    private List<int[]> getAllValidLaneDirections(int numLanesTotal) {
         ArrayList<int[]> validLaneDirections = new ArrayList<>();
         for (int left = 0; left <= 4; left++) {
             for (int leftForward = 0; leftForward <= 4; leftForward++) {
@@ -354,7 +357,7 @@ public class JunctionMetrics implements Serializable {
                             int[] directions = {
                                     left, leftForward, forward, rightForward, right
                             };
-                            if (!isValidLaneDirections(directions))
+                            if (!isValidLaneDirections(directions, numLanesTotal))
                                 continue;
                             validLaneDirections.add(directions);
                         }
@@ -366,18 +369,21 @@ public class JunctionMetrics implements Serializable {
     }
 
     public List<JunctionMetrics> getPermutations() {
-        List<int[]> allValidDirections = getAllValidLaneDirections();
         // Loops
         List<JunctionMetrics> permutations = new ArrayList<>();
-        for (int northIndex = 0; northIndex < allValidDirections.size(); northIndex++) {
-            for (int eastIndex = 0; eastIndex < allValidDirections.size(); eastIndex++) {
-                for (int southIndex = 0; southIndex < allValidDirections.size(); southIndex++) {
-                    for (int westIndex = 0; westIndex < allValidDirections.size(); westIndex++) {
+        List<int[]> allValidNorthDirections = getAllValidLaneDirections(north.numLanes);
+        List<int[]> allValidEastDirections = getAllValidLaneDirections(east.numLanes);
+        List<int[]> allValidSouthDirections = getAllValidLaneDirections(south.numLanes);
+        List<int[]> allValidWestDirections = getAllValidLaneDirections(west.numLanes);
+        for (int northIndex = 0; northIndex < allValidNorthDirections.size(); northIndex++) {
+            for (int eastIndex = 0; eastIndex < allValidEastDirections.size(); eastIndex++) {
+                for (int southIndex = 0; southIndex < allValidSouthDirections.size(); southIndex++) {
+                    for (int westIndex = 0; westIndex < allValidWestDirections.size(); westIndex++) {
                         JunctionMetrics perm = new JunctionMetrics(this);
-                        perm.addRoad("north", allValidDirections.get(northIndex));
-                        perm.addRoad("east", allValidDirections.get(eastIndex));
-                        perm.addRoad("south", allValidDirections.get(southIndex));
-                        perm.addRoad("west", allValidDirections.get(westIndex));
+                        perm.addRoad("north", allValidNorthDirections.get(northIndex));
+                        perm.addRoad("east", allValidEastDirections.get(eastIndex));
+                        perm.addRoad("south", allValidSouthDirections.get(southIndex));
+                        perm.addRoad("west", allValidWestDirections.get(westIndex));
                         permutations.add(perm);
                     }
                 }
