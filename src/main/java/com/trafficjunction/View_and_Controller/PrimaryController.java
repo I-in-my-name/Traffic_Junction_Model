@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Map;
 
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.JunctionMetrics;
@@ -191,6 +190,8 @@ public class PrimaryController {
             populateInputDataMetrics();
         } catch (Exception ignored) {
         }
+        int[] dummyData = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        junctionMetrics = new JunctionMetrics(dummyData, dummyData);
         careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
 
         TextField[] allTextFields = { NTE, NTS, NTW, ETS, ETW, ETN, STW, STN, STE, WTN, WTE, WTS };
@@ -329,7 +330,7 @@ public class PrimaryController {
             if (chosenFile.canRead()) {
                 try {
                     JunctionMetrics loadedMetrics = JunctionMetrics.loadObject(chosenFile);
-                    junctionMetrics = loadedMetrics;
+                    junctionMetrics.copyValues(loadedMetrics);
                     careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
                     populateFieldsWithData(junctionMetrics);
                 } catch (NullPointerException nullPointerException) {
@@ -493,7 +494,7 @@ public class PrimaryController {
         }
 
         // Add all data to the junction metrics object.
-        junctionMetrics = new JunctionMetrics(vehicleNums, trafficLightDurs);
+        junctionMetrics.copyValues(new JunctionMetrics(vehicleNums, trafficLightDurs));
 
         // Count the number of each type of lane in each road.
         try {
@@ -553,8 +554,6 @@ public class PrimaryController {
      */
     @FXML
     private void runSimulationButtonPress() {
-        populateInputDataMetrics();
-        careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
         // Flag that the simulation is now running.
         isRunningSimulation = true;
 
@@ -568,6 +567,7 @@ public class PrimaryController {
         // Populate the data metrics to be used as parameters. This populates the
         // junctionMetrics object.
         populateInputDataMetrics();
+        careTaker.addSnap(new ConfigurationSnapshot(junctionMetrics));
 
         Junction junction = junctionMetrics.intoJunction();
 
@@ -910,7 +910,6 @@ public class PrimaryController {
         for (int i = 0; i < allLanes.length; i++) {
             fixRoadToForward(allLanes[i], allNums[i]);
         }
-
     }
 
     private void fixRoadToForward(UILane[] lanes, int laneNum) {

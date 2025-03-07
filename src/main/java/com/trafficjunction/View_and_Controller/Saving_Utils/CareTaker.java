@@ -15,12 +15,14 @@ public class CareTaker {
     public void addSnap(ConfigurationSnapshot configSnap) {
         allSnapshots.add(configSnap);
         index++;
+        System.out.println("SNAP " + index + " Added");
     }
 
     public void undo() {
         if (index >= 0) {
             allSnapshots.get(index).restore();
             index--;
+            System.out.println("UNDO hit, now on index " + index);
             if (index < 0)
                 index++;
         }
