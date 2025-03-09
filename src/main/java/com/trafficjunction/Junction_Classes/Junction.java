@@ -49,9 +49,9 @@ public class Junction {
     // Same constructor as before but takes vehicleRates values as input
     public Junction(int[] vehicleRates) {
         // Initialise
-        vehicle_routes = new HashMap<>();
+        vehicleRoutes = new HashMap<>();
         animateVehicles = new ArrayList<>();
-        vehicle_rate = new HashMap<>();
+        vehicleRate = new HashMap<>();
 
         String[] keys = {
             "nte", "nts", "ntw",
@@ -60,40 +60,40 @@ public class Junction {
             "wts", "wte", "wtn"
         };
         for (int i = 0; i < 12; i++) {
-            vehicle_rate.put(keys[i], vehicleRates[i]);
+            vehicleRate.put(keys[i], vehicleRates[i]);
         }
 
-        vehicle_backlogs = new HashMap<>();
+        vehicleBacklogs = new HashMap<>();
         
         // Set vehicle rate to be 0 for all directions
-        vehicle_backlogs = new HashMap<>();
-        vehicle_backlogs.put("nte", 0);
-        vehicle_backlogs.put("nts", 0);
-        vehicle_backlogs.put("ntw", 0);
-        vehicle_backlogs.put("ets", 0);
-        vehicle_backlogs.put("etw", 0);
-        vehicle_backlogs.put("etn", 0);
-        vehicle_backlogs.put("ste", 0);
-        vehicle_backlogs.put("stn", 0);
-        vehicle_backlogs.put("stw", 0);
-        vehicle_backlogs.put("wts", 0);
-        vehicle_backlogs.put("wte", 0);
-        vehicle_backlogs.put("wtn", 0);
+        vehicleBacklogs = new HashMap<>();
+        vehicleBacklogs.put("nte", 0);
+        vehicleBacklogs.put("nts", 0);
+        vehicleBacklogs.put("ntw", 0);
+        vehicleBacklogs.put("ets", 0);
+        vehicleBacklogs.put("etw", 0);
+        vehicleBacklogs.put("etn", 0);
+        vehicleBacklogs.put("ste", 0);
+        vehicleBacklogs.put("stn", 0);
+        vehicleBacklogs.put("stw", 0);
+        vehicleBacklogs.put("wts", 0);
+        vehicleBacklogs.put("wte", 0);
+        vehicleBacklogs.put("wtn", 0);
 
         // Add a lane to each direction
-        for (int routes_index = 0; routes_index<4; routes_index++) {
-            entry_lanes.add(new ArrayList<>());
-            exit_lanes.add(new ArrayList<>());
+        for (int routesIndex = 0; routesIndex<4; routesIndex++) {
+            entryLanes.add(new ArrayList<>());
+            exitLanes.add(new ArrayList<>());
         }
         
         // Create one trafficlight per road
-        traffic_lights = new ArrayList<>();
-        for (int routes_index = 0; routes_index < 4; routes_index++) {
-            traffic_lights.add(new TrafficLight());
+        trafficLights = new ArrayList<>();
+        for (int routesIndex = 0; routesIndex < 4; routesIndex++) {
+            trafficLights.add(new TrafficLight());
         }
 
         // Create a traffic light config
-        tl_config = new TrafficLightConfig();
+        tlConfig = new TrafficLightConfig();
 
         /*
          * Adding default traffic light config
@@ -108,7 +108,7 @@ public class Junction {
                 } else {
                     states.add(0);
                 }
-                tl_config.addState(10.f, new ArrayList<>(states));  // Passes in a copy, not the actual arraylist
+                tlConfig.addState(10.f, new ArrayList<>(states));  // Passes in a copy, not the actual arraylist
             }
         }
     }
