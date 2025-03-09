@@ -29,6 +29,90 @@ public class SimulationTest {
                 // junction.setLaneTrafficLight(0, 0, null);
         }
 
+        // Alternative setup function for more complex junction
+        static void setupTwo() {
+                junction = new Junction();
+                junction.addEntryLane(0);
+                junction.addExitLane(0);
+                junction.addEntryLane(0);
+                junction.addExitLane(0);
+                junction.addEntryLane(0);
+                junction.addExitLane(0);
+
+                junction.addEntryLane(1);
+                junction.addExitLane(1);
+                junction.addEntryLane(1);
+                junction.addExitLane(1);
+                junction.addEntryLane(1);
+                junction.addExitLane(1);
+
+                junction.addEntryLane(2);
+                junction.addExitLane(2);
+                junction.addEntryLane(2);
+                junction.addExitLane(2);
+                junction.addEntryLane(2);
+                junction.addExitLane(2);
+
+                junction.addEntryLane(3);
+                junction.addExitLane(3);
+                junction.addEntryLane(3);
+                junction.addExitLane(3);
+                junction.addEntryLane(3);
+                junction.addExitLane(3);
+
+                junction.connectJunction();
+        }
+
+        @Test
+        void simulationPerformance() {
+                int TRIALS = 1000; // Run a thousand times
+                float startTime;
+                float endTime;
+                float timeTaken;
+                float averageTime = 0.f;
+                float maximumAverageTime = 15.f;
+
+                for (int i = 0; i < TRIALS; i++) {
+                        startTime = (float)(System.currentTimeMillis() / 1000);
+                        // Picking values at random uniformly between 50 and 450
+                        // Ensures a wide range of junctions tested
+                        setup();
+                        junction.setVehicleRate("nte", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("nts", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("ntw", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("wte", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("wtn", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("wts", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("etw", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("ets", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("etn", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("stn", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("ste", (int)(Math.random() * 400) + 50);
+                        junction.setVehicleRate("stw", (int)(Math.random() * 400) + 50);
+
+                        float time = 0.f;
+                        float timeStep = 1.f;
+                        float simDuration = 60.f * 60.f * 24; // run for 1 hour
+
+                        while (time < simDuration) {
+                                junction.update(timeStep);
+                                time += timeStep;
+                        }
+
+                        junction.calculateMetrics(time);
+
+                        endTime = (float) (System.currentTimeMillis() / 1000);
+
+                        timeTaken = endTime - startTime;
+                        averageTime += timeTaken / TRIALS;
+                }
+
+                assertTrue(averageTime < maximumAverageTime);
+                System.out.println("Average time of: ");
+                System.out.print(averageTime);
+                System.out.println();
+        }
+
         /*
          * Simpler test case to see if the values are correct
          */
