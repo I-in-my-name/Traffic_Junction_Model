@@ -530,25 +530,25 @@ public class JunctionTests {
         boolean result;
 
         // test 0 <= side <= 3
-        result = junction.setLaneDirections(-1, 2, "l");
+        result = junction.setLaneDirections(-1, 2, "L");
         assertEquals(false, result);
-        result = junction.setLaneDirections(10, 2, "f");
+        result = junction.setLaneDirections(10, 2, "F");
         assertEquals(false, result);
 
         // test 0 <= index
-        result = junction.setLaneDirections(2, -1, "l");
+        result = junction.setLaneDirections(2, -1, "L");
         assertEquals(false, result);
 
         // test for large values of index
-        result = junction.setLaneDirections(2, 1000, "l");
+        result = junction.setLaneDirections(2, 1000, "L");
         assertEquals(false, result);
 
         // test direction must only contain "lfr" chars
-        result = junction.setLaneDirections(2, 2, "l ");
+        result = junction.setLaneDirections(2, 2, "L ");
         assertEquals(false, result);
         result = junction.setLaneDirections(2, 2, "");
         assertEquals(false, result);
-        result = junction.setLaneDirections(2, 2, "frj");
+        result = junction.setLaneDirections(2, 2, "LFJ");
         assertEquals(false, result);
     }
 
@@ -580,7 +580,7 @@ public class JunctionTests {
 
         side = 0;
         index = 3;
-        expectedDirection = "l";
+        expectedDirection = "L";
         result = junction.setLaneDirections(side, index, expectedDirection);
         assertEquals(true, result);
         newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
@@ -588,7 +588,7 @@ public class JunctionTests {
 
         side = 1;
         index = 0;
-        expectedDirection = "lr";
+        expectedDirection = "LR";
         result = junction.setLaneDirections(side, index, expectedDirection);
         assertEquals(true, result);
         newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
@@ -596,7 +596,7 @@ public class JunctionTests {
 
         side = 2;
         index = 0;
-        expectedDirection = "r";
+        expectedDirection = "R";
         result = junction.setLaneDirections(side, index, expectedDirection);
         assertEquals(true, result);
         newDirection = junction.getEntryLanes().get(side).get(index).getDirection();
@@ -604,7 +604,7 @@ public class JunctionTests {
 
         side = 3;
         index = 1;
-        expectedDirection = "lfr";
+        expectedDirection = "LFR";
         result = junction.setLaneDirections(side, index, expectedDirection);
         assertEquals(true, result);
         newDirection = junction.getEntryLanes().get(side).get(index).getDirection();

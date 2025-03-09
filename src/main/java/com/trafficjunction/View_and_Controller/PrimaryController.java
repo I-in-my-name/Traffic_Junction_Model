@@ -926,8 +926,8 @@ public class PrimaryController {
 
         Map<String, Integer> numbersMap = newMetrics.getAllVehicleNums();
         NTE.setText(Integer.toString(numbersMap.get("nte")));
-        NTW.setText(Integer.toString(numbersMap.get("nts")));
-        NTS.setText(Integer.toString(numbersMap.get("ntw")));
+        NTW.setText(Integer.toString(numbersMap.get("ntw")));
+        NTS.setText(Integer.toString(numbersMap.get("nts")));
 
         ETS.setText(Integer.toString(numbersMap.get("ets")));
         ETW.setText(Integer.toString(numbersMap.get("etw")));
