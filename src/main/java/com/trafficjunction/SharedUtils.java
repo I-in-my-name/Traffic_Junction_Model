@@ -25,12 +25,7 @@ public class SharedUtils {
                 } else if (currentStage == stage.rightAllowed) {
                     if (!lanetypes[i].equals("R"))
                         return false;
-                    else {
-                        // System.out.println(lanetypes[i]);
-                    }
                 }
-                // System.out.println("Stage: " + currentStage + " for loop " + i + " for
-                // character " + lanetypes[i]);
             }
         }
         return true;

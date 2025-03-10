@@ -117,8 +117,6 @@ public class Road implements Serializable {
     }
 
     public boolean equals(Road otherRoad) {
-        // System.out.println(otherRoad.forward);
-        // System.out.println(this.forward);
         return otherRoad.getForward() == this.getForward() && otherRoad.getLeft() == this.getLeft()
                 && otherRoad.getRight() == this.getRight() && this.getNumLanes() == otherRoad.getNumLanes()
                 && otherRoad.getRightForward() == this.getRightForward()

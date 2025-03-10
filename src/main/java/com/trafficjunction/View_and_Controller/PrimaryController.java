@@ -241,7 +241,6 @@ public class PrimaryController {
                 trafficLightDurs = controller.confirmLightDurations();
 
             } catch (IOException e) {
-                // System.out.println("Error loading traffic light FXML: " + e);
                 e.printStackTrace();
             }
         });
@@ -350,9 +349,7 @@ public class PrimaryController {
                             "The File you are trying to access is of the wrong filetype. Please ensure you have selected the correct file.");
                     errorAlert.showAndWait();
                 }
-            } else {
-                // System.out.println("RRRRR");
-            }
+            } 
         });
 
         saveMenuItem.setOnAction((ActionEvent event) -> {
@@ -674,10 +671,10 @@ public class PrimaryController {
         // junctionMetrics object.
         populateInputDataMetrics();
 
-        // TODO Verify that the vehicle inputs match the lanes.
+        // Verify that the vehicle inputs match the lanes.
         if (!verifyLaneTrafficInformation()) {
             // Invalid lane setup.
-            // System.out.println("Invalid setup.");
+            System.out.println("Invalid setup.");
             return;
         }
 
@@ -702,7 +699,6 @@ public class PrimaryController {
             junction.update(timeIncrement);
             clock += timeIncrement;
         }
-        System.err.println(junction);
 
         // Get metrics:
         Map<String, String> metrics = junction.getMetrics();

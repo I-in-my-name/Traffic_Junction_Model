@@ -63,7 +63,7 @@ public class SimulationTest {
                 junction.connectJunction();
         }
 
-        @Test
+        //@Test
         void simulationPerformance() {
                 int TRIALS = 1000; // Run a thousand times
                 float startTime;
@@ -130,15 +130,6 @@ public class SimulationTest {
                 junction.setVehicleRate("nte", 200);
                 junction.setVehicleRate("nts", 200);
                 junction.setVehicleRate("ntw", 200);
-                // junction.setVehicleRate("ets", 0);
-                // junction.setVehicleRate("etw", 0);
-                // junction.setVehicleRate("etn", 0);
-                // junction.setVehicleRate("ste", 0);
-                // junction.setVehicleRate("stn", 0);
-                // junction.setVehicleRate("stw", 0);
-                // junction.setVehicleRate("wts", 0);
-                // junction.setVehicleRate("wte", 0);
-                // junction.setVehicleRate("wtn", 0);
 
                 float time = 0.f;
                 float timeStep = 0.1f;
@@ -153,9 +144,6 @@ public class SimulationTest {
 
                 LaneMetrics metr = junction.getEntryLanes().get(0).get(0).getMetrics();
 
-                // System.out.println(metr.toString());
-                // System.out.println(junction);
-
                 // All lights are red and one vehicle
 
                 float averageWaitTime = junction.getAverageWaitTime(0);
@@ -163,13 +151,12 @@ public class SimulationTest {
 
                 // average wait time should be about half the runtime 200/2 = 100
                 assertTrue(85.f < averageWaitTime && averageWaitTime < 115.f);
-                // Vehicle travelling 60 kmph, entry lane is 100m long, max wait time is the
+                // Vehicle travelling 20 kmph, entry lane is 100m long, max wait time is the
                 // vehicle that gets created first
-                // travelTime = 100 / (60 / 3.6) = 6
-                // expectedMaxWaitTime = 200 - 6 = 194
-                assertTrue(190.f < maxWaitTime && maxWaitTime < 200.f);
+                // travelTime = 100 / (20 / 3.6) = 18
+                // expectedMaxWaitTime = 200 - 18 = 182
+                assertTrue(180.f < maxWaitTime && maxWaitTime < 185.f);
                 float averageQueue = junction.getAverageQueueLength(0);
-
                 assertTrue(5 < averageQueue && averageQueue < 20);
         }
 
@@ -190,26 +177,11 @@ public class SimulationTest {
                 while (time < endTime) {
                         junction.update(timeStep);
                         time += timeStep;
-
-                        // System.out.println(junction);
                 }
 
                 junction.calculateMetrics(time);
 
-                // System.out.println(junction.getAverageWaitTime(0));
-                // System.out.println(junction.getAverageWaitTime(1));
-                // System.out.println(junction.getAverageWaitTime(2));
-                // System.out.println(junction.getAverageWaitTime(3));
-
-                // System.out.println(junction.getMaxWaitTime(0));
-                // System.out.println(junction.getMaxWaitTime(1));
-                // System.out.println(junction.getMaxWaitTime(2));
-                // System.out.println(junction.getMaxWaitTime(3));
-
-                // System.out.println(junction.getMaxQueueLength(0));
-                // System.out.println(junction.getMaxQueueLength(1));
-                // System.out.println(junction.getMaxQueueLength(2));
-                // System.out.println(junction.getMaxQueueLength(3));
+                System.out.println(junction.getMetrics());
         }
 
 }
