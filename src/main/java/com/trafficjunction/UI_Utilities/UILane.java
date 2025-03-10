@@ -63,10 +63,6 @@ public class UILane {
         if (this.leftEnabled && this.rightEnabled && !allAllowedRoads.contains(allTurns)) {
             this.allAllowedRoads.add(allTurns);
         }
-        // System.out.println("This lane has left enabled: " + leftEnabled);
-        // System.out.println("This lane has right enabled: " + rightEnabled);
-        // System.out.println("This lane is a left turn: " + this.roadType.getLeft());
-        // System.out.println("This lane is a right turn: " + this.roadType.getRight());
     }
 
     /* Method to enable this lane. */

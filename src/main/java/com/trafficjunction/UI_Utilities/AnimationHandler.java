@@ -532,7 +532,6 @@ public class AnimationHandler {
     public void chooseAnimation(char entry, char exit, int lane) {
 
         if (0 > lane || lane > 4) {
-            System.out.println("Invalid lane number. Must be between 0 and 4 inclusive.");
             return;
         }
 
@@ -551,7 +550,6 @@ public class AnimationHandler {
                         animateCarAlongPath(this.northToWestPaths[lane], car);
                         break;
                     default:
-                        System.out.println("Invalid character exit");
                         break;
                 }
                 break;
@@ -568,7 +566,6 @@ public class AnimationHandler {
                         animateCarAlongPath(this.eastToNorthPaths[lane], car);
                         break;
                     default:
-                        System.out.println("Invalid character exit");
                         break;
                 }
                 break;
@@ -585,7 +582,6 @@ public class AnimationHandler {
                         animateCarAlongPath(this.southToEastPaths[lane], car);
                         break;
                     default:
-                        System.out.println("Invalid character exit");
                         break;
                 }
                 break;
@@ -602,15 +598,11 @@ public class AnimationHandler {
                         animateCarAlongPath(this.westToSouthPaths[lane], car);
                         break;
                     default:
-                        System.out.println("Invalid character exit");
                         break;
                 }
                 break;
             default:
-                System.out.println("Invalid character entry");
                 break;
         }
-
-        System.out.println("Animation function finished.");
     }
 }
