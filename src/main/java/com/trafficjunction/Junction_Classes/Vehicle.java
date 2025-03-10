@@ -124,36 +124,6 @@ public class Vehicle {
     }
 
     /**
-     * TODO: remove this if not needed
-     * 
-     * Updates the vehicle's movement based on lane conditions.
-     * If the traffic light is red (state = 0), the vehicle stops.
-     * If the light is green (state = 1), the vehicle moves.
-     * Time here is an objective timestamp and is not relative.
-     */
-    // public void updateMovement(float time, Lane lane) {
-    // TrafficLight trafficLight = lane.getTrafficLight();
-
-    // if (trafficLight.getState() == 0 || lane.isFull()) { // 0 = Red
-    // if (this.speed != 0) {
-    // metrics.stopMoving(time); // Track wait time
-    // }
-    // } else if (trafficLight.getState() == 1) { // 1 = Green
-    // if (this.speed == 0) {
-    // metrics.startMoving(time); // Resume movement
-    // }
-    // lane.removeVehicle();
-    // List<Lane> lanes = lane.getGoingTo();
-    // if (lanes == null) {
-    // // TODO: delete self, pass metrics to JunctionMetrics somehow.
-    // } else {
-    // lanes.get(0).addVehicle(this);
-    // }
-    // }
-    // }
-
-    // TODO: finish test for
-    /**
      * Method to update a vehicle's position
      * <p>
      * Updates the vehicles position in its lane based on the time and traffic

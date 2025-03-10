@@ -2,8 +2,10 @@ package com.trafficjunction.View_and_Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import com.trafficjunction.JunctionConfiguration;
 import com.trafficjunction.JunctionMetrics;
@@ -422,7 +424,6 @@ public class PrimaryController {
 
     @FXML
     private void subtractLane(UILane[] lanes, int laneNum) {
-        System.out.println("Subtracting lane");
         for (int i = laneNum; i < 5; i++) {
             lanes[i].disableLane();
             lanes[i].update();
@@ -432,7 +433,6 @@ public class PrimaryController {
 
     @FXML
     private void addLane(UILane[] lanes, int laneNum) {
-        System.out.println("Adding lane");
         for (int i = 0; i < laneNum; i++) {
             lanes[i].enableLane();
             lanes[i].update();
@@ -514,6 +514,11 @@ public class PrimaryController {
         try {
             int[] laneData;
             laneData = countRoadTypes(northRoadAllLanes, northLaneNum);
+            System.err.print("Lane Data: ");
+            for (int i = 0; i < 5; i++) {
+                System.err.print(laneData[i]);
+                System.err.print(", ");
+            }
             junctionMetrics.addRoad("north", northLaneNum, laneData[0], laneData[1], laneData[2], laneData[3],
                     laneData[4]);
             laneData = countRoadTypes(eastRoadAllLanes, eastLaneNum);
@@ -762,12 +767,6 @@ public class PrimaryController {
         String[] roadTypeArray = new String[5];
 
         lane.changeImage();
-        // System.out.println("RoadType = " + lane.getRoadType().getAsChars());
-        // System.out.println("counter = " + lane.currentRoadCounter);
-        // System.out.println("We say the image is: " +
-        // lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
-        // System.out.println("We say the image is: " +
-        // lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
 
         lane.update();
 
@@ -803,13 +802,6 @@ public class PrimaryController {
         } else {
             leftUpTo = leftForwardIndex;
         }
-        // System.out.println("RoadType = " + lane.getRoadType().getAsChars());
-        // System.out.println("counter = " + lane.currentRoadCounter);
-        // System.out.println("We say the image is: " +
-        // lane.allAllowedRoads.get(lane.currentRoadCounter).getAsChars());
-        // System.out.println("We say the image is: " +
-        // lane.allAllowedRoads.get(lane.currentRoadCounter).getImagePath());
-        // remember index 0 equlas rightmost and 5 = leftmost
         for (int i = 0; i < laneNum; i++) {
             // sort exactly right turns for all lanes
             laneArr[i].addForward();
@@ -819,7 +811,6 @@ public class PrimaryController {
                 laneArr[i].addRightTurn();
                 laneArr[i].removeForward();
                 if (i == rightUpTo) {
-                    System.out.println("lane " + i);
                     laneArr[i].addRightTurns();
                 }
             }
@@ -974,7 +965,6 @@ public class PrimaryController {
                         changeUntilCorrect(allLanes[i][allLanes[i].length - 1 - highestIndex],
                                 allLanes[i], allNums[i], nextString);
                         highestIndex--;
-                        System.out.println(nextString);
                     } else {
                         rightToLeft = false;
                     }
@@ -984,31 +974,6 @@ public class PrimaryController {
                             allLanes[i], allNums[i], formattedRoad[i][j]);
                 }
             }
-
-            // for (int i = 0; i < allLanes.length; i++) {
-            // rightToLeft = false;
-            // count = 0;
-            // for (int j = 0; j < allLanes[i].length; j++) {
-            // System.out.println(formattedRoad[i][j]);
-            // }
-            // while (!rightToLeft && count < formattedRoad[i].length) {
-            // String nextString = formattedRoad[i][formattedRoad[i].length - 1 - count];
-            // if (nextString.equals("L") || nextString.equals("LF")) {
-            // changeUntilCorrect(allLanes[i][formattedRoad[i].length - 1 - count],
-            // allLanes[i], allNums[i], nextString);
-            // count++;
-            // } else {
-            // rightToLeft = true;
-            // }
-            // }
-            // for (int j = 0; j < formattedRoad[i].length - count; j++) {
-            // changeUntilCorrect(allLanes[i][j],
-            // allLanes[i], allNums[i], formattedRoad[i][j]);
-            // }
-            // for (int j = 0; j < formattedRoad[i].length; j++) {
-            // changeUntilCorrect(allLanes[i][j], northRoadAllLanes, northLaneNum,
-            // formattedRoad[i][j]);
-            // }
         } catch (NullPointerException nullPointerException) {
             nullPointerException.printStackTrace();
         }
@@ -1048,7 +1013,6 @@ public class PrimaryController {
                 while (!lanes[rightMostLeft].getRoadType().getImagePath().equals("/assets/straightOnRoad.png")) {
 
                     updateLanes(lanes[rightMostLeft], lanes, laneNum);
-                    System.out.println(lanes[rightMostLeft].allAllowedRoads);
                 }
             }
             if (leftMostRight != -100) {
@@ -1056,9 +1020,7 @@ public class PrimaryController {
                     updateLanes(lanes[leftMostRight], lanes, laneNum);
                 }
             }
-            System.out.println("OUT");
         }
-        System.out.println("Actually out");
     }
 
     private int countDisabledLanesFromMetrics(String[] array) {
@@ -1109,7 +1071,6 @@ public class PrimaryController {
 
     @FXML
     private void redo() {
-        System.out.println("red pressed");
         careTaker.redo();
         populateFieldsWithData(junctionMetrics);
     }
@@ -1121,14 +1082,7 @@ public class PrimaryController {
     @FXML
     private void showJunctionOptions(ActionEvent event) {
         // JunctionMetrics baseConfiguration = junctionMetrics;
-        List<JunctionMetrics> permutations = this.junctionMetrics.getPermutations();
-        Map<Float, JunctionMetrics> generationData;
-        Junction junction;
-        for (JunctionMetrics permutation : permutations) {
-            junction = permutation.intoJunction();
-            // TODO run simulation
-            // TODO get data and add
-        }
+        SortedMap<Float, JunctionMetrics> generationData = this.junctionMetrics.getPermutations();
 
         try {
             // Load the new FXML file
@@ -1147,6 +1101,9 @@ public class PrimaryController {
             genStage.setTitle("Generated Alternative Junctions");
 
             genStage.show();
+
+            generationController.setGenerationData(generationData);
+            generationController.displayGenerationProfiles();
 
             // Hide the current window.
             primaryStage.hide();

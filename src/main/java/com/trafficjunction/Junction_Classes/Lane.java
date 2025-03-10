@@ -56,7 +56,7 @@ public class Lane {
             char characterI = newDirection.charAt(i); // Gets the i'th characthter in direction
             String character = Character.toString(characterI); // Converts the character to a string so the
                                                                 // (.contains()) method can be used
-            String allowed = "lfr"; // Allowed characters
+            String allowed = "LFR"; // Allowed characters
             if (!allowed.contains(character)) {
                 return false;
             } else {
@@ -194,30 +194,6 @@ public class Lane {
         metrics.addVehicleMetric(vehicle.getMetrics());
         vehicleTotalNum++;
         return true;
-
-        /*
-         * vehicleTotalNum += 1;
-         * // Instead of adding vehicles at position length,
-         * // add them to position of last vehicle + constant
-         * //vehicles.add(new Pair<>(length, vehicle)); // Add to the back of the lane
-         * if (vehicles.isEmpty()) {
-         * vehicles.add(new Pair<>(0.f, vehicle));
-         * metrics.addVehicleMetric(vehicle.getMetrics());
-         * return true;
-         * }
-         * float maxPosition = 0.f;
-         * for (Pair<Float, Vehicle> vehiclePairs : vehicles) {
-         * float position = vehiclePairs.getLeft();
-         * if (position > maxPosition)
-         * maxPosition = position;
-         * }
-         * float constantSpacing = 1.f; // TODO: What is distance between cars?
-         * float newPosition = maxPosition + constantSpacing;
-         * vehicles.add(new Pair<>(newPosition, vehicle)); // Add to back of lane's list
-         * of cars
-         * metrics.addVehicleMetric(vehicle.getMetrics());
-         * return true;
-         */
     }
 
     // Number of total unique vehicles that have gone through this lane
@@ -235,9 +211,11 @@ public class Lane {
         return this.vehicles;
     }
 
-    // Written test TODO: Fix tests
-
-    // Rewrite of isFull(): 04/03/25
+    /**
+     * Method to check if a vehicle can be added to the back of a lane
+     * 
+     * @return if a vehicle can be added
+     */
     public boolean isFull() {
         if (vehicles.isEmpty()) {
             return false;
@@ -251,51 +229,7 @@ public class Lane {
         // is at least the length of a vehicle plus the fixed gap.
         return (length - lastVehiclePos - vehicleLength) < (gap); // check if the space left in the lane is less than
                                                                   // the space required for adding a new vehicle
-        /*
-         * With this change, if the lane is empty the check returns false.
-         * If there’s at least one vehicle, a new vehicle can only be added if there is
-         * enough space
-         * (i.e. the remaining space from the last vehicle’s current position to the end
-         * of the lane is at least one vehicle length plus the gap).
-         */
-        // Lane's should never be full?
-        // Pair<Float, Vehicle> lastVehicle = vehicles.get(vehicles.size() - 1);
-        // float backmostVehiclePos = lastVehicle.getLeft(); // get pos
-
-        // return backmostVehiclePos >= (length - lastVehicle.getRight().getLength());
     }
-
-    /**
-     * (This function is to be removed unless decided to be necessary)
-     * 
-     * Updates all vehicles in the lane based on the traffic light's state.
-     * - If the traffic light is red (state = 0) or the lane is blocked, vehicles
-     * stop.
-     * - If the traffic light is green (state = 1), vehicles resume movement.
-     * - Vehicles interact with their `VehicleMetrics` to track wait time.
-     *
-     * @param time The current simulation time (in seconds).
-     */
-    // public void updateTraffic(float time) {
-    // TrafficLight trafficLight = this.getTrafficLight(); // Retrieve the lane's
-    // traffic light
-
-    // for (Pair<Float, Vehicle> posVehicle : vehicles) { // Loop through all
-    // vehicles in the lane
-    // Vehicle vehicle = posVehicle.getRight(); // Extract the Vehicle object from
-    // the Pair
-
-    // // If the light is red (0) or the lane is blocked, stop the vehicle
-    // if (trafficLight.getState() == 0 || this.isFull()) {
-    // vehicle.updateMovement(time, this); // Stop the vehicle (tracked in
-    // VehicleMetrics)
-
-    // // If the light is green (1), allow movement
-    // } else if (trafficLight.getState() == 1) {
-    // vehicle.updateMovement(time, this); // Allow vehicle to move
-    // }
-    // }
-    // }
 
     public float getMaxWaitTime() {
         return metrics.getMaxWaitTime();
@@ -335,7 +269,6 @@ public class Lane {
      * 
      * Parameters - (time) which is the time (sec) since the simulation started
      * 
-     * @return
      */
     public void update(float time) {
         // TODO: shift stored values in index? Will this cause problems? If so then does
@@ -397,7 +330,8 @@ public class Lane {
                 builder.append(", ");
             }
         }
-        builder.append("]");
+        builder.append("] ");
+        builder.append(direction);
         return builder.toString();
     }
 }
