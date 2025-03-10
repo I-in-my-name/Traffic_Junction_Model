@@ -2,8 +2,6 @@ package com.trafficjunction.View_and_Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -243,7 +241,7 @@ public class PrimaryController {
                 trafficLightDurs = controller.confirmLightDurations();
 
             } catch (IOException e) {
-                System.out.println("Error loading traffic light FXML: " + e);
+                // System.out.println("Error loading traffic light FXML: " + e);
                 e.printStackTrace();
             }
         });
@@ -353,7 +351,7 @@ public class PrimaryController {
                     errorAlert.showAndWait();
                 }
             } else {
-                System.out.println("RRRRR");
+                // System.out.println("RRRRR");
             }
         });
 
@@ -679,7 +677,7 @@ public class PrimaryController {
         // TODO Verify that the vehicle inputs match the lanes.
         if (!verifyLaneTrafficInformation()) {
             // Invalid lane setup.
-            System.out.println("Invalid setup.");
+            // System.out.println("Invalid setup.");
             return;
         }
 

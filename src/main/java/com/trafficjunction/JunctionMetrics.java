@@ -327,13 +327,13 @@ public class JunctionMetrics implements Serializable {
         int rightForward = laneDirections[3];
         int right = laneDirections[4];
 
-        System.out.println(left);
-        System.out.println(leftForward);
-        System.out.println(forward);
-        System.out.println(rightForward);
-        System.out.println(right);
+        // System.out.println(left);
+        // System.out.println(leftForward);
+        // System.out.println(forward);
+        // System.out.println(rightForward);
+        // System.out.println(right);
 
-        System.out.println(numLanesTotal);
+        // System.out.println(numLanesTotal);
         if (left + leftForward + forward + rightForward + right != numLanesTotal)
             return false;
 
@@ -397,12 +397,12 @@ public class JunctionMetrics implements Serializable {
                         perm.addRoad("south", allValidSouthDirections.get(southIndex));
                         perm.addRoad("west", allValidWestDirections.get(westIndex));
                         index++;
-                        System.out.println(index);
+                        // System.out.println(index);
                         tempJunction = perm.intoJunction();
                         permutations.put(tempJunction.computeOverallScore(), perm);
                     }
                     while (permutations.size() > 20) {
-                        System.out.println("delete");
+                        // System.out.println("delete");
                         permutations.remove(permutations.firstKey());
                     }
                 }
@@ -414,7 +414,6 @@ public class JunctionMetrics implements Serializable {
                 break;
             }
         }
-        System.out.println("WOAH");
         return permutations;
     }
 }

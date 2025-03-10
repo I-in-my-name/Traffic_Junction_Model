@@ -33,7 +33,7 @@ public class GenerationController {
     int optionNumberCounter = 0;
 
     public GenerationController() {
-        System.out.println("SecondWindowController constructor called!");
+        // System.out.println("SecondWindowController constructor called!");
     }
 
     public void setGenerationData(Map<Float, JunctionMetrics> incomingData) {
@@ -43,21 +43,21 @@ public class GenerationController {
     public void displayGenerationProfiles() {
         stage = (Stage) generatedProfiles.getScene().getWindow();
 
-        System.out.println("Here");
+        // System.out.println("Here");
 
         for (Map.Entry<Float, JunctionMetrics> entrySet : generationData.entrySet()) {
-            System.out.println("Inside");
+            // System.out.println("Inside");
             AnchorPane newProfile = makeGeneratedProfile(optionNumberCounter, entrySet.getValue());
 
             Platform.runLater(() -> {
-                System.out.println("RUNNNN");
+                // System.out.println("RUNNNN");
 
                 generatedProfiles.setSpacing(10);
                 generatedProfiles.setPadding(new Insets(10));
 
                 generatedProfiles.getChildren().add(newProfile);
                 generatedProfiles.requestLayout();
-                System.out.println(":()");
+                // System.out.println(":()");
 
             });
 
@@ -67,7 +67,7 @@ public class GenerationController {
 
     @FXML
     public void initialize() {
-        System.out.println("SecondWindowController initialized!");
+        // System.out.println("SecondWindowController initialized!");
     }
 
     @FXML

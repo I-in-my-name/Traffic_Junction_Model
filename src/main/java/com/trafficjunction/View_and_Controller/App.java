@@ -38,7 +38,7 @@ public class App extends Application implements Observer {
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
-        System.out.println("com/trafficjunction/" + fxml + ".fxml");
+        // System.out.println("com/trafficjunction/" + fxml + ".fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/com/trafficjunction/primary.fxml"));
         return fxmlLoader.load();
     }
