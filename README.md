@@ -1,11 +1,14 @@
 # Traffic_Junction_Model
 
-Instructions for running:
-run: >mvn clean install
-to get all the dependencies on your own machine
+You need to install Maven to build the project.
+We use JDK 21. To run the project ensure this is installed and Maven is using it.
 
-Then running the App via vscode should work fine, but use:
-mvn clean javafx:run
-If it doesn't work
+Use
+- mvn clean install
+to get all the dependencies on your own machine.
 
-You may need to download JDK 21 if you don't have it already (it is objectively better than all previous versions so we are using it)
+Use
+- mvn clean javafx:run 
+to run the project
+- mvn test
+to run the tests.
