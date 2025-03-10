@@ -193,15 +193,6 @@ public class Junction {
         return timer;
     }
 
-    /**
-     * Accesses and returns the metrics of the junction
-     * 
-     * @return
-     */
-    // public JunctionMetrics getJunctionMetric() {
-    // return metrics;
-    // }
-
     public float getMaxWaitTime(int side) {
         float maxWaitTime = -1;
         for (Lane lane : entryLanes.get(side)) {
@@ -220,10 +211,6 @@ public class Junction {
         for (Lane lane : entryLanes.get(side)) {
             totalNumberOfVehicles += lane.getTotalVehicleNum();
             totalWaitTime += lane.getAverageWaitTime() * lane.getTotalVehicleNum();
-            // System.out.print("Lane average wait time:
-            // ");System.out.print(lane.getAverageWaitTime());
-            // System.out.print(" VehicleNum:
-            // ");System.out.println(lane.getTotalVehicleNum());
         }
         if (totalNumberOfVehicles == 0) {
             return 0.f;
@@ -465,9 +452,6 @@ public class Junction {
             if (entryLanes.get(routesIndex).isEmpty())
                 return false; // Junction is not valid if a side does not have any lanes
             for (Lane lane : entryLanes.get(routesIndex)) {
-                // TODO: Move validate lane direction logic into shared thing somewhere
-                // currently repeating this logic in different ways in different functions
-                // ideally should not do that
                 int length = lane.getDirection().toUpperCase().length();
                 if (length <= 3 && length > 0) {
                     for (char c : lane.getDirection().toUpperCase().toCharArray()) {
@@ -522,8 +506,6 @@ public class Junction {
          */
         for (int routesIndex = 0; routesIndex < 4; routesIndex++) { // For each road
             List<Lane> entryRoad = entryLanes.get(routesIndex);
-            // List<String> directions = new ArrayList<>(); // Store directions for present
-            // lanes
             for (int j = 0; j < entryRoad.size(); j++) { // For each lane
                 Lane entryLane = entryRoad.get(j); // Gets a lane
                 String direction = entryLane.getDirection(); // Gets the lane's direction
@@ -565,7 +547,6 @@ public class Junction {
         }
     }
 
-    // TODO: Is this a simple setter or any validation required?
     public void setTrafficLightConfig(TrafficLightConfig config) {
         this.tlConfig = config;
     }
@@ -749,28 +730,28 @@ public class Junction {
             int routesIndex;
 
             int backlogNumber = vehicleBacklogs.get(key);
-            // if (backlogNumber > 0) {
-            // // Backlog section for findRoute
-            // int entryBacklog = directionString.indexOf(key.charAt(0));
-            // int exitBacklog = directionString.indexOf(key.charAt(2));
-            // List<List<Lane>> routesBacklog = findRoute(entryBacklog, exitBacklog);
-
-            // // TODO: revise logic
-            // for (int k = 0; k < backlogNumber; k++) {
-            // route = routesBacklog.get(0);
-            // newCar = new Car(this.timer, route, key);
-            // newCar.popRoute();
-            // succesfull = false;
-            // routesIndex = 0;
-            // while (!succesfull && routesIndex < routesBacklog.size()) {
-            // succesfull = routesBacklog.get(routesIndex).get(0).addVehicle(newCar);
-            // routesIndex++;
-            // }
-            // if (!succesfull) {
-            // vehicleBacklogs.put(key, vehicleBacklogs.get(key) - 1);
-            // }
-            // }
-            // }
+            if (backlogNumber > 0) {
+                // Backlog section for findRoute
+                int entryBacklog = directionString.indexOf(key.charAt(0));
+                int exitBacklog = directionString.indexOf(key.charAt(2));
+                List<List<Lane>> routesBacklog = findRoute(entryBacklog, exitBacklog);
+                
+                for (int k = 0; k < backlogNumber; k++) {
+                    route = routesBacklog.get(0);
+                    newCar = new Car(this.timer, route, key);
+                    newCar.popRoute();
+                    succesfull = false;
+                    routesIndex = 0;
+                
+                    while (!succesfull && routesIndex < routesBacklog.size()) {
+                    succesfull = routesBacklog.get(routesIndex).get(0).addVehicle(newCar);
+                    routesIndex++;
+                    }
+                    if (!succesfull) {
+                    vehicleBacklogs.put(key, vehicleBacklogs.get(key) - 1);
+                    }
+                }
+            }
 
             // Gets the index direction for the entry
             int entryInd = directionString.indexOf(key.charAt(0));
@@ -840,9 +821,6 @@ public class Junction {
     }
 
     public float computeOverallScore() {
-        // Update all lane metrics first
-        // TODO: These have already been calculated, could be changing time by calling
-        // this again?
         updateAllMetrics(this.timer);
 
         float totalScore = 0.0f;
@@ -921,34 +899,11 @@ public class Junction {
             float maxWaitTime = 0;
             float averageQueueLength = 0.f;
             int maxQueueLength = 0;
-
-            // Merge metrics of lanes in the same direction:
-            // for (LaneMetrics laneMetric : rawMetrics.get(index)) {
-            // // Add averages:
-            // averageWaitTime += laneMetric.getAverageWaitTime();
-            // averageQueueLength += laneMetric.getAverageQueueLength();
-            // // Get new maximums:
-            // float newMaxWaitTime = laneMetric.getMaxWaitTime();
-            // int newMaxQueueLength = laneMetric.getMaxQueueLength();
-            // // Update maximum values if needed:
-            // if (maxWaitTime < newMaxWaitTime) {
-            // maxWaitTime = newMaxWaitTime;
-            // }
-            // if (maxQueueLength < newMaxQueueLength) {
-            // maxQueueLength = newMaxQueueLength;
-            // }
-            // count++;
-            // }
-            System.out.println(directions[side] + " Metrics:");
+            
             averageWaitTime = this.getAverageWaitTime(side);
-            System.out.println(averageWaitTime);
             averageQueueLength = this.getAverageQueueLength(side);
             maxWaitTime = this.getAverageWaitTime(side);
             maxQueueLength = this.getMaxQueueLength(side);
-
-            //// Divide averages to get correct values:
-            // averageWaitTime = averageWaitTime / count;
-            // averageQueueLength = averageQueueLength / count;
 
             String key = directions[side];
             metrics.put(key + " Average Wait Time", Float.toString(averageWaitTime));

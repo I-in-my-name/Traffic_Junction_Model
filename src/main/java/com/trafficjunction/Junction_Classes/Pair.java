@@ -1,7 +1,5 @@
 package com.trafficjunction.Junction_Classes;
 
-import javax.crypto.KEM;
-
 class Pair<K, V> { // amount of time the taffic light will be in a given state
 // the state (e.g. red =)
     K left;
